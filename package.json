@@ -1,0 +1,17 @@
+{
+  "name": "big-trip",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Проект «Большое путешествие» от HTML Academy",
+  "scripts": {
+    "eslint": "eslint src/**/*.js",
+    "test": "npm run eslint"
+  },
+  "devDependencies": {
+    "eslint": "7.13.0",
+    "eslint-config-htmlacademy": "0.6.0"
+  },
+  "engines": {
+    "node": "10"
+  }
+}
