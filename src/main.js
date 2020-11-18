@@ -6,6 +6,8 @@ import {creatNewPointTemplate} from "./view/trip-new-point.js";
 import {createEditPointTemplate} from "./view/trip-edit-point.js";
 import {createTripPointTemplate} from "./view/trip-point.js";
 
+const POIN_COUNT = 3;
+
 const render = (container, content, position) => {
   container.insertAdjacentHTML(position, content);
 };
@@ -24,7 +26,8 @@ render(tripEventsSection, createTripListTemplate(), `beforeend`);
 const tripList = tripEventsSection.querySelector(`.trip-events__list`);
 render(tripList, creatNewPointTemplate(), `beforeend`);
 render(tripList, createEditPointTemplate(), `beforeend`);
-render(tripList, createTripPointTemplate(), `beforeend`);
-render(tripList, createTripPointTemplate(), `beforeend`);
-render(tripList, createTripPointTemplate(), `beforeend`);
+
+for (let i = 0; i < POIN_COUNT; i++) {
+  render(tripList, createTripPointTemplate(), `beforeend`);
+}
 
