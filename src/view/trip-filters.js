@@ -1,4 +1,4 @@
-export const createTripControlsTemplate = () => {
+export const createTripFiltersTemplate = () => {
   return `<div>
   <h2 class="visually-hidden">Switch trip view</h2>
   <nav class="trip-controls__trip-tabs  trip-tabs">
