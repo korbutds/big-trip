@@ -8,7 +8,8 @@ const getRandomFishText = (sentenseCount) => {
   for (let i = 0; i < sentenseCount; i++) {
     sentenseArr.push(fishTextArr[getRandomInt(0, fishTextLength - 1)]);
   }
-  return sentenseArr.join(`. `);
+
+  return sentenseArr;
 };
 
 const getRandomArrayElement = (arr) => {
@@ -43,7 +44,7 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// const SENTENSE_COUNT = 5;
+const SENTENSE_COUNT = 5;
 
 const DESTINATIONS = [
   `San_Francisco`,
@@ -77,29 +78,16 @@ const OFFERS_LIST = {
     'price': getRandomInt(20, 95)},
 };
 
-const createPhotosArr = () => {
-  const count = getRandomInt(1, 4);
-  const src = [];
-  for (let i = 0; i < count; i++) {
-    src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
-  }
-
-  return {count, src};
-};
-
 const generateTask = () => {
   return {
     pointType: getRandomArrayElement(ROUTE_POINT_TYPES),
     pointDestination: getRandomArrayElement(DESTINATIONS),
-    getPointOffers() {
-      const distanation = this.pointDestination;
-      return Object.keys(OFFERS_LIST).filter((value) => {
-        return OFFERS_LIST[value][`destination list`].includes(distanation);
-      });
-    },
-    description: getRandomFishText(getRandomInt(1, 5)),
-    photo: createPhotosArr()
+
+    pointOffers: Object.keys(OFFERS_LIST).filter((value) => {
+      return OFFERS_LIST[value][`destination list`].includes(getRandomArrayElement(DESTINATIONS));
+    }),
+    newfid: OFFERS_LIST[`Lunch in city`][`destination list`],
   };
 };
-const dfds = generateTask();
-console.log(dfds);
+
+console.log(generateTask());
