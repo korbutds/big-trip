@@ -36,97 +36,97 @@ const getRandomArray = (count, arr) => {
 };
 
 const OFFERS_LIST = {
-  'orderUber': {
-    'id': `order-uber`,
-    'name': `Order uber`,
-    'price': getRandomInt(20, 95)
+  orderUber: {
+    id: `order-uber`,
+    name: `Order uber`,
+    price: getRandomInt(20, 95)
   },
-  'addLuggage': {
-    'id': `add-luggage`,
-    'name': `Add luggage`,
-    'price': getRandomInt(20, 95)
+  addLuggage: {
+    id: `add-luggage`,
+    name: `Add luggage`,
+    price: getRandomInt(20, 95)
   },
-  'switchToComfort': {
-    'id': `switch-to-comfort`,
-    'name': `Switch to comfort`,
-    'price': getRandomInt(20, 95)
+  switchToComfort: {
+    id: `switch-to-comfort`,
+    name: `Switch to comfort`,
+    price: getRandomInt(20, 95)
   },
-  'rentACar': {
-    'id': `rent-a-car`,
-    'name': `Rent a car`,
-    'price': getRandomInt(20, 95)
+  rentACar: {
+    id: `rent-a-car`,
+    name: `Rent a car`,
+    price: getRandomInt(20, 95)
   },
-  'addBreakfast': {
-    'id': `add-breakfast`,
-    'name': `Add breakfast`,
-    'price': getRandomInt(20, 95)
+  addBreakfast: {
+    id: `add-breakfast`,
+    name: `Add breakfast`,
+    price: getRandomInt(20, 95)
   },
-  'bookTickets': {
-    'id': `book-tickets`,
-    'name': `Book tickets`,
-    'price': getRandomInt(20, 95)
+  bookTickets: {
+    id: `book-tickets`,
+    name: `Book tickets`,
+    price: getRandomInt(20, 95)
   },
-  'lunchInCity': {
-    'id': `lunch-in-city`,
-    'name': `Lunch in city`,
-    'price': getRandomInt(20, 95)
+  lunchInCity: {
+    id: `lunch-in-city`,
+    name: `Lunch in city`,
+    price: getRandomInt(20, 95)
   },
 };
 
 const ROUTE_POINT_TYPES = {
-  'taxi': {
-    'name': `Taxi`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/taxi.png`
+  taxi: {
+    name: `Taxi`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/taxi.png`
   },
-  'bus': {
-    'name': `Bus`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/bus.png`
+  bus: {
+    name: `Bus`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/bus.png`
   },
-  'train': {
-    'name': `Train`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/train.png`
+  train: {
+    name: `Train`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/train.png`
   },
-  'ship': {
-    'name': `Ship`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/ship.png`
+  ship: {
+    name: `Ship`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/ship.png`
   },
-  'transport': {
-    'name': `Transport`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/transport.png`
+  transport: {
+    name: `Transport`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/transport.png`
   },
-  'drive': {
-    'name': `Drive`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/drive.png`
+  drive: {
+    name: `Drive`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/drive.png`
   },
-  'flight': {
-    'name': `Flight`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/flight.png`
+  flight: {
+    name: `Flight`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/flight.png`
   },
-  'checkIn': {
-    'name': `Check-in`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/check-in.png`
+  checkIn: {
+    name: `Check-in`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/check-in.png`
   },
-  'sightseeng': {
-    'name': `Sightseeng`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/sightseeing.png`
+  sightseeng: {
+    name: `Sightseeng`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/sightseeing.png`
   },
-  'restaurant': {
-    'name': `Restaurant`,
-    'offers': getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-    'iconSrc': `../img/icons/restaurant.png`
+  restaurant: {
+    name: `Restaurant`,
+    offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
+    iconSrc: `../img/icons/restaurant.png`
   },
 };
 
-const DESTINATIONS = [
+const DESTINATIONS_ARRAY = [
   `San-Francisco`,
   `Los-Angeles`,
   `New-York`,
@@ -141,7 +141,7 @@ const createPhotosArr = () => {
     src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
 
-  return {count, src};
+  return src;
 };
 
 const getObjectsArray = (obj, keysArr) => {
@@ -157,24 +157,9 @@ const getObjectsArray = (obj, keysArr) => {
 
 let startDate = dayjs().add(1, `day`).startOf(`date`);
 
-const addZeroToNumber = (number) => {
-  return (number < 10) ? `0${number}` : number;
-};
-
-const getDateDiff = (start, finish) => {
-  const diffTimeInMs = finish.diff(start);
-  const timeDuration = dayjs.duration(diffTimeInMs);
-  const days = timeDuration.days();
-  const hours = timeDuration.hours();
-  const minutes = timeDuration.minutes();
-  const time = `${(days > 0) ? addZeroToNumber(days) + `D ` : ``}${(hours > 0) ? addZeroToNumber(hours) + `H ` : ``}${addZeroToNumber(minutes)}M`;
-  return time;
-};
-
 const generateDate = () => {
   const MAX_TRIP_TIME = 6;
   const tripTime = getRandomInt(1, MAX_TRIP_TIME) * 30;
-  startDate = startDate.add(30, `minutes`);
   const start = startDate;
   const tripEndTime = startDate.add(tripTime, `minutes`);
   const finish = tripEndTime;
@@ -186,7 +171,7 @@ const generateDate = () => {
 };
 
 export const generatePoint = () => {
-  const pointDestination = getRandomArrayElement(DESTINATIONS);
+  const pointDestination = getRandomArrayElement(DESTINATIONS_ARRAY);
 
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
   const type = ROUTE_POINT_TYPES[pointType];
@@ -195,10 +180,10 @@ export const generatePoint = () => {
   return {
     times: generateDate(),
     type,
-    destinations: DESTINATIONS,
+    destinations: DESTINATIONS_ARRAY,
     pointDestination,
     offers: offersObjectList,
     description: getRandomFishText(getRandomInt(1, 5)),
-    photo: createPhotosArr(),
+    photos: createPhotosArr(),
   };
 };

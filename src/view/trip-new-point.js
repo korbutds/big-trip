@@ -1,4 +1,4 @@
-import {nanoid} from 'nanoid';
+import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 
 const getRandomInt = (min = 0, max = 1) => {
@@ -7,28 +7,28 @@ const getRandomInt = (min = 0, max = 1) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const generateDistDatalist = (arr) => {
+const generateDistDatalist = (pointsList) => {
   let str = ``;
-  for (let i = 0; i < arr.length; i++) {
-    str += `<option value='${arr[i]}'></option>`;
+  for (let i = 0; i < pointsList.length; i++) {
+    str += `<option value='${pointsList[i]}'></option>`;
   }
   return str;
 };
 
-const generateOffersList = (arr) => {
+const generateOffersList = (offersList) => {
   let str = ``;
-  if (arr.length > 0) {
+  if (offersList.length > 0) {
     str += `<section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
               <div class="event__available-offers">`;
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < offersList.length; i++) {
       let id = nanoid();
       str += `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${getRandomInt() ? `checked` : ``}>
-                  <label class="event__offer-label" for="event-offer-${arr[i][`id`]}-${id}">
-                    <span class="event__offer-title">${arr[i][`name`]}</span>
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offersList[i][`id`]}-${id}" type="checkbox" name="event-offer-${offersList[i][`id`]}" ${getRandomInt() ? `checked` : ``}>
+                  <label class="event__offer-label" for="event-offer-${offersList[i][`id`]}-${id}">
+                    <span class="event__offer-title">${offersList[i][`name`]}</span>
                     &plus;&euro;&nbsp;
-                    <span class="event__offer-price">${arr[i][`price`]}</span>
+                    <span class="event__offer-price">${offersList[i][`price`]}</span>
                   </label>
               </div>`;
     }
@@ -37,22 +37,22 @@ const generateOffersList = (arr) => {
   return str;
 };
 
-const generatePhoto = (arr) => {
+const generatePhoto = (photosList) => {
   let str = ``;
-  if (arr.length > 0) {
-    for (let i = 0; i < arr.length; i++) {
-      str += `<img class="event__photo" src=${arr[i]} alt="Event photo"></img>`;
-    }
+  if (photosList.length > 0) {
+    photosList.forEach((element) => {
+      str += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
+    });
   }
   return str;
 };
 
-export const creatNewPointTemplate = (task) => {
-  const {times, type, pointDestination, offers, description, photo} = task;
+export const creatNewPointTemplate = (point) => {
+  const {times, type, pointDestination, offers, description, photos} = point;
   const {iconSrc, name} = type;
   const {start, finish} = times;
   let id = nanoid();
-  const newPointList = task.destinations.filter((element) => element !== pointDestination);
+  const newPointList = point.destinations.filter((element) => element !== pointDestination);
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -157,7 +157,7 @@ export const creatNewPointTemplate = (task) => {
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-          ${generatePhoto(photo[`src`])}
+          ${generatePhoto(photos)}
           </div>
         </div>
       </section>

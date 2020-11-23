@@ -1,4 +1,4 @@
-import {nanoid} from 'nanoid';
+import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 
 const getRandomInt = (min = 0, max = 1) => {
@@ -37,12 +37,12 @@ const generateOffersList = (arr) => {
   return str;
 };
 
-export const createEditPointTemplate = (task) => {
-  const {times, type, pointDestination, offers, description} = task;
+export const createEditPointTemplate = (point) => {
+  const {times, type, pointDestination, offers, description} = point;
   const {iconSrc, name} = type;
   const {start, finish} = times;
   let id = nanoid();
-  const newPointList = task.destinations.filter((element) => element !== pointDestination);
+  const newPointList = point.destinations.filter((element) => element !== pointDestination);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
