@@ -11,8 +11,6 @@ const POINT_COUNT = 20;
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
-const POIN_COUNT = 3;
-
 const render = (container, content, position) => {
   container.insertAdjacentHTML(position, content);
 };
@@ -30,9 +28,9 @@ render(tripEventsSection, createTripListTemplate(), `beforeend`);
 
 const tripList = tripEventsSection.querySelector(`.trip-events__list`);
 render(tripList, creatNewPointTemplate(points[points.length - 1]), `beforeend`);
-render(tripList, createEditPointTemplate(), `beforeend`);
+render(tripList, createEditPointTemplate(points[0]), `beforeend`);
 
-for (let i = 0; i < POIN_COUNT; i++) {
-  render(tripList, createTripPointTemplate(), `beforeend`);
+for (let i = 1; i < POINT_COUNT - 1; i++) {
+  render(tripList, createTripPointTemplate(points[i]), `beforeend`);
 }
 

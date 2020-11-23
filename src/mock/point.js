@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 const FISH_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
@@ -152,19 +154,34 @@ const getObjectsArray = (obj, keysArr) => {
   }
   return arr;
 };
-let startDate = dayjs();
+
+let startDate = dayjs().add(1, `day`).startOf(`date`);
+
+const addZeroToNumber = (number) => {
+  return (number < 10) ? `0${number}` : number;
+};
+
+const getDateDiff = (start, finish) => {
+  const diffTimeInMs = finish.diff(start);
+  const timeDuration = dayjs.duration(diffTimeInMs);
+  const days = timeDuration.days();
+  const hours = timeDuration.hours();
+  const minutes = timeDuration.minutes();
+  const time = `${(days > 0) ? addZeroToNumber(days) + `D ` : ``}${(hours > 0) ? addZeroToNumber(hours) + `H ` : ``}${addZeroToNumber(minutes)}M`;
+  return time;
+};
 
 const generateDate = () => {
-  const MAX_TRIP_TIME = 7;
-  const tripTime = getRandomInt(1, MAX_TRIP_TIME);
-  startDate = startDate.add(1, `day`);
-  const start = startDate.format(`DD/MM/YY 00:00`);
-  const tripEndTime = startDate.add(tripTime, `day`);
-  const finish = tripEndTime.format(`DD/MM/YY 00:00`);
-  startDate = tripEndTime;
+  const MAX_TRIP_TIME = 6;
+  const tripTime = getRandomInt(1, MAX_TRIP_TIME) * 30;
+  startDate = startDate.add(30, `minutes`);
+  const start = startDate;
+  const tripEndTime = startDate.add(tripTime, `minutes`);
+  const finish = tripEndTime;
+  startDate = finish;
   return {
-    start,
-    finish,
+    start: Date.parse(start),
+    finish: Date.parse(finish)
   };
 };
 
@@ -172,16 +189,16 @@ export const generatePoint = () => {
   const pointDestination = getRandomArrayElement(DESTINATIONS);
 
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
-  const pointObject = ROUTE_POINT_TYPES[pointType];
-  const offersList = ROUTE_POINT_TYPES[pointType][`offers`];
+  const type = ROUTE_POINT_TYPES[pointType];
+  const offersList = type[`offers`];
   const offersObjectList = getObjectsArray(OFFERS_LIST, offersList);
   return {
     times: generateDate(),
-    pointObject,
+    type,
     destinations: DESTINATIONS,
     pointDestination,
     offers: offersObjectList,
     description: getRandomFishText(getRandomInt(1, 5)),
-    photo: createPhotosArr()
+    photo: createPhotosArr(),
   };
 };
