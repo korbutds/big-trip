@@ -1,11 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
-
-const getRandomInt = (min = 0, max = 1) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+import {DESTINATIONS_ARRAY} from "../mock/point.js";
+import {getRandomInt} from "../utils.js";
 
 const generateDistDatalist = (pointsList) => {
   let str = ``;
@@ -48,11 +44,11 @@ const generatePhoto = (photosList) => {
 };
 
 export const creatNewPointTemplate = (point) => {
-  const {times, type, pointDestination, offers, description, photos} = point;
+  const {times, type, destination, offers, description, photos} = point;
   const {iconSrc, name} = type;
   const {start, finish} = times;
   let id = nanoid();
-  const newPointList = point.destinations.filter((element) => element !== pointDestination);
+  const newPointList = DESTINATIONS_ARRAY.filter((element) => element !== destination);
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -124,7 +120,7 @@ export const creatNewPointTemplate = (point) => {
         <label class="event__label  event__type-output" for="event-destination-1">
           ${name}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
         <datalist id="destination-list-${id}">
         ${generateDistDatalist(newPointList)}
         </datalist>

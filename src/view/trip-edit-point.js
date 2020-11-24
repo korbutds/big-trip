@@ -1,5 +1,6 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
+import {DESTINATIONS_ARRAY} from "../mock/point.js";
 
 const getRandomInt = (min = 0, max = 1) => {
   min = Math.ceil(min);
@@ -37,12 +38,12 @@ const generateOffersList = (arr) => {
   return str;
 };
 
-export const createEditPointTemplate = (point) => {
+export const createEditPointTemplate = (point = {}) => {
   const {times, type, pointDestination, offers, description} = point;
   const {iconSrc, name} = type;
   const {start, finish} = times;
   let id = nanoid();
-  const newPointList = point.destinations.filter((element) => element !== pointDestination);
+  const newPointList = DESTINATIONS_ARRAY.filter((element) => element !== pointDestination);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">

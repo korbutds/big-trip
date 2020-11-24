@@ -1,18 +1,5 @@
 import dayjs from "dayjs";
-
-const addZeroToNumber = (number) => {
-  return (number < 10) ? `0${number}` : number;
-};
-
-const getRandomInt = (min = 0, max = 1) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const getRandomArrayElement = (arr) => {
-  return arr[getRandomInt(0, arr.length - 1)];
-};
+import {addZeroToNumber} from "../utils.js";
 
 const getDateDiff = (start, finish) => {
   const diffTimeInMs = finish.diff(start);
@@ -24,18 +11,30 @@ const getDateDiff = (start, finish) => {
   return time;
 };
 
+const generateOffersList = (offersList) => {
+  let str = ``;
+  if (offersList.length > 0) {
+    offersList.forEach((element) => {
+      str += `<li class="event__offer">
+                <span class="event__offer-title">${element.name} &plus;&euro;&nbsp;</span>
+                <span class="event__offer-price">${element.price}</span>
+              </li>`;
+    });
+  }
+  return str;
+};
+
 export const createTripPointTemplate = (point) => {
-  const {times, type, pointDestination, offers} = point;
-  const {iconSrc, name} = type;
+  const {times, type, destination, offers} = point;
+  const {iconSrc, name, price} = type;
   const {start, finish} = times;
-  const randomOffer = (offers.length > 0) ? getRandomArrayElement(offers) : ``;
   return `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="${dayjs(start).format(`YYYY-MM-DD`)}">${dayjs(start).format(`MMM DD`)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="${iconSrc}" alt="Event type icon">
     </div>
-    <h3 class="event__title">${name} ${pointDestination}</h3>
+    <h3 class="event__title">${name} ${destination}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="${dayjs(start)}">${dayjs(start).format(`HH:mm`)}</time>
@@ -45,14 +44,11 @@ export const createTripPointTemplate = (point) => {
       <p class="event__duration">${getDateDiff(dayjs(start), dayjs(finish))}</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">20</span>
+      &euro;&nbsp;<span class="event__price-value">${price}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">${(offers.length > 0) ? randomOffer.name + ` &plus;&euro;&nbsp; ` : ``}</span>
-        <span class="event__offer-price">${(offers.length > 0) ? randomOffer.price : ``}</span>
-      </li>
+      ${generateOffersList(offers)}
     </ul>
     <button class="event__favorite-btn event__favorite-btn--active" type="button">
       <span class="visually-hidden">Add to favorite</span>
