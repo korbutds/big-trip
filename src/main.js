@@ -34,7 +34,7 @@ const tripControlsElement = pageHeader.querySelector(`.trip-main__trip-controls`
 const pageMain = document.querySelector(`.page-body__page-main`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
-render(tripMainElement, createAboutTripTemplate(), `afterbegin`);
+render(tripMainElement, createAboutTripTemplate(points), `afterbegin`);
 render(tripControlsElement, createTripFiltersTemplate(), `afterbegin`);
 render(tripEventsSection, createTripSortTemplate(), `beforeend`);
 render(tripEventsSection, createTripListTemplate(), `beforeend`);

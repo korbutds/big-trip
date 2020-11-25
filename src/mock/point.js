@@ -26,7 +26,7 @@ const getObjectsArray = (obj, keysArr) => {
   return arr;
 };
 
-let startDate = dayjs().add(1, `day`).startOf(`date`);
+let startDate = dayjs().add(2, `day`).startOf(`date`);
 
 const generateDate = () => {
   const MAX_TRIP_TIME = 6;
