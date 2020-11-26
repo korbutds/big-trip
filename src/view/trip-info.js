@@ -1,5 +1,9 @@
 import dayjs from "dayjs";
 
+const countFullPrice = (costs = []) => {
+  return (costs.length > 0) ? costs.reduce((accumulator, cost) => accumulator + cost) : 0;
+};
+
 const getDestinationString = (destinations) => {
   let str = ``;
   destinations = [...new Set(destinations)];
@@ -27,6 +31,7 @@ export const createAboutTripTemplate = (points) => {
   const destinations = points.reduce((prev, current) => {
     return [...prev, current.destination];
   }, []);
+  const pointsCost = points.reduce((prev, current) => [...prev, current[`type`][`price`]], []);
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getDestinationString(destinations)}</h1>
@@ -35,7 +40,7 @@ export const createAboutTripTemplate = (points) => {
   </div>
 
   <p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+    Total: &euro;&nbsp;<span class="trip-info__cost-value">${countFullPrice(pointsCost)}</span>
   </p>
 </section>`;
 };

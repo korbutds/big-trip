@@ -15,19 +15,6 @@ const render = (container, content, position) => {
   container.insertAdjacentHTML(position, content);
 };
 
-const countFullPrice = () => {
-  const tropInfoCostTottal = document.querySelector(`.trip-info__cost-value`);
-  const eventPrice = document.querySelectorAll(`.event__price-value`);
-
-  let costTotal = 0;
-
-  eventPrice.forEach((element) => {
-    costTotal += +element.textContent;
-  });
-
-  tropInfoCostTottal.textContent = costTotal;
-};
-
 const pageHeader = document.querySelector(`.page-header`);
 const tripMainElement = pageHeader.querySelector(`.trip-main`);
 const tripControlsElement = pageHeader.querySelector(`.trip-main__trip-controls`);
@@ -46,5 +33,3 @@ render(tripList, createEditPointTemplate(points[0]), `beforeend`);
 for (let i = 1; i < POINT_COUNT - 1; i++) {
   render(tripList, createTripPointTemplate(points[i]), `beforeend`);
 }
-
-countFullPrice();

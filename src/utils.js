@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 const getRandomInt = (min = 0, max = 1) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -33,4 +35,14 @@ const getRandomArray = (count, arr) => {
   return [...newSet];
 };
 
-export {getRandomInt, getRandomFishText, getRandomArrayElement, getRandomArray, addZeroToNumber};
+const getDateDiff = (start, finish) => {
+  const diffTimeInMs = finish.diff(start);
+  const timeDuration = dayjs.duration(diffTimeInMs);
+  const days = timeDuration.days();
+  const hours = timeDuration.hours();
+  const minutes = timeDuration.minutes();
+  const time = `${(days > 0) ? addZeroToNumber(days) + `D ` : ``}${(hours > 0) ? addZeroToNumber(hours) + `H ` : ``}${(minutes > 0) ? addZeroToNumber(minutes) + `M` : ``}`;
+  return time;
+};
+
+export {getRandomInt, getRandomFishText, getRandomArrayElement, getRandomArray, addZeroToNumber, getDateDiff};

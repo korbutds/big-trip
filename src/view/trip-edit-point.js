@@ -1,12 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
-
-const getRandomInt = (min = 0, max = 1) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+import {getRandomInt} from "../utils.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;

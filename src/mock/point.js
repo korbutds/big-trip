@@ -4,7 +4,6 @@ import {getRandomInt, getRandomFishText, getRandomArrayElement} from "../utils.j
 import {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY} from "../const.js";
 dayjs.extend(duration);
 
-
 const createPhotosArr = () => {
   const count = getRandomInt(1, 9);
   const src = [];
@@ -55,6 +54,7 @@ const generatePoint = () => {
     offers: offersObjectList,
     description: getRandomFishText(getRandomInt(1, 5)),
     photos: createPhotosArr(),
+    isFavorite: Boolean(getRandomInt()),
   };
 };
 
