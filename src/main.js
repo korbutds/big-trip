@@ -1,7 +1,7 @@
 import TripInfo from "./view/trip-info.js";
-import {createTripFiltersTemplate} from "./view/trip-filters.js";
-import {createTripSortTemplate} from "./view/trip-sort.js";
-import {createTripListTemplate} from "./view/trip-list.js";
+import FilterMenu from "./view/trip-filters.js";
+import TripSort from "./view/trip-sort.js";
+import TripList from "./view/trip-list.js";
 import {creatNewPointTemplate} from "./view/trip-new-point.js";
 import {createEditPointTemplate} from "./view/trip-edit-point.js";
 import {createTripPointTemplate} from "./view/trip-point.js";
@@ -19,9 +19,10 @@ const pageMain = document.querySelector(`.page-body__page-main`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
 renderElement(tripMainElement, new TripInfo(points).getElement(), RenderPosition.AFTERBEGIN);
-renderTemplate(tripControlsElement, createTripFiltersTemplate(), `afterbegin`);
-renderTemplate(tripEventsSection, createTripSortTemplate(), `beforeend`);
-renderTemplate(tripEventsSection, createTripListTemplate(), `beforeend`);
+renderElement(tripControlsElement, new FilterMenu().getElement(), RenderPosition.AFTERBEGIN);
+renderElement(tripEventsSection, new TripSort().getElement(), RenderPosition.BEFOREBEGIN);
+const tripBoard = new TripList();
+renderElement(tripEventsSection, tripBoard.getElement(), RenderPosition.BEFOREBEGIN);
 
 const tripList = tripEventsSection.querySelector(`.trip-events__list`);
 renderTemplate(tripList, creatNewPointTemplate(points[points.length - 1]), `beforeend`);
