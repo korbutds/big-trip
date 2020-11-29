@@ -36,7 +36,7 @@ export default class TripFilterMenu {
   }
 
   getTemplate() {
-    return createTripFiltersTemplate()
+    return createTripFiltersTemplate();
   }
 
   getElement() {
