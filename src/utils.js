@@ -69,5 +69,3 @@ export const createElement = (template) => {
   newElement.innerHTML = template;
   return newElement.firstChild;
 };
-
-// export {getRandomInt, getRandomFishText, getRandomArrayElement, getRandomArray, addZeroToNumber, getDateDiff, renderTemplate};
