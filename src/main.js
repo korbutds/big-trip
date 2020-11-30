@@ -24,26 +24,30 @@ const renderPoint = (pointContainer, point) => {
 
   const replaceCardToForm = () => {
     pointContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    document.addEventListener(`keydown`, onEscKeyDown);
   };
 
   const replaceFormToCard = () => {
     pointContainer.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
-  pointComponent.getElement()
-    .querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, replaceCardToForm);
+  pointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceCardToForm);
 
-  pointEditComponent.getElement()
-    .querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, replaceFormToCard);
+  pointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceFormToCard);
 
-  pointEditComponent.getElement()
-    .querySelector(`.event--edit`)
-    .addEventListener(`submit`, (evt) => {
+  pointEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       replaceFormToCard();
-    });
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
 
   render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREBEGIN);
 };
