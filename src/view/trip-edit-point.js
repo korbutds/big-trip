@@ -45,7 +45,7 @@ const generatePhoto = (photosList) => {
 
 const createEditPointTemplate = (point = {}) => {
   const {times, type, destination, offers, description, photos} = point;
-  const {iconSrc, name} = type;
+  const {iconSrc, name, price} = type;
   const {start, finish} = times;
   let id = nanoid();
   const newPointList = DESTINATIONS_ARRAY.reduce((prev, curr) => {
@@ -143,7 +143,7 @@ const createEditPointTemplate = (point = {}) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${getRandomInt(10, 15) * 5}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
