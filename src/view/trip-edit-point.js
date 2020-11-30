@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
-import {getRandomInt, createElement} from "../utils.js";
+import {createElement} from "../utils.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -20,7 +20,7 @@ const generateOffersList = (arr) => {
     for (let i = 0; i < arr.length; i++) {
       let id = nanoid();
       str += `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${getRandomInt() ? `checked` : ``}>
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${arr[i].isChecked ? `checked` : ``}>
                   <label class="event__offer-label" for="event-offer-${arr[i][`id`]}-${id}">
                     <span class="event__offer-title">${arr[i][`name`]}</span>
                     &plus;&euro;&nbsp;

@@ -5,10 +5,11 @@ const generateOffersList = (offersList) => {
   let str = ``;
   if (offersList.length > 0) {
     offersList.forEach((element) => {
-      str += `<li class="event__offer">
+      str += element.isChecked ? `<li class="event__offer">
                 <span class="event__offer-title">${element.name} &plus;&euro;&nbsp;</span>
                 <span class="event__offer-price">${element.price}</span>
-              </li>`;
+              </li>`
+        : ``;
     });
   }
   return str;

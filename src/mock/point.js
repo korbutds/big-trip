@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import {getRandomInt, getRandomFishText, getRandomArrayElement} from "../utils.js";
-import {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY} from "../const.js";
+import {ROUTE_POINT_TYPES, DESTINATIONS_ARRAY} from "../const.js";
 dayjs.extend(duration);
 
 const createPhotosArr = () => {
@@ -14,16 +14,16 @@ const createPhotosArr = () => {
   return src;
 };
 
-const getObjectsArray = (obj, keysArr) => {
-  let arr = [];
-  if (keysArr.length > 0) {
-    for (let i = 0; i < keysArr.length; i++) {
-      let element = keysArr[i];
-      arr.push(obj[element]);
-    }
-  }
-  return arr;
-};
+// const getObjectsArray = (obj, keysArr) => {
+//   let arr = [];
+//   if (keysArr.length > 0) {
+//     for (let i = 0; i < keysArr.length; i++) {
+//       let element = keysArr[i];
+//       arr.push(obj[element]);
+//     }
+//   }
+//   return arr;
+// };
 
 let startDate = dayjs().add(2, `day`).startOf(`date`);
 
@@ -46,12 +46,11 @@ const generatePoint = () => {
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
   const type = ROUTE_POINT_TYPES[pointType];
   const offersList = type[`offers`];
-  const offersObjectList = getObjectsArray(OFFERS_LIST, offersList);
   return {
     times: generateDate(),
     type,
     destination,
-    offers: offersObjectList,
+    offers: offersList,
     description: getRandomFishText(getRandomInt(1, 5)),
     photos: createPhotosArr(),
     isFavorite: Boolean(getRandomInt()),

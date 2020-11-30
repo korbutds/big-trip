@@ -7,6 +7,7 @@ import TripPointEdit from "./view/trip-edit-point.js";
 import TripPoint from "./view/trip-point.js";
 import {generatePoint} from "./mock/point.js";
 import {RenderPosition, render} from "./utils.js";
+import {Keys} from "./const.js";
 
 const POINT_COUNT = 20;
 
@@ -42,7 +43,7 @@ const renderPoint = (pointContainer, point) => {
   });
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (evt.key === Keys.ESCAPE[0] || evt.key === Keys.ESCAPE[1]) {
       evt.preventDefault();
       replaceFormToCard();
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -64,7 +65,7 @@ if (points.length === 0) {
   render(tripEventsSection, new TripSort().getElement(), RenderPosition.BEFOREBEGIN);
   const tripBoard = new TripList();
   render(tripEventsSection, tripBoard.getElement(), RenderPosition.BEFOREBEGIN);
-  for (let i = 0; i < POINT_COUNT - 1; i++) {
+  for (let i = 0; i < POINT_COUNT; i++) {
     renderPoint(tripBoard.getElement(), points[i]);
   }
 }
