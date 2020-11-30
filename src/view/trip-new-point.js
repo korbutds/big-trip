@@ -1,6 +1,6 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
-import {DESTINATIONS_ARRAY} from "../mock/point.js";
+import {DESTINATIONS_ARRAY} from "../const.js";
 import {getRandomInt} from "../utils.js";
 
 const generateDistDatalist = (pointsList) => {

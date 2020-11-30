@@ -41,7 +41,7 @@ const generateDate = () => {
 };
 
 const generatePoint = () => {
-  const destination = getRandomArrayElement(DESTINATIONS_ARRAY);
+  const destination = getRandomArrayElement(DESTINATIONS_ARRAY).name;
 
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
   const type = ROUTE_POINT_TYPES[pointType];

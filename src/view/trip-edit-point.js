@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
-import {getRandomInt} from "../utils.js";
+import {getRandomInt, createElement} from "../utils.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -33,12 +33,25 @@ const generateOffersList = (arr) => {
   return str;
 };
 
-export const createEditPointTemplate = (point = {}) => {
-  const {times, type, pointDestination, offers, description} = point;
+const generatePhoto = (photosList) => {
+  let str = ``;
+  if (photosList.length > 0) {
+    photosList.forEach((element) => {
+      str += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
+    });
+  }
+  return str;
+};
+
+const createEditPointTemplate = (point = {}) => {
+  const {times, type, destination, offers, description, photos} = point;
   const {iconSrc, name} = type;
   const {start, finish} = times;
   let id = nanoid();
-  const newPointList = DESTINATIONS_ARRAY.filter((element) => element !== pointDestination);
+  const newPointList = DESTINATIONS_ARRAY.reduce((prev, curr) => {
+    return [...prev, curr.name];
+  }, [])
+  .filter((element) => element !== destination);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -55,7 +68,7 @@ export const createEditPointTemplate = (point = {}) => {
             <legend class="visually-hidden">Event type</legend>
 
             <div class="event__type-item">
-              <input id="event-type-taxi-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${pointDestination}">
+              <input id="event-type-taxi-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${destination}">
               <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-${id}">Taxi</label>
             </div>
 
@@ -111,7 +124,7 @@ export const createEditPointTemplate = (point = {}) => {
         <label class="event__label  event__type-output" for="event-destination-1">
           ${name}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
         <datalist id="destination-list-1">
           ${generateDistDatalist(newPointList)}
         </datalist>
@@ -144,8 +157,36 @@ export const createEditPointTemplate = (point = {}) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+          ${generatePhoto(photos)}
+          </div>
+        </div>
       </section>
     </section>
   </form>
 </li>`;
 };
+
+export default class EditPoint {
+  constructor(point = {}) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

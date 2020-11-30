@@ -1,15 +1,15 @@
 import dayjs from "dayjs";
 
-const getRandomInt = (min = 0, max = 1) => {
+export const getRandomInt = (min = 0, max = 1) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const addZeroToNumber = (number) => {
+export const addZeroToNumber = (number) => {
   return (number < 10) ? `0${number}` : number;
 };
-const getRandomFishText = (sentenseCount) => {
+export const getRandomFishText = (sentenseCount) => {
   const FISH_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
   const fishTextArr = FISH_TEXT.split(`. `);
   const fishTextLength = fishTextArr.length;
@@ -21,11 +21,11 @@ const getRandomFishText = (sentenseCount) => {
   return sentenseArr.join(`. `).concat(`.`);
 };
 
-const getRandomArrayElement = (arr) => {
+export const getRandomArrayElement = (arr) => {
   return arr[getRandomInt(0, arr.length - 1)];
 };
 
-const getRandomArray = (count, arr) => {
+export const getRandomArray = (count, arr) => {
   let pointArr = [];
   const arrLength = arr.length;
   for (let i = 0; i < count; i++) {
@@ -35,7 +35,17 @@ const getRandomArray = (count, arr) => {
   return [...newSet];
 };
 
-const getDateDiff = (start, finish) => {
+export const createPhotosArr = () => {
+  const count = getRandomInt(1, 9);
+  const src = [];
+  for (let i = 0; i < count; i++) {
+    src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+  }
+
+  return src;
+};
+
+export const getDateDiff = (start, finish) => {
   const diffTimeInMs = finish.diff(start);
   const timeDuration = dayjs.duration(diffTimeInMs);
   const days = timeDuration.days();
@@ -45,4 +55,27 @@ const getDateDiff = (start, finish) => {
   return time;
 };
 
-export {getRandomInt, getRandomFishText, getRandomArrayElement, getRandomArray, addZeroToNumber, getDateDiff};
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREBEGIN: `beforebegin`,
+};
+
+export const render = (container, element, position) => {
+  switch (position) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREBEGIN:
+      container.append(element);
+  }
+};
+
+export const renderTemplate = (container, content, position) => {
+  container.insertAdjacentHTML(position, content);
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};

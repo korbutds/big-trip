@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {getDateDiff} from "../utils.js";
+import {getDateDiff, createElement} from "../utils.js";
 
 const generateOffersList = (offersList) => {
   let str = ``;
@@ -14,7 +14,7 @@ const generateOffersList = (offersList) => {
   return str;
 };
 
-export const createTripPointTemplate = (point) => {
+const createTripPointTemplate = (point) => {
   const {times, type, destination, offers, isFavorite} = point;
   const {iconSrc, name, price} = type;
   const {start, finish} = times;
@@ -53,3 +53,25 @@ export const createTripPointTemplate = (point) => {
   </div>
 </li>`;
 };
+
+export default class TripPoint {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
