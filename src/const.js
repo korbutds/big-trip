@@ -1,4 +1,5 @@
-import {getRandomInt, getRandomArray} from "./utils.js";
+import {getRandomInt, getRandomArray, getRandomFishText, createPhotosArr} from "./utils.js";
+import dayjs from "dayjs";
 
 const OFFERS_LIST = {
   orderUber: {
@@ -102,10 +103,48 @@ const ROUTE_POINT_TYPES = {
 };
 
 const DESTINATIONS_ARRAY = [
-  `San-Francisco`,
-  `Los-Angeles`,
-  `New-York`,
-  `Kokkari restaurant`,
-  `Hollywood Hills`
+  {
+    name: `San-Francisco`,
+    description: getRandomFishText(getRandomInt(1, 5)),
+    photos: createPhotosArr(),
+  },
+  {
+    name: `Los-Angeles`,
+    description: getRandomFishText(getRandomInt(1, 5)),
+    photos: createPhotosArr(),
+  },
+  {
+    name: `New-York`,
+    description: getRandomFishText(getRandomInt(1, 5)),
+    photos: createPhotosArr(),
+  },
+  {
+    name: `Kokkari restaurant`,
+    description: getRandomFishText(getRandomInt(1, 5)),
+    photos: createPhotosArr(),
+  },
+  {
+    name: `Hollywood Hills`,
+    description: getRandomFishText(getRandomInt(1, 5)),
+    photos: createPhotosArr(),
+  },
 ];
-export {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY};
+
+const BLANK_POINT = {
+  times: dayjs(),
+  type: ROUTE_POINT_TYPES.checkIn.name,
+  destination: DESTINATIONS_ARRAY[0].name,
+  offers: ROUTE_POINT_TYPES.checkIn.offers,
+  description: getRandomFishText(getRandomInt(1, 5)),
+  photos: DESTINATIONS_ARRAY[0].photos,
+  isFavorite: false,
+};
+
+// const DESTINATIONS_ARRAY = [
+//   `San-Francisco`,
+//   `Los-Angeles`,
+//   `New-York`,
+//   `Kokkari restaurant`,
+//   `Hollywood Hills`
+// ];
+export {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY, BLANK_POINT};

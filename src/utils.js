@@ -35,6 +35,16 @@ export const getRandomArray = (count, arr) => {
   return [...newSet];
 };
 
+export const createPhotosArr = () => {
+  const count = getRandomInt(1, 9);
+  const src = [];
+  for (let i = 0; i < count; i++) {
+    src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+  }
+
+  return src;
+};
+
 export const getDateDiff = (start, finish) => {
   const diffTimeInMs = finish.diff(start);
   const timeDuration = dayjs.duration(diffTimeInMs);
