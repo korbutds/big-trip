@@ -31,19 +31,19 @@ const renderPoint = (pointContainer, point) => {
   };
 
   pointComponent.getElement()
-  .querySelector(`.event__rollup-btn`)
-  .addEventListener(`click`, replaceCardToForm);
+    .querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, replaceCardToForm);
 
   pointEditComponent.getElement()
-  .querySelector(`.event__rollup-btn`)
-  .addEventListener(`click`, replaceCardToForm);
+    .querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, replaceFormToCard);
 
   pointEditComponent.getElement()
-  .querySelector(`.event--edit`)
-  .addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
+    .querySelector(`.event--edit`)
+    .addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      replaceFormToCard();
+    });
 
   render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREBEGIN);
 };
