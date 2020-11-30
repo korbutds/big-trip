@@ -1,9 +1,9 @@
 import TripInfo from "./view/trip-info.js";
+import TripEmpty from "./view/trip-empty.js";
 import FilterMenu from "./view/trip-filters.js";
 import TripSort from "./view/trip-sort.js";
 import TripList from "./view/trip-list.js";
 import TripPointEdit from "./view/trip-edit-point.js";
-// import {creatNewPointTemplate} from "./view/trip-new-point.js";
 import TripPoint from "./view/trip-point.js";
 import {generatePoint} from "./mock/point.js";
 import {RenderPosition, render} from "./utils.js";
@@ -52,12 +52,20 @@ const renderPoint = (pointContainer, point) => {
   render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREBEGIN);
 };
 
-render(tripMainElement, new TripInfo(points).getElement(), RenderPosition.AFTERBEGIN);
 render(tripControlsElement, new FilterMenu().getElement(), RenderPosition.AFTERBEGIN);
-render(tripEventsSection, new TripSort().getElement(), RenderPosition.BEFOREBEGIN);
-const tripBoard = new TripList();
-render(tripEventsSection, tripBoard.getElement(), RenderPosition.BEFOREBEGIN);
-for (let i = 0; i < POINT_COUNT - 1; i++) {
-  renderPoint(tripBoard.getElement(), points[i]);
+
+if (points.length === 0) {
+  render(tripEventsSection, new TripEmpty().getElement(), RenderPosition.AFTERBEGIN);
+  document.querySelectorAll(`.trip-filters__filter-input`).forEach((element) => {
+    element.disabled = true;
+  });
+} else {
+  render(tripMainElement, new TripInfo(points).getElement(), RenderPosition.AFTERBEGIN);
+  render(tripEventsSection, new TripSort().getElement(), RenderPosition.BEFOREBEGIN);
+  const tripBoard = new TripList();
+  render(tripEventsSection, tripBoard.getElement(), RenderPosition.BEFOREBEGIN);
+  for (let i = 0; i < POINT_COUNT - 1; i++) {
+    renderPoint(tripBoard.getElement(), points[i]);
+  }
 }
 
