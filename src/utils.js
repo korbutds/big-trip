@@ -60,7 +60,7 @@ export const RenderPosition = {
   BEFOREBEGIN: `beforebegin`,
 };
 
-export const renderElement = (container, element, position) => {
+export const render = (container, element, position) => {
   switch (position) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
