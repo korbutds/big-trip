@@ -2,7 +2,7 @@ import TripInfo from "./view/trip-info.js";
 import FilterMenu from "./view/trip-filters.js";
 import TripSort from "./view/trip-sort.js";
 import TripList from "./view/trip-list.js";
-// import TripPointEdit from "./view/trip-edit-point.js";
+import TripPointEdit from "./view/trip-edit-point.js";
 // import {creatNewPointTemplate} from "./view/trip-new-point.js";
 import TripPoint from "./view/trip-point.js";
 import {generatePoint} from "./mock/point.js";
@@ -19,9 +19,33 @@ const pageMain = document.querySelector(`.page-body__page-main`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
 const renderPoint = (pointContainer, point) => {
-  const PointComponent = new TripPoint(point);
-  // const PointEdinComponent = new TripPointEdit(point);
-  render(pointContainer, PointComponent.getElement(), RenderPosition.BEFOREBEGIN);
+  const pointComponent = new TripPoint(point);
+  const pointEditComponent = new TripPointEdit(point);
+
+  const replaceCardToForm = () => {
+    pointContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  };
+
+  const replaceFormToCard = () => {
+    pointContainer.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  };
+
+  pointComponent.getElement()
+  .querySelector(`.event__rollup-btn`)
+  .addEventListener(`click`, replaceCardToForm);
+
+  pointEditComponent.getElement()
+  .querySelector(`.event__rollup-btn`)
+  .addEventListener(`click`, replaceCardToForm);
+
+  pointEditComponent.getElement()
+  .querySelector(`.event--edit`)
+  .addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
+
+  render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREBEGIN);
 };
 
 render(tripMainElement, new TripInfo(points).getElement(), RenderPosition.AFTERBEGIN);
