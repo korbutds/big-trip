@@ -1,7 +1,8 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
-import {getRandomInt, createElement} from "../utils.js";
+import {createElement} from "../utils.js";
+import {ROUTE_POINT_TYPES} from "../const.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -11,7 +12,7 @@ const generateDistDatalist = (arr) => {
   return str;
 };
 
-const generateOffersList = (arr) => {
+const generateOffersList = (arr, checkedArr) => {
   let str = ``;
   if (arr.length > 0) {
     str += `<section class="event__section  event__section--offers">
@@ -20,7 +21,7 @@ const generateOffersList = (arr) => {
     for (let i = 0; i < arr.length; i++) {
       let id = nanoid();
       str += `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${getRandomInt() ? `checked` : ``}>
+                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${checkedArr.includes(arr[i]) ? `checked` : ``}>
                   <label class="event__offer-label" for="event-offer-${arr[i][`id`]}-${id}">
                     <span class="event__offer-title">${arr[i][`name`]}</span>
                     &plus;&euro;&nbsp;
@@ -44,8 +45,9 @@ const generatePhoto = (photosList) => {
 };
 
 const createEditPointTemplate = (point = {}) => {
-  const {times, type, destination, offers, description, photos} = point;
-  const {iconSrc, name} = type;
+  const {times, type, destination, offers, description, photos, id: typeId} = point;
+  const {iconSrc, name, price} = type;
+  const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;
   let id = nanoid();
   const newPointList = DESTINATIONS_ARRAY.reduce((prev, curr) => {
@@ -143,7 +145,7 @@ const createEditPointTemplate = (point = {}) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${getRandomInt(10, 15) * 5}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -153,7 +155,7 @@ const createEditPointTemplate = (point = {}) => {
       </button>
     </header>
     <section class="event__details">
-      ${generateOffersList(offers)}
+      ${generateOffersList(offersList, offers)}
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
