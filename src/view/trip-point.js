@@ -1,10 +1,11 @@
 import dayjs from "dayjs";
-import {getDateDiff, createElement} from "../utils.js";
+import {getDateDiff, createElement, getRandomInt} from "../utils.js";
 
 const generateOffersList = (offersList) => {
   let str = ``;
   if (offersList.length > 0) {
     offersList.forEach((element) => {
+      element.isChecked = Boolean(getRandomInt());
       str += element.isChecked ? `<li class="event__offer">
                 <span class="event__offer-title">${element.name} &plus;&euro;&nbsp;</span>
                 <span class="event__offer-price">${element.price}</span>
@@ -17,6 +18,7 @@ const generateOffersList = (offersList) => {
 
 const createTripPointTemplate = (point) => {
   const {times, type, destination, offers, isFavorite} = point;
+  const offersCopy = Object.assign([], offers);
   const {iconSrc, name, price} = type;
   const {start, finish} = times;
   const favorite = isFavorite ? `event__favorite-btn--active` : ``;
@@ -40,7 +42,7 @@ const createTripPointTemplate = (point) => {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${generateOffersList(offers)}
+      ${generateOffersList(offersCopy)}
     </ul>
     <button class="event__favorite-btn ${favorite}" type="button">
       <span class="visually-hidden">Add to favorite</span>

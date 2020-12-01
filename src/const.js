@@ -45,7 +45,7 @@ const getRandomOfferList = () => {
     return {
       name: OFFERS_LIST[elem].name,
       price: OFFERS_LIST[elem].price,
-      isChecked: Boolean(getRandomInt()),
+      isChecked: false,
     };
   });
 };
@@ -54,61 +54,61 @@ const ROUTE_POINT_TYPES = {
   taxi: {
     name: `Taxi`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/taxi.png`,
+    iconSrc: `./img/icons/taxi.png`,
     price: getRandomInt(2, 20) * 20,
   },
   bus: {
     name: `Bus`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/bus.png`,
+    iconSrc: `./img/icons/bus.png`,
     price: getRandomInt(2, 20) * 20,
   },
   train: {
     name: `Train`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/train.png`,
+    iconSrc: `./img/icons/train.png`,
     price: getRandomInt(2, 20) * 20,
   },
   ship: {
     name: `Ship`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/ship.png`,
+    iconSrc: `./img/icons/ship.png`,
     price: getRandomInt(2, 20) * 20,
   },
   transport: {
     name: `Transport`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/transport.png`,
+    iconSrc: `./img/icons/transport.png`,
     price: getRandomInt(2, 20) * 20,
   },
   drive: {
     name: `Drive`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/drive.png`,
+    iconSrc: `./img/icons/drive.png`,
     price: getRandomInt(2, 20) * 20,
   },
   flight: {
     name: `Flight`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/flight.png`,
+    iconSrc: `./img/icons/flight.png`,
     price: getRandomInt(2, 20) * 20,
   },
   checkIn: {
     name: `Check-in`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/check-in.png`,
+    iconSrc: `./img/icons/check-in.png`,
     price: getRandomInt(2, 20) * 20,
   },
   sightseeng: {
     name: `Sightseeng`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/sightseeing.png`,
+    iconSrc: `./img/icons/sightseeing.png`,
     price: getRandomInt(2, 20) * 20,
   },
   restaurant: {
     name: `Restaurant`,
     offers: getRandomOfferList(),
-    iconSrc: `../img/icons/restaurant.png`,
+    iconSrc: `./img/icons/restaurant.png`,
     price: getRandomInt(2, 20) * 20,
   },
 };

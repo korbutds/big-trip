@@ -14,17 +14,6 @@ const createPhotosArr = () => {
   return src;
 };
 
-// const getObjectsArray = (obj, keysArr) => {
-//   let arr = [];
-//   if (keysArr.length > 0) {
-//     for (let i = 0; i < keysArr.length; i++) {
-//       let element = keysArr[i];
-//       arr.push(obj[element]);
-//     }
-//   }
-//   return arr;
-// };
-
 let startDate = dayjs().add(2, `day`).startOf(`date`);
 
 const generateDate = () => {
@@ -46,6 +35,9 @@ const generatePoint = () => {
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
   const type = ROUTE_POINT_TYPES[pointType];
   const offersList = type[`offers`];
+  // offersList.forEach((element) => {
+  //   element.isChecked = Boolean(getRandomInt());
+  // });
   return {
     times: generateDate(),
     type,
