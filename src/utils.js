@@ -27,9 +27,11 @@ export const getRandomArrayElement = (arr) => {
 
 export const getRandomArray = (count, arr) => {
   let pointArr = [];
-  const arrLength = arr.length;
-  for (let i = 0; i < count; i++) {
-    pointArr.push(arr[getRandomInt(0, arrLength - 1)]);
+  if (arr.length > 0) {
+    const arrLength = arr.length;
+    for (let i = 0; i < count; i++) {
+      pointArr.push(arr[getRandomInt(0, arrLength - 1)]);
+    }
   }
   const newSet = new Set(pointArr);
   return [...newSet];

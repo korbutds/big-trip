@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import {getRandomInt, getRandomFishText, getRandomArrayElement} from "../utils.js";
+import {getRandomInt, getRandomFishText, getRandomArrayElement, getRandomArray} from "../utils.js";
 import {ROUTE_POINT_TYPES, DESTINATIONS_ARRAY} from "../const.js";
 dayjs.extend(duration);
 
@@ -34,11 +34,9 @@ const generatePoint = () => {
 
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
   const type = ROUTE_POINT_TYPES[pointType];
-  const offersList = type[`offers`];
-  // offersList.forEach((element) => {
-  //   element.isChecked = Boolean(getRandomInt());
-  // });
+  const offersList = getRandomArray(getRandomInt(0, type[`offers`].length), type[`offers`]);
   return {
+    id: pointType,
     times: generateDate(),
     type,
     destination,
