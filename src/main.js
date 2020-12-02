@@ -69,4 +69,3 @@ if (points.length === 0) {
     renderPoint(tripBoard.getElement(), points[i]);
   }
 }
-
