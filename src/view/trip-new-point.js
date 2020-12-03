@@ -163,7 +163,7 @@ const creatNewPointTemplate = (point) => {
 </li>`;
 };
 
-export default class extends AbstractView {
+export default class TripNewPoint extends AbstractView {
   constructor(point) {
     super();
     this._point = point;

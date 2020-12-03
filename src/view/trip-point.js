@@ -55,13 +55,23 @@ const createTripPointTemplate = (point) => {
 </li>`;
 };
 
-export default class extends AbstractView {
+export default class TripPoint extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createTripPointTemplate(this._point);
+  }
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
   }
 }

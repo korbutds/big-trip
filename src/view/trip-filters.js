@@ -30,7 +30,7 @@ const createTripFiltersTemplate = () => {
 </div>`;
 };
 
-export default class extends AbstractView {
+export default class TripFilters extends AbstractView {
   getTemplate() {
     return createTripFiltersTemplate();
   }

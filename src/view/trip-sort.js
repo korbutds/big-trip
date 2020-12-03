@@ -29,7 +29,7 @@ const createTripSortTemplate = () => {
 </form>`;
 };
 
-export default class extends AbstractView {
+export default class TripSort extends AbstractView {
   getTemplate() {
     return createTripSortTemplate();
   }

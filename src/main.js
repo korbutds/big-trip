@@ -33,14 +33,11 @@ const renderPoint = (pointContainer, point) => {
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
-  pointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceCardToForm);
+  pointComponent.setEditClickHandler(replaceCardToForm);
 
-  pointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceFormToCard);
+  pointEditComponent.setEditClickHandler(replaceFormToCard);
 
-  pointEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
+  pointEditComponent.setEditSubmitHandler(replaceFormToCard);
 
   const onEscKeyDown = (evt) => {
     if (evt.key === Keys.ESCAPE[0] || evt.key === Keys.ESCAPE[1]) {

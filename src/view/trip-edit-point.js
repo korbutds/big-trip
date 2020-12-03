@@ -171,13 +171,35 @@ const createEditPointTemplate = (point = {}) => {
 </li>`;
 };
 
-export default class extends AbstractView {
+export default class EditPoint extends AbstractView {
   constructor(point = {}) {
     super();
     this._point = point;
+    this._clickHandler = this._clickHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  _submitHandler(evt) {
+    evt.preventDefault();
+    this._callback.submit();
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._clickHandler);
+  }
+
+  setEditSubmitHandler(callback) {
+    this._callback.submit = callback;
+    this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._submitHandler);
   }
 }
