@@ -9,6 +9,7 @@ import {generatePoint} from "./mock/point.js";
 import {RenderPosition} from "./view/utils/points.js";
 import {render} from "./view/utils/render.js";
 import {Keys} from "./const.js";
+import Abstract from "./view/abstract.js";
 
 const POINT_COUNT = 20;
 
@@ -23,6 +24,10 @@ const tripEventsSection = pageMain.querySelector(`.trip-events`);
 const renderPoint = (pointContainer, point) => {
   const pointComponent = new TripPoint(point);
   const pointEditComponent = new TripPointEdit(point);
+
+  if (pointContainer instanceof Abstract) {
+    pointContainer = pointContainer.getElement();
+  }
 
   const replaceCardToForm = () => {
     pointContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
@@ -48,22 +53,22 @@ const renderPoint = (pointContainer, point) => {
     }
   };
 
-  render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREBEGIN);
+  render(pointContainer, pointComponent, RenderPosition.BEFOREBEGIN);
 };
 
-render(tripControlsElement, new FilterMenu().getElement(), RenderPosition.AFTERBEGIN);
+render(tripControlsElement, new FilterMenu(), RenderPosition.AFTERBEGIN);
 
 if (points.length === 0) {
-  render(tripEventsSection, new TripEmpty().getElement(), RenderPosition.AFTERBEGIN);
+  render(tripEventsSection, new TripEmpty(), RenderPosition.AFTERBEGIN);
   document.querySelectorAll(`.trip-filters__filter-input`).forEach((element) => {
     element.disabled = true;
   });
 } else {
-  render(tripMainElement, new TripInfo(points).getElement(), RenderPosition.AFTERBEGIN);
-  render(tripEventsSection, new TripSort().getElement(), RenderPosition.BEFOREBEGIN);
+  render(tripMainElement, new TripInfo(points), RenderPosition.AFTERBEGIN);
+  render(tripEventsSection, new TripSort(), RenderPosition.BEFOREBEGIN);
   const tripBoard = new TripList();
-  render(tripEventsSection, tripBoard.getElement(), RenderPosition.BEFOREBEGIN);
+  render(tripEventsSection, tripBoard, RenderPosition.BEFOREBEGIN);
   for (let i = 0; i < POINT_COUNT; i++) {
-    renderPoint(tripBoard.getElement(), points[i]);
+    renderPoint(tripBoard, points[i]);
   }
 }
