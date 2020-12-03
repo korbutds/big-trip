@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
-import {createElement} from "../utils.js";
+import AbstractView from "../view/abstract.js";
 import {ROUTE_POINT_TYPES} from "../const.js";
 
 const generateDistDatalist = (arr) => {
@@ -171,24 +171,13 @@ const createEditPointTemplate = (point = {}) => {
 </li>`;
 };
 
-export default class EditPoint {
+export default class extends AbstractView {
   constructor(point = {}) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
