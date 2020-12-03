@@ -6,7 +6,8 @@ import TripList from "./view/trip-list.js";
 import TripPointEdit from "./view/trip-edit-point.js";
 import TripPoint from "./view/trip-point.js";
 import {generatePoint} from "./mock/point.js";
-import {RenderPosition, render} from "./utils.js";
+import {RenderPosition} from "./view/utils/points.js";
+import {render} from "./view/utils/render.js";
 import {Keys} from "./const.js";
 
 const POINT_COUNT = 20;

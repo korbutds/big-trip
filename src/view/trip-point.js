@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {getDateDiff} from "../utils.js";
+import {getDateDiff} from "../view/utils/points.js";
 import AbstractView from "../view/abstract.js";
 
 const generateOffersList = (offersList) => {

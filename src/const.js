@@ -1,4 +1,5 @@
-import {getRandomInt, getRandomFishText, createPhotosArr} from "./utils.js";
+import {getRandomInt} from "./view/utils/common.js";
+import {createPhotosArr, getRandomFishText} from "./view/utils/points.js";
 import dayjs from "dayjs";
 
 const OFFERS_LIST = {
@@ -101,69 +102,6 @@ const ROUTE_POINT_TYPES = {
     price: getRandomInt(2, 20) * 20,
   },
 };
-
-// const ROUTE_POINT_TYPES = {
-//   taxi: {
-//     name: `Taxi`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/taxi.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   bus: {
-//     name: `Bus`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/bus.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   train: {
-//     name: `Train`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/train.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   ship: {
-//     name: `Ship`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/ship.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   transport: {
-//     name: `Transport`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/transport.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   drive: {
-//     name: `Drive`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/drive.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   flight: {
-//     name: `Flight`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/flight.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   checkIn: {
-//     name: `Check-in`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/check-in.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   sightseeng: {
-//     name: `Sightseeng`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/sightseeing.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-//   restaurant: {
-//     name: `Restaurant`,
-//     offers: getRandomArray(getRandomInt(0, 5), Object.keys(OFFERS_LIST)),
-//     iconSrc: `../img/icons/restaurant.png`,
-//     price: getRandomInt(2, 20) * 20,
-//   },
-// };
 
 const DESTINATIONS_ARRAY = [
   {

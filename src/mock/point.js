@@ -1,33 +1,7 @@
-import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
-import {getRandomInt, getRandomFishText, getRandomArrayElement, getRandomArray} from "../utils.js";
+import {getRandomInt, getRandomArrayElement, getRandomArray} from "../view/utils/common.js";
+import {createPhotosArr, generateDate, getRandomFishText} from "../view/utils/points.js";
 import {ROUTE_POINT_TYPES, DESTINATIONS_ARRAY} from "../const.js";
-dayjs.extend(duration);
 
-const createPhotosArr = () => {
-  const count = getRandomInt(1, 9);
-  const src = [];
-  for (let i = 0; i < count; i++) {
-    src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
-  }
-
-  return src;
-};
-
-let startDate = dayjs().add(2, `day`).startOf(`date`);
-
-const generateDate = () => {
-  const MAX_TRIP_TIME = 6;
-  const tripTime = getRandomInt(1, MAX_TRIP_TIME) * 30;
-  const start = startDate;
-  const tripEndTime = startDate.add(tripTime, `minutes`);
-  const finish = tripEndTime;
-  startDate = finish;
-  return {
-    start: Date.parse(start),
-    finish: Date.parse(finish)
-  };
-};
 
 const generatePoint = () => {
   const destination = getRandomArrayElement(DESTINATIONS_ARRAY).name;
