@@ -1,7 +1,8 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../const.js";
-import {getRandomInt} from "../utils.js";
+import {getRandomInt} from "./utils/common.js";
+import AbstractView from "../view/abstract.js";
 
 const generateDistDatalist = (pointsList) => {
   let str = ``;
@@ -43,7 +44,7 @@ const generatePhoto = (photosList) => {
   return str;
 };
 
-export const creatNewPointTemplate = (point) => {
+const creatNewPointTemplate = (point) => {
   const {times, type, destination, offers, description, photos} = point;
   const {iconSrc, name} = type;
   const {start, finish} = times;
@@ -161,3 +162,14 @@ export const creatNewPointTemplate = (point) => {
   </form>
 </li>`;
 };
+
+export default class TripNewPoint extends AbstractView {
+  constructor(point) {
+    super();
+    this._point = point;
+  }
+
+  gerTemplate() {
+    return creatNewPointTemplate(this._point);
+  }
+}

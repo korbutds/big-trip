@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils.js";
+import AbstractView from "../view/abstract.js";
 
 const countFullPrice = (costs = []) => {
   return (costs.length > 0) ? costs.reduce((accumulator, cost) => accumulator + cost) : 0;
@@ -46,24 +46,13 @@ const createTripInfoTemplate = (points) => {
 </section>`;
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractView {
   constructor(points) {
-    this._element = null;
+    super();
     this._points = points;
   }
 
   getTemplate() {
     return createTripInfoTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
