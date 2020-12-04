@@ -7,9 +7,8 @@ import TripPointEdit from "./view/trip-edit-point.js";
 import TripPoint from "./view/trip-point.js";
 import {generatePoint} from "./mock/point.js";
 import {RenderPosition} from "./view/utils/points.js";
-import {render} from "./view/utils/render.js";
+import {render, replace} from "./view/utils/render.js";
 import {Keys} from "./const.js";
-import Abstract from "./view/abstract.js";
 
 const POINT_COUNT = 20;
 
@@ -25,30 +24,23 @@ const renderPoint = (pointContainer, point) => {
   const pointComponent = new TripPoint(point);
   const pointEditComponent = new TripPointEdit(point);
 
-  if (pointContainer instanceof Abstract) {
-    pointContainer = pointContainer.getElement();
-  }
-
-  const replaceCardToForm = () => {
-    pointContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  pointComponent.setEditClickHandler(() => {
+    replace(pointEditComponent, pointComponent);
     document.addEventListener(`keydown`, onEscKeyDown);
-  };
+  });
 
-  const replaceFormToCard = () => {
-    pointContainer.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
-    document.removeEventListener(`keydown`, onEscKeyDown);
-  };
+  pointEditComponent.setEditClickHandler(() => {
+    replace(pointComponent, pointEditComponent);
+  });
 
-  pointComponent.setEditClickHandler(replaceCardToForm);
-
-  pointEditComponent.setEditClickHandler(replaceFormToCard);
-
-  pointEditComponent.setEditSubmitHandler(replaceFormToCard);
+  pointEditComponent.setEditSubmitHandler(() => {
+    replace(pointComponent, pointEditComponent);
+  });
 
   const onEscKeyDown = (evt) => {
     if (evt.key === Keys.ESCAPE[0] || evt.key === Keys.ESCAPE[1]) {
       evt.preventDefault();
-      replaceFormToCard();
+      replace(pointComponent, pointEditComponent);
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
