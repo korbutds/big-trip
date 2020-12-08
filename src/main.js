@@ -2,12 +2,11 @@ import TripInfo from "./view/trip-info.js";
 import TripEmpty from "./view/trip-empty.js";
 import FilterMenu from "./view/trip-filters.js";
 import TripSort from "./view/trip-sort.js";
-import TripList from "./view/trip-list.js";
+import TripBoard from "./view/trip-board.js";
 import TripPointEdit from "./view/trip-edit-point.js";
 import TripPoint from "./view/trip-point.js";
 import {generatePoint} from "./mock/point.js";
-import {RenderPosition} from "./view/utils/points.js";
-import {render, replace} from "./view/utils/render.js";
+import {render, replace, RenderPosition} from "./view/utils/render.js";
 import {Keys} from "./const.js";
 
 const POINT_COUNT = 20;
@@ -58,7 +57,7 @@ if (points.length === 0) {
 } else {
   render(tripMainElement, new TripInfo(points), RenderPosition.AFTERBEGIN);
   render(tripEventsSection, new TripSort(), RenderPosition.BEFOREBEGIN);
-  const tripBoard = new TripList();
+  const tripBoard = new TripBoard();
   render(tripEventsSection, tripBoard, RenderPosition.BEFOREBEGIN);
   for (let i = 0; i < POINT_COUNT; i++) {
     renderPoint(tripBoard, points[i]);

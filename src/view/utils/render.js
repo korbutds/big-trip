@@ -1,5 +1,9 @@
 import Abstract from "../abstract.js";
-import {RenderPosition} from "./points.js";
+
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREBEGIN: `beforebegin`,
+};
 
 export const render = (container, child, position) => {
   if (container instanceof Abstract) {
