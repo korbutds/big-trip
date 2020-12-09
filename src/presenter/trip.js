@@ -1,12 +1,13 @@
-import TripPointEdit from "../view/trip-edit-point.js";
-import TripPoint from "../view/trip-point.js";
+// import TripPoint from "../view/trip-point.js";
+// import TripPointEdit from "../view/trip-edit-point.js";
 import FilterMenu from "../view/trip-filters.js";
 import TripEmpty from "../view/trip-empty.js";
 import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
-import {render, replace, RenderPosition} from "../view/utils/render.js";
-import {Keys} from "../const.js";
+import {render, RenderPosition} from "../view/utils/render.js";
+// import {Keys} from "../const.js";
+import Point from "./point.js";
 
 export default class Trip {
   constructor(tripListContainer) {
@@ -28,31 +29,8 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointComponent = new TripPoint(point);
-    const pointEditComponent = new TripPointEdit(point);
-
-    pointComponent.setEditClickHandler(() => {
-      replace(pointEditComponent, pointComponent);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    pointEditComponent.setEditClickHandler(() => {
-      replace(pointComponent, pointEditComponent);
-    });
-
-    pointEditComponent.setEditSubmitHandler(() => {
-      replace(pointComponent, pointEditComponent);
-    });
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === Keys.ESCAPE[0] || evt.key === Keys.ESCAPE[1]) {
-        evt.preventDefault();
-        replace(pointComponent, pointEditComponent);
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    render(this._boardComponent, pointComponent, RenderPosition.BEFOREBEGIN);
+    const pointPresenter = new Point(this._boardComponent);
+    pointPresenter.init(point);
   }
 
   _renderPoints() {
