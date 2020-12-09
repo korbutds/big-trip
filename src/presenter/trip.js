@@ -1,11 +1,11 @@
-import TripPointEdit from "./view/trip-edit-point.js";
-import TripPoint from "./view/trip-point.js";
-import FilterMenu from "./view/trip-filters.js";
-import TripEmpty from "./view/trip-empty.js";
-import TripInfo from "./view/trip-info.js";
-import TripSort from "./view/trip-sort.js";
-import TripBoard from "./view/trip-board.js";
-import {render, replace, RenderPosition} from "./view/utils/render.js";
+import TripPointEdit from "../view/trip-edit-point.js";
+import TripPoint from "../view/trip-point.js";
+import FilterMenu from "../view/trip-filters.js";
+import TripEmpty from "../view/trip-empty.js";
+import TripInfo from "../view/trip-info.js";
+import TripSort from "../view/trip-sort.js";
+import TripBoard from "../view/trip-board.js";
+import {render, replace, RenderPosition} from "../view/utils/render.js";
 import {Keys} from "../const.js";
 
 export default class Trip {
@@ -24,7 +24,7 @@ export default class Trip {
   init(tripPoints) {
     this._tripPoints = tripPoints.slice();
     this._renderFilters();
-    this._renderTripBoard();
+    this._renderTrip();
   }
 
   _renderPoint(point) {
@@ -78,14 +78,13 @@ export default class Trip {
   }
 
   _renderTripBoard() {
-    // Метод отрисовки поля отоброжения точек
     render(this._tripListContainer, this._boardComponent, RenderPosition.BEFOREBEGIN);
     this._renderPoints();
+
   }
 
   _renderTrip() {
     this._infoComponent = new TripInfo(this._tripPoints);
-
     if (this._tripPoints.length === 0) {
       this._renderEmptyTrip();
       document.querySelectorAll(`.trip-filters__filter-input`).forEach((element) => {
