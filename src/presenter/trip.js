@@ -6,6 +6,7 @@ import TripInfo from "./view/trip-info.js";
 import TripSort from "./view/trip-sort.js";
 import TripBoard from "./view/trip-board.js";
 import {render, replace, RenderPosition} from "./view/utils/render.js";
+import {Keys} from "../const.js";
 
 export default class Trip {
   constructor(tripListContainer) {
@@ -24,11 +25,35 @@ export default class Trip {
     this._tripPoints = tripPoints.slice();
     this._renderFilters();
     this._renderTripBoard();
-
   }
 
-  _renderPoints() {
+  _renderPoints(point) {
     // Метод создания точек путешествия
+    const pointComponent = new TripPoint(point);
+    const pointEditComponent = new TripPointEdit(point);
+
+    pointComponent.setEditClickHandler(() => {
+      replace(pointEditComponent, pointComponent);
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+    pointEditComponent.setEditClickHandler(() => {
+      replace(pointComponent, pointEditComponent);
+    });
+
+    pointEditComponent.setEditSubmitHandler(() => {
+      replace(pointComponent, pointEditComponent);
+    });
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === Keys.ESCAPE[0] || evt.key === Keys.ESCAPE[1]) {
+        evt.preventDefault();
+        replace(pointComponent, pointEditComponent);
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
+    render(this._boardComponent, pointComponent, RenderPosition.BEFOREBEGIN);
   }
 
   _renderFilters() {
@@ -70,6 +95,5 @@ export default class Trip {
       this._renderTripBoard();
       this._renderPoints();
     }
-  }
   }
 }
