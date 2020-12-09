@@ -1,6 +1,6 @@
 import TripPoint from "../view/trip-point.js";
 import TripPointEdit from "../view/trip-edit-point.js";
-import {render, replace, RenderPosition} from "../view/utils/render";
+import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
 import {Keys} from "../const.js";
 
 export default class Point {
@@ -16,23 +16,43 @@ export default class Point {
 
   init(point) {
     this._point = point;
-
+    const prevPointComponent = this._pointComponent;
+    const prevPointEditComponent = this._pointEditComponent;
     this._pointComponent = new TripPoint(point);
     this._pointEditComponent = new TripPointEdit(point);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setEditClickHandler(this._handleFormSubmit);
 
-    render(this._pointContainer, this._pointComponent, RenderPosition.BEFOREBEGIN);
+    if (prevPointComponent === null && prevPointEditComponent === null) {
+      render(this._pointContainer, this._pointComponent, RenderPosition.BEFOREBEGIN);
+      return;
+    }
+
+    if (this._pointContainer.getElement().contains(prevPointComponent.getElement())) {
+      replace(this._pointComponent, prevPointComponent);
+    }
+
+    if (this._pointEditComponent.getElement().contains(prevPointEditComponent.getElement())) {
+      replace(this._pointComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
   }
 
   _replaceCardToForm() {
-    replace(this._pointComponent, this._pointEditComponent);
+    replace(this._pointEditComponent, this._pointComponent);
     document.addEventListener(`keydown`, this._escKeyDownHandle);
   }
 
+  _destroy() {
+    remove(this._pointComponent);
+    remove(this._pointEditComponent);
+  }
+
   _replaceFormToCard() {
-    replace(this._pointEditComponent, this._pointComponent);
+    replace(this._pointComponent, this._pointEditComponent);
     document.removeEventListener(`keydown`, this._escKeyDownHandle);
   }
 
@@ -50,4 +70,6 @@ export default class Point {
   _handleFormSubmit() {
     this._replaceFormToCard();
   }
+
+
 }

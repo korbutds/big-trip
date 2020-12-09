@@ -6,7 +6,6 @@ import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
 import {render, RenderPosition} from "../view/utils/render.js";
-// import {Keys} from "../const.js";
 import Point from "./point.js";
 
 export default class Trip {
