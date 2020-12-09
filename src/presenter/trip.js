@@ -27,8 +27,7 @@ export default class Trip {
     this._renderTripBoard();
   }
 
-  _renderPoints(point) {
-    // Метод создания точек путешествия
+  _renderPoint(point) {
     const pointComponent = new TripPoint(point);
     const pointEditComponent = new TripPointEdit(point);
 
@@ -56,29 +55,32 @@ export default class Trip {
     render(this._boardComponent, pointComponent, RenderPosition.BEFOREBEGIN);
   }
 
+  _renderPoints() {
+    for (let i = 0; i < this._tripPoints.length; i++) {
+      this._renderPoint(this._tripPoints[i]);
+    }
+  }
+
   _renderFilters() {
-    // Метода ренндиринга контролов
     render(this._tripControlsContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEmptyTrip() {
-    // Метод рендеринга заглушки
     render(this._tripListContainer, this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderInfo() {
-    // Метод отрисовки информации о путешествии
     render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderSort() {
-    // Метод отрисовки сортировки точек
     render(this._tripListContainer, this._sortComponent, RenderPosition.BEFOREBEGIN);
   }
 
   _renderTripBoard() {
     // Метод отрисовки поля отоброжения точек
     render(this._tripListContainer, this._boardComponent, RenderPosition.BEFOREBEGIN);
+    this._renderPoints();
   }
 
   _renderTrip() {
@@ -93,7 +95,6 @@ export default class Trip {
       this._renderInfo();
       this._renderSort();
       this._renderTripBoard();
-      this._renderPoints();
     }
   }
 }
