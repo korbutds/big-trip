@@ -45,7 +45,7 @@ const generatePhoto = (photosList) => {
 };
 
 const createEditPointTemplate = (point = {}) => {
-  const {times, type, destination, offers, description, photos, id: typeId} = point;
+  const {times, type, destination, offers, description, photos, pointType: typeId} = point;
   const {iconSrc, name, price} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;

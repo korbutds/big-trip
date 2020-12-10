@@ -20,7 +20,6 @@ export default class Point {
     const prevPointEditComponent = this._pointEditComponent;
     this._pointComponent = new TripPoint(point);
     this._pointEditComponent = new TripPointEdit(point);
-
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setEditClickHandler(this._handleFormSubmit);
 
@@ -46,7 +45,7 @@ export default class Point {
     document.addEventListener(`keydown`, this._escKeyDownHandle);
   }
 
-  _destroy() {
+  destroy() {
     remove(this._pointComponent);
     remove(this._pointEditComponent);
   }

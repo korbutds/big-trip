@@ -12,6 +12,7 @@ export default class Trip {
   constructor(tripListContainer) {
     this._tripListContainer = tripListContainer;
 
+    this._pointPresenter = {};
     this._header = document.querySelector(`.page-header`);
     this._tripControlsContainer = this._header.querySelector(`.trip-main__trip-controls`);
     this._tripInfoContainer = this._header.querySelector(`.trip-main`);
@@ -30,6 +31,14 @@ export default class Trip {
   _renderPoint(point) {
     const pointPresenter = new Point(this._boardComponent);
     pointPresenter.init(point);
+    this._pointPresenter[point.id] = pointPresenter;
+  }
+
+  _clearTrip() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
   }
 
   _renderPoints() {
