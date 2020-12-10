@@ -7,6 +7,7 @@ import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
 import {render, RenderPosition} from "../view/utils/render.js";
 import Point from "./point.js";
+import {updateItem} from "../view/utils/common.js";
 
 export default class Trip {
   constructor(tripListContainer) {
@@ -39,6 +40,11 @@ export default class Trip {
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
+  }
+
+  _handlePointChange(updatedPoint) {
+    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
   _renderPoints() {

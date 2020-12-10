@@ -20,3 +20,16 @@ export const getRandomArray = (count, arr) => {
   return [...newSet];
 };
 
+export const updateItem = (points, update) => {
+  const index = points.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return points;
+  }
+
+  return [
+    ...points.slice(0, index),
+    update,
+    ...points.slice(index + 1)
+  ];
+};
