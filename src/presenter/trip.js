@@ -14,14 +14,18 @@ export default class Trip {
     this._tripListContainer = tripListContainer;
 
     this._pointPresenter = {};
+
     this._header = document.querySelector(`.page-header`);
     this._tripControlsContainer = this._header.querySelector(`.trip-main__trip-controls`);
     this._tripInfoContainer = this._header.querySelector(`.trip-main`);
+
     this._filterComponent = new FilterMenu();
     this._emptyComponent = new TripEmpty();
     this._sortComponent = new TripSort();
     this._boardComponent = new TripBoard();
+
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(tripPoints) {
@@ -31,9 +35,10 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new Point(this._boardComponent, this._handlePointChange);
+    const pointPresenter = new Point(this._boardComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
+
   }
 
   _clearTrip() {
@@ -46,6 +51,12 @@ export default class Trip {
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.resetView());
   }
 
   _renderPoints() {
