@@ -22,7 +22,6 @@ export const getRandomArray = (count, arr) => {
 
 export const updateItem = (points, update) => {
   const index = points.findIndex((item) => item.id === update.id);
-
   if (index === -1) {
     return points;
   }

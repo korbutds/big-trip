@@ -12,6 +12,7 @@ export default class Point {
     this._pointEditComponent = null;
 
     this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleBackClick = this._handleBackClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandle = this._escKeyDownHandle.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -19,15 +20,19 @@ export default class Point {
 
   init(point) {
     this._point = point;
+
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
+
     this._pointComponent = new TripPoint(point);
     this._pointEditComponent = new TripPointEdit(point);
+
     this._pointComponent.setEditClickHandler(this._handleEditClick);
-    this._pointEditComponent.setEditClickHandler(this._handleFormSubmit);
+    this._pointEditComponent.setEditClickHandler(this._handleBackClick);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    if (prevPointComponent === null && prevPointEditComponent === null) {
+
+    if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this._pointContainer, this._pointComponent, RenderPosition.BEFOREBEGIN);
       return;
     }
@@ -36,8 +41,8 @@ export default class Point {
       replace(this._pointComponent, prevPointComponent);
     }
 
-    if (this._pointEditComponent.getElement().contains(prevPointEditComponent.getElement())) {
-      replace(this._pointComponent, prevPointEditComponent);
+    if (this._pointContainer.getElement().contains(prevPointEditComponent.getElement())) {
+      replace(this._pointEditComponent, prevPointEditComponent);
     }
 
     remove(prevPointComponent);
@@ -68,6 +73,10 @@ export default class Point {
 
   _handleEditClick() {
     this._replaceCardToForm();
+  }
+
+  _handleBackClick() {
+    this._replaceFormToCard();
   }
 
   _handleFormSubmit(point) {
