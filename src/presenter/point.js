@@ -4,14 +4,17 @@ import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
 import {Keys} from "../const.js";
 
 export default class Point {
-  constructor(pointContainer) {
+  constructor(pointContainer, changeData) {
     this._pointContainer = pointContainer;
+    this._changeData = changeData;
+
     this._pointComponent = null;
     this._pointEditComponent = null;
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandle = this._escKeyDownHandle.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   init(point) {
@@ -22,7 +25,8 @@ export default class Point {
     this._pointEditComponent = new TripPointEdit(point);
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setEditClickHandler(this._handleFormSubmit);
-
+    this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
+    this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     if (prevPointComponent === null && prevPointEditComponent === null) {
       render(this._pointContainer, this._pointComponent, RenderPosition.BEFOREBEGIN);
       return;
@@ -66,9 +70,12 @@ export default class Point {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(point) {
+    this._changeData(point);
     this._replaceFormToCard();
   }
 
-
+  _handleFavoriteClick() {
+    this._changeData(Object.assign({}, this._point, {isFavorite: !this._point.isFavorite}));
+  }
 }

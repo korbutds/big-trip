@@ -21,6 +21,7 @@ export default class Trip {
     this._emptyComponent = new TripEmpty();
     this._sortComponent = new TripSort();
     this._boardComponent = new TripBoard();
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init(tripPoints) {
@@ -30,7 +31,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new Point(this._boardComponent);
+    const pointPresenter = new Point(this._boardComponent, this._handlePointChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
