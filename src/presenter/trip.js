@@ -8,12 +8,15 @@ import TripBoard from "../view/trip-board.js";
 import {render, RenderPosition} from "../view/utils/render.js";
 import Point from "./point.js";
 import {updateItem} from "../view/utils/common.js";
+import {sortPointPriceToUp, sortPointTimeToUp} from "../view/utils/points.js";
+import {SortType} from "../const.js";
 
 export default class Trip {
   constructor(tripListContainer) {
     this._tripListContainer = tripListContainer;
 
     this._pointPresenter = {};
+    this._currentSortType = SortType.DAY;
 
     this._header = document.querySelector(`.page-header`);
     this._tripControlsContainer = this._header.querySelector(`.trip-main__trip-controls`);
@@ -31,15 +34,36 @@ export default class Trip {
 
   init(tripPoints) {
     this._tripPoints = tripPoints.slice();
+    this._soursedTripPoints = tripPoints.slice();
+
     this._renderFilters();
     this._renderTrip();
+  }
+
+  _sortPoint(sortType) {
+    switch (sortType) {
+      case SortType.PRICE:
+        console.log(this._tripPoints);
+        this._tripPoints.sort(sortPointPriceToUp);
+        console.log(sortPointPriceToUp);
+        console.log(this._tripPoints);
+        break;
+        case SortType.TIME:
+          console.log(this._tripPoints);
+          this._tripPoints.sort(sortPointTimeToUp);
+          console.log(this._tripPoints);
+        break;
+      case SortType.DAY:
+        this._tripPoints = this._sourcedTripPoints.slice();
+        break;
+    }
+    this._currentSortType = sortType;
   }
 
   _renderPoint(point) {
     const pointPresenter = new Point(this._boardComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
-
   }
 
   _clearTrip() {
@@ -61,7 +85,10 @@ export default class Trip {
   }
 
   _handleSortTypeChange(sortType) {
-    console.log(`click`, sortType);
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortPoint(sortType);
   }
 
   _renderPoints() {

@@ -54,3 +54,14 @@ export const getRandomFishText = (sentenseCount) => {
   }
   return sentenseArr.join(`. `).concat(`.`);
 };
+
+export const sortPointPriceToUp = (priceA, priceB) => {
+  return priceA.type.price - priceB.type.price;
+};
+
+export const sortPointTimeToUp = (timeA, timeB) => {
+  const timeADuration = dayjs(timeA.times.finish).diff(dayjs(timeA.times.start));
+  const timeBDuration = dayjs(timeB.times.finish).diff(dayjs(timeB.times.start));
+  console.log(timeADuration - timeBDuration)
+  return timeADuration - timeBDuration;
+};
