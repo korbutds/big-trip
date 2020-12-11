@@ -91,9 +91,7 @@ export default class Trip {
     this._infoComponent = new TripInfo(this._tripPoints);
     if (this._tripPoints.length === 0) {
       this._renderEmptyTrip();
-      document.querySelectorAll(`.trip-filters__filter-input`).forEach((element) => {
-        element.disabled = true;
-      });
+      this._filterComponent.disableElement();
     } else {
       this._renderInfo();
       this._renderSort();
