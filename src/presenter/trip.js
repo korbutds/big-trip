@@ -26,6 +26,7 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(tripPoints) {
@@ -59,6 +60,10 @@ export default class Trip {
       .forEach((presenter) => presenter.resetView());
   }
 
+  _handleSortTypeChange(sortType) {
+    console.log(`click`, sortType);
+  }
+
   _renderPoints() {
     for (let i = 0; i < this._tripPoints.length; i++) {
       this._renderPoint(this._tripPoints[i]);
@@ -67,6 +72,7 @@ export default class Trip {
 
   _renderFilters() {
     render(this._tripControlsContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
+
   }
 
   _renderEmptyTrip() {
@@ -79,6 +85,7 @@ export default class Trip {
 
   _renderSort() {
     render(this._tripListContainer, this._sortComponent, RenderPosition.BEFOREBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderTripBoard() {

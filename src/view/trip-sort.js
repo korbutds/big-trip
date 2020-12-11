@@ -34,6 +34,7 @@ export default class TripSort extends AbstractView {
   constructor() {
     super();
 
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
   getTemplate() {
     return createTripSortTemplate();
