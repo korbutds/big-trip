@@ -34,8 +34,6 @@ export default class Trip {
 
   init(tripPoints) {
     this._tripPoints = tripPoints.slice();
-    console.log(tripPoints, `Исходный`)
-    console.log(this._tripPoints, `Исходный слайс`)
     this._sourcedTripPoints = tripPoints.slice();
 
     this._renderFilters();
@@ -45,19 +43,13 @@ export default class Trip {
   _sortPoint(sortType) {
     switch (sortType) {
       case SortType.PRICE:
-        console.log(this._tripPoints);
         this._tripPoints.sort(sortPointPriceToUp);
-        console.log(this._tripPoints);
         break;
       case SortType.TIME:
-        console.log(this._tripPoints);
         this._tripPoints.sort(sortPointTimeToUp);
-        console.log(this._tripPoints);
         break;
       case SortType.DAY:
-        console.log(this._tripPoints);
         this._tripPoints = this._sourcedTripPoints.slice();
-        console.log(this._tripPoints);
         break;
     }
     this._currentSortType = sortType;
