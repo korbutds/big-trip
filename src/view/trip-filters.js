@@ -36,7 +36,7 @@ export default class TripFilters extends AbstractView {
   }
 
   disableElement() {
-    this._element
+    this.getElement()
       .querySelectorAll(`.trip-filters__filter-input`)
       .forEach((element) => {
         element.disabled = true;

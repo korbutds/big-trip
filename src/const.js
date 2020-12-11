@@ -132,9 +132,9 @@ const DESTINATIONS_ARRAY = [
 ];
 
 export const SortType = {
-  DEFAULT: `default`,
-  DATE_DOWN: `date-down`,
-  DATE_UP: `date-up`
+  DAY: `day-up`,
+  TIME: `time-up`,
+  PRICE: `price-up`
 };
 
 const BLANK_POINT = {
