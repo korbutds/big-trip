@@ -81,7 +81,7 @@ export default class Point {
   }
 
   _escKeyDownHandle(evt) {
-    if (evt.key === Keys.ESCAPE[0] || evt.key === Keys.ESCAPE[1]) {
+    if (Keys.ESCAPE.indexOf(evt.key) > -1) {
       evt.preventDefault();
       this._replaceFormToCard();
     }
