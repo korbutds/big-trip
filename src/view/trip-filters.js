@@ -34,4 +34,12 @@ export default class TripFilters extends AbstractView {
   getTemplate() {
     return createTripFiltersTemplate();
   }
+
+  disableElement() {
+    this.getElement()
+      .querySelectorAll(`.trip-filters__filter-input`)
+      .forEach((element) => {
+        element.disabled = true;
+      });
+  }
 }

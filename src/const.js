@@ -131,6 +131,12 @@ const DESTINATIONS_ARRAY = [
   },
 ];
 
+export const SortType = {
+  DAY: `day-up`,
+  TIME: `time-up`,
+  PRICE: `price-up`
+};
+
 const BLANK_POINT = {
   times: dayjs(),
   type: ROUTE_POINT_TYPES.checkIn.name,

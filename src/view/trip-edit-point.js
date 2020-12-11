@@ -45,7 +45,7 @@ const generatePhoto = (photosList) => {
 };
 
 const createEditPointTemplate = (point = {}) => {
-  const {times, type, destination, offers, description, photos, id: typeId} = point;
+  const {times, type, destination, offers, description, photos, pointType: typeId} = point;
   const {iconSrc, name, price} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;
@@ -179,14 +179,13 @@ export default class EditPoint extends AbstractView {
     this._submitHandler = this._submitHandler.bind(this);
   }
 
-  _clickHandler(evt) {
-    evt.preventDefault();
+  _clickHandler() {
     this._callback.click();
   }
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit();
+    this._callback.submit(this._point);
   }
 
   getTemplate() {
