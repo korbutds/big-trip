@@ -89,8 +89,8 @@ const ROUTE_POINT_TYPES = {
     iconSrc: `./img/icons/check-in.png`,
     price: getRandomInt(2, 20) * 20,
   },
-  sightseeng: {
-    name: `Sightseeng`,
+  sightseeing: {
+    name: `Sightseeing`,
     offers: [OFFERS_LIST.bookTickets, OFFERS_LIST.lunchInCity, OFFERS_LIST.addBreakfast],
     iconSrc: `./img/icons/sightseeing.png`,
     price: getRandomInt(2, 20) * 20,
