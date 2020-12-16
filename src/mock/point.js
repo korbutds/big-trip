@@ -22,5 +22,4 @@ const generatePoint = () => {
     isFavorite: Boolean(getRandomInt()),
   };
 };
-
 export {generatePoint, DESTINATIONS_ARRAY};

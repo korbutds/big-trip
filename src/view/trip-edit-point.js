@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
 import AbstractView from "../view/abstract.js";
 import {ROUTE_POINT_TYPES} from "../const.js";
+import {deepClone} from "../view/utils/common.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -141,6 +142,8 @@ export default class EditPoint extends AbstractView {
   constructor(point = {}) {
     super();
     this._point = point;
+    this._data = deepClone(point);
+
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
   }
@@ -151,11 +154,11 @@ export default class EditPoint extends AbstractView {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(this._point);
+    this._callback.submit(this._data);
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._point);
+    return createEditPointTemplate(this._data);
   }
 
   setEditClickHandler(callback) {
