@@ -154,6 +154,7 @@ export default class EditPoint extends AbstractView {
 
   _submitHandler(evt) {
     evt.preventDefault();
+    this.updateElement();
     this._callback.submit(this._data);
   }
 
@@ -169,5 +170,28 @@ export default class EditPoint extends AbstractView {
   setEditSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._submitHandler);
+  }
+
+  updateElement() {
+    let prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+        {},
+        this._data,
+        update
+    );
+
+    this.updateElement();
   }
 }
