@@ -4,7 +4,7 @@ import {ROUTE_POINT_TYPES, DESTINATIONS_ARRAY} from "../const.js";
 import {nanoid} from "nanoid";
 
 
-const generatePoint = () => {
+export const generatePoint = () => {
   const destination = getRandomArrayElement(DESTINATIONS_ARRAY).name;
 
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
@@ -22,4 +22,3 @@ const generatePoint = () => {
     isFavorite: Boolean(getRandomInt()),
   };
 };
-export {generatePoint, DESTINATIONS_ARRAY};

@@ -1,6 +1,6 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
-import {DESTINATIONS_ARRAY} from "../mock/point.js";
+import {DESTINATIONS_ARRAY} from "../const.js";
 import Smart from "../view/smart.js";
 import {ROUTE_POINT_TYPES} from "../const.js";
 import {deepClone} from "../view/utils/common.js";
@@ -70,18 +70,8 @@ const generateOffersList = (arr, checkedArr) => {
   return str;
 };
 
-const generatePhoto = (photosList) => {
-  let str = ``;
-  if (photosList.length > 0) {
-    photosList.forEach((element) => {
-      str += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
-    });
-  }
-  return str;
-};
-
 const createEditPointTemplate = (point = {}) => {
-  const {times, type, destination, offers, description, photos, pointType: typeId} = point;
+  const {times, type, destination, offers, description, pointType: typeId} = point;
   const {iconSrc, name, price} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;
@@ -126,12 +116,6 @@ const createEditPointTemplate = (point = {}) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-          ${generatePhoto(photos)}
-          </div>
-        </div>
       </section>
     </section>
   </form>
@@ -143,9 +127,12 @@ export default class EditPoint extends Smart {
     super();
     this._point = point;
     this._data = deepClone(point);
-
+    window.__data__ = this._data;
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
+    this._eventTypeChangeHandle = this._eventTypeChangeHandle.bind(this);
+
+    this._setTypeChangeHandlers();
   }
 
   _clickHandler() {
@@ -169,5 +156,25 @@ export default class EditPoint extends Smart {
   setEditSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._submitHandler);
+  }
+
+  _eventTypeChangeHandle(evt) {
+    evt.preventDefault();
+    const eventValue = (evt.target.value === `check-in`) ? `checkIn` : evt.target.value;
+    this.updateData({
+      pointType: eventValue,
+      type: ROUTE_POINT_TYPES[eventValue],
+      offers: []
+    });
+  }
+
+  _setTypeChangeHandlers() {
+    this.getElement()
+      .querySelectorAll(`.event__type-input`)
+      .forEach((element) => element.addEventListener(`change`, this._eventTypeChangeHandle));
+  }
+
+  restoreHandlers() {
+    this._setTypeChangeHandlers();
   }
 }
