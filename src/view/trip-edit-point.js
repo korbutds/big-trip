@@ -13,6 +13,16 @@ const generateDistDatalist = (arr) => {
   return str;
 };
 
+const generatePhoto = (photosList) => {
+  let str = ``;
+  if (photosList.length > 0) {
+    photosList.forEach((element) => {
+      str += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
+    });
+  }
+  return str;
+};
+
 const generateData = (start, finish, id) => {
   return `<div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-${id}">From</label>
@@ -71,7 +81,7 @@ const generateOffersList = (arr, checkedArr) => {
 };
 
 const createEditPointTemplate = (point = {}) => {
-  const {times, type, destination, offers, description, pointType: typeId} = point;
+  const {times, type, destination, offers, description, photos, pointType: typeId} = point;
   const {iconSrc, name, price} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;
@@ -116,6 +126,12 @@ const createEditPointTemplate = (point = {}) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+          ${generatePhoto(photos)}
+          </div>
+        </div>
       </section>
     </section>
   </form>
@@ -175,6 +191,12 @@ export default class EditPoint extends Smart {
   }
 
   restoreHandlers() {
+    this.setEditClickHandler(this._callback.click);
+    this.setEditSubmitHandler(this._callback.submit);
     this._setTypeChangeHandlers();
+  }
+
+  reset(point) {
+    this.updateData(point);
   }
 }
