@@ -1,7 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../mock/point.js";
-import AbstractView from "../view/abstract.js";
+import Smart from "../view/smart.js";
 import {ROUTE_POINT_TYPES} from "../const.js";
 import {deepClone} from "../view/utils/common.js";
 
@@ -138,7 +138,7 @@ const createEditPointTemplate = (point = {}) => {
 </li>`;
 };
 
-export default class EditPoint extends AbstractView {
+export default class EditPoint extends Smart {
   constructor(point = {}) {
     super();
     this._point = point;
@@ -154,7 +154,6 @@ export default class EditPoint extends AbstractView {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this.updateElement();
     this._callback.submit(this._data);
   }
 
@@ -170,28 +169,5 @@ export default class EditPoint extends AbstractView {
   setEditSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._submitHandler);
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-    parent.replaceChild(newElement, prevElement);
-  }
-
-  updateData(update) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
-
-    this.updateElement();
   }
 }
