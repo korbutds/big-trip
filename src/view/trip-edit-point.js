@@ -2,7 +2,7 @@ import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import {DESTINATIONS_ARRAY} from "../const.js";
 import Smart from "../view/smart.js";
-import {ROUTE_POINT_TYPES} from "../const.js";
+import {ROUTE_POINT_TYPES, OFFERS_LIST} from "../const.js";
 import {deepClone} from "../view/utils/common.js";
 
 const generateDistDatalist = (arr) => {
@@ -67,7 +67,7 @@ const generateOffersList = (arr, checkedArr) => {
     for (let i = 0; i < arr.length; i++) {
       let id = nanoid();
       str += `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${checkedArr.includes(arr[i]) ? `checked` : ``}>
+                  <input class="event__offer-checkbox  visually-hidden" data-feature-name="${arr[i].offerKey}" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${checkedArr.includes(arr[i]) ? `checked` : ``}>
                   <label class="event__offer-label" for="event-offer-${arr[i][`id`]}-${id}">
                     <span class="event__offer-title">${arr[i][`name`]}</span>
                     &plus;&euro;&nbsp;
@@ -147,8 +147,10 @@ export default class EditPoint extends Smart {
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
     this._eventTypeChangeHandle = this._eventTypeChangeHandle.bind(this);
+    this._fetureListChangeHandle = this._fetureListChangeHandle.bind(this);
 
     this._setTypeChangeHandlers();
+    this._setFeaturesChangeHandlers();
   }
 
   _clickHandler() {
@@ -188,6 +190,27 @@ export default class EditPoint extends Smart {
     this.getElement()
       .querySelectorAll(`.event__type-input`)
       .forEach((element) => element.addEventListener(`change`, this._eventTypeChangeHandle));
+  }
+
+  _fetureListChangeHandle(evt) {
+    const features = this._data.offers.slice();
+    if (evt.target.checked) {
+      features.push(OFFERS_LIST[evt.target.dataset.featureName]);
+      this.updateData({
+        offers: features
+      }, true);
+    } else {
+      const featuresFiltred = features.filter((feature) => feature.offerKey !== evt.target.dataset.featureName);
+      this.updateData({
+        offers: featuresFiltred
+      }, true);
+    }
+  }
+
+  _setFeaturesChangeHandlers() {
+    this.getElement()
+      .querySelectorAll(`.event__offer-checkbox`)
+      .forEach((element) => element.addEventListener(`change`, this._fetureListChangeHandle));
   }
 
   restoreHandlers() {
