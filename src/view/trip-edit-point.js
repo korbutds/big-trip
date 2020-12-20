@@ -1,8 +1,7 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
-import {DESTINATIONS_ARRAY} from "../const.js";
 import Smart from "../view/smart.js";
-import {ROUTE_POINT_TYPES, OFFERS_LIST} from "../const.js";
+import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
 import {deepClone} from "../view/utils/common.js";
 
 const generateDistDatalist = (arr) => {
@@ -99,7 +98,7 @@ const createEditPointTemplate = (point = {}) => {
         <label class="event__label  event__type-output" for="event-destination-${id}">
           ${name}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination}" list="destination-list-${id}">
+        <input class="event__input  event__input--destination" type="text" id="event-destination-${id}" name="event-destination" value="${destination}" list="destination-list-${id}" required>
         <datalist id="destination-list-${id}">
           ${generateDistDatalist(newPointList)}
         </datalist>
@@ -146,11 +145,13 @@ export default class EditPoint extends Smart {
     window.__data__ = this._data;
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
-    this._eventTypeChangeHandle = this._eventTypeChangeHandle.bind(this);
-    this._fetureListChangeHandle = this._fetureListChangeHandle.bind(this);
+    this._pointTypeChangeHandle = this._pointTypeChangeHandle.bind(this);
+    this._pointDestinationHandle = this._pointDestinationHandle.bind(this);
+    this._offersListChangeHandle = this._offersListChangeHandle.bind(this);
 
     this._setTypeChangeHandlers();
-    this._setFeaturesChangeHandlers();
+    this._setDestinationHandlers();
+    this._setOffersChangeHandlers();
   }
 
   _clickHandler() {
@@ -176,7 +177,7 @@ export default class EditPoint extends Smart {
     this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._submitHandler);
   }
 
-  _eventTypeChangeHandle(evt) {
+  _pointTypeChangeHandle(evt) {
     evt.preventDefault();
     const eventValue = (evt.target.value === `check-in`) ? `checkIn` : evt.target.value;
     this.updateData({
@@ -189,10 +190,35 @@ export default class EditPoint extends Smart {
   _setTypeChangeHandlers() {
     this.getElement()
       .querySelectorAll(`.event__type-input`)
-      .forEach((element) => element.addEventListener(`change`, this._eventTypeChangeHandle));
+      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
   }
 
-  _fetureListChangeHandle(evt) {
+  _pointDestinationHandle(evt) {
+    evt.preventDefault();
+    const destinationList = DESTINATIONS_ARRAY.reduce((acc, current) => {
+      return [...acc, current.name];
+    }, []);
+    if (!destinationList.includes(evt.target.value)) {
+      evt.target.setCustomValidity(`Данной точки маршрута не существует. Попробуйте выбрать из предложенного списка`);
+    } else {
+      evt.target.setCustomValidity(``);
+      const destinationObject = DESTINATIONS_ARRAY.filter((destination) => destination.name === evt.target.value);
+      this.updateData({
+        destination: destinationObject[0].name,
+        description: destinationObject[0].description,
+        photos: destinationObject[0].photos
+      });
+    }
+    evt.target.reportValidity();
+  }
+
+  _setDestinationHandlers() {
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._pointDestinationHandle);
+  }
+
+  _offersListChangeHandle(evt) {
     const features = this._data.offers.slice();
     if (evt.target.checked) {
       features.push(OFFERS_LIST[evt.target.dataset.featureName]);
@@ -207,16 +233,18 @@ export default class EditPoint extends Smart {
     }
   }
 
-  _setFeaturesChangeHandlers() {
+  _setOffersChangeHandlers() {
     this.getElement()
       .querySelectorAll(`.event__offer-checkbox`)
-      .forEach((element) => element.addEventListener(`change`, this._fetureListChangeHandle));
+      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
   }
 
   restoreHandlers() {
     this.setEditClickHandler(this._callback.click);
     this.setEditSubmitHandler(this._callback.submit);
     this._setTypeChangeHandlers();
+    this._setOffersChangeHandlers();
+    this._setDestinationHandlers();
   }
 
   reset(point) {
