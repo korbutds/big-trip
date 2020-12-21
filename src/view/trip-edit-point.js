@@ -2,6 +2,9 @@ import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const generateDistDatalist = (arr) => {
   let str = ``;

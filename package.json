@@ -25,7 +25,7 @@
     "chart.js": "2.9.4",
     "chartjs-plugin-datalabels": "0.7.0",
     "dayjs": "^1.9.5",
-    "flatpickr": "^4.6.6",
+    "flatpickr": "^4.6.8",
     "he": "1.2.0",
     "nanoid": "^3.1.18"
   }
