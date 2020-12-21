@@ -48,7 +48,8 @@ export default class Trip {
       case SortType.TIME:
         this._tripPoints.sort(sortPointTimeToUp);
         break;
-      case SortType.DAY:
+      default:
+        this._tripPoints = this._sourcedTripPoints.slice();
         break;
     }
     this._currentSortType = sortType;

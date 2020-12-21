@@ -2,7 +2,6 @@ import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
-import {deepClone} from "../view/utils/common.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -37,7 +36,7 @@ const generateEventTypeList = (eventsObject, iconSrc, id, eventType) => {
   let events = ``;
   for (let i = 0; i < eventsList.length; i++) {
     events += `<div class="event__type-item">
-                <input id="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventsObject[eventsList[i]].name.toLowerCase()}" ${(eventType === eventsObject[eventsList[i]].name) ? `checked` : ``}>
+                <input id="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventsList[i]}" ${(eventType === eventsObject[eventsList[i]].name) ? `checked` : ``}>
                 <label class="event__type-label  event__type-label--${eventsObject[eventsList[i]].name.toLowerCase()}" for="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}">${eventsObject[eventsList[i]].name}</label>
               </div>`;
   }
@@ -141,8 +140,6 @@ export default class EditPoint extends Smart {
   constructor(point = {}) {
     super();
     this._point = point;
-    this._data = deepClone(point);
-    window.__data__ = this._data;
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
     this._pointTypeChangeHandle = this._pointTypeChangeHandle.bind(this);
@@ -160,11 +157,11 @@ export default class EditPoint extends Smart {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(this._data);
+    this._callback.submit(this._point);
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._data);
+    return createEditPointTemplate(this._point);
   }
 
   setEditClickHandler(callback) {
@@ -179,10 +176,10 @@ export default class EditPoint extends Smart {
 
   _pointTypeChangeHandle(evt) {
     evt.preventDefault();
-    const eventValue = (evt.target.value === `check-in`) ? `checkIn` : evt.target.value;
+    // const eventValue = (evt.target.value === `check-in`) ? `checkIn` : evt.target.value;
     this.updateData({
-      pointType: eventValue,
-      type: ROUTE_POINT_TYPES[eventValue],
+      pointType: evt.target.value,
+      type: ROUTE_POINT_TYPES[evt.target.value],
       offers: []
     });
   }
@@ -202,11 +199,11 @@ export default class EditPoint extends Smart {
       evt.target.setCustomValidity(`Данной точки маршрута не существует. Попробуйте выбрать из предложенного списка`);
     } else {
       evt.target.setCustomValidity(``);
-      const destinationObject = DESTINATIONS_ARRAY.filter((destination) => destination.name === evt.target.value);
+      const destinationObject = DESTINATIONS_ARRAY.find((elem) => elem.name === evt.target.value);
       this.updateData({
-        destination: destinationObject[0].name,
-        description: destinationObject[0].description,
-        photos: destinationObject[0].photos
+        destination: destinationObject.name,
+        description: destinationObject.description,
+        photos: destinationObject.photos
       });
     }
     evt.target.reportValidity();
@@ -219,14 +216,14 @@ export default class EditPoint extends Smart {
   }
 
   _offersListChangeHandle(evt) {
-    const features = this._data.offers.slice();
+    const offers = this._point.offers.slice();
     if (evt.target.checked) {
-      features.push(OFFERS_LIST[evt.target.dataset.featureName]);
+      offers.push(OFFERS_LIST[evt.target.dataset.featureName]);
       this.updateData({
-        offers: features
+        offers
       }, true);
     } else {
-      const featuresFiltred = features.filter((feature) => feature.offerKey !== evt.target.dataset.featureName);
+      const featuresFiltred = offers.filter((feature) => feature.offerKey !== evt.target.dataset.featureName);
       this.updateData({
         offers: featuresFiltred
       }, true);
