@@ -176,7 +176,6 @@ export default class EditPoint extends Smart {
 
   _pointTypeChangeHandle(evt) {
     evt.preventDefault();
-    // const eventValue = (evt.target.value === `check-in`) ? `checkIn` : evt.target.value;
     this.updateData({
       pointType: evt.target.value,
       type: ROUTE_POINT_TYPES[evt.target.value],
