@@ -2,6 +2,9 @@ import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -140,15 +143,19 @@ export default class EditPoint extends Smart {
   constructor(point = {}) {
     super();
     this._point = point;
+    this._datepickerStart = null;
+    this._datepickerFinish = null;
+
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
     this._pointTypeChangeHandle = this._pointTypeChangeHandle.bind(this);
     this._pointDestinationHandle = this._pointDestinationHandle.bind(this);
     this._offersListChangeHandle = this._offersListChangeHandle.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
-    this._setTypeChangeHandlers();
-    this._setDestinationHandlers();
-    this._setOffersChangeHandlers();
+    this._setInnerHandlers();
+    this._setDatePicker();
   }
 
   _clickHandler() {
@@ -183,10 +190,74 @@ export default class EditPoint extends Smart {
     });
   }
 
-  _setTypeChangeHandlers() {
-    this.getElement()
-      .querySelectorAll(`.event__type-input`)
-      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
+  _setDatePicker() {
+    if (this._datepicker) {
+      this._datepickerStart.destroy();
+      this._datepickerFinish.destroy();
+      this._datepickerStart = null;
+      this._datepickerFinish = null;
+    }
+    this._datepickerStart = flatpickr(
+        this.getElement().querySelector(`[name="event-start-time"]`),
+        {
+          dateFormat: `d/m/y H:i`,
+          enableTime: true,
+          minDate: `today`,
+          defaultDate: this._point.times.start,
+          onChange: this._startDateChangeHandler
+        }
+    );
+
+    this._datepickerFinish = flatpickr(
+        this.getElement().querySelector(`[name="event-end-time"]`),
+        {
+          dateFormat: `d/m/y H:i`,
+          enableTime: true,
+          minDate: `today`,
+          defaultDate: this._point.times.finish,
+          onChange: this._endDateChangeHandler
+        }
+    );
+  }
+
+  _startDateChangeHandler([userTime]) {
+    const startDate = Date.parse(userTime);
+
+    if (startDate < this._point.times.finish) {
+      this.updateData({
+        times: {
+          start: startDate,
+          finish: this._point.times.finish
+        }
+      });
+    } else {
+      this.updateData({
+        times: {
+          start: startDate,
+          finish: startDate
+        }
+      });
+    }
+  }
+
+  _endDateChangeHandler([userTime]) {
+    const endDate = Date.parse(userTime);
+
+    if (endDate < this._point.times.start) {
+      this.updateData({
+        times: {
+          start: endDate,
+          finish: endDate
+        }
+      });
+    } else {
+      this.updateData({
+        times: {
+          start: this._point.times.start,
+          finish: endDate
+        }
+      });
+    }
   }
 
   _pointDestinationHandle(evt) {
@@ -208,10 +279,16 @@ export default class EditPoint extends Smart {
     evt.target.reportValidity();
   }
 
-  _setDestinationHandlers() {
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelectorAll(`.event__type-input`)
+      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
     this.getElement()
       .querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._pointDestinationHandle);
+    this.getElement()
+      .querySelectorAll(`.event__offer-checkbox`)
+      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
   }
 
   _offersListChangeHandle(evt) {
@@ -229,18 +306,11 @@ export default class EditPoint extends Smart {
     }
   }
 
-  _setOffersChangeHandlers() {
-    this.getElement()
-      .querySelectorAll(`.event__offer-checkbox`)
-      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
-  }
-
   restoreHandlers() {
     this.setEditClickHandler(this._callback.click);
     this.setEditSubmitHandler(this._callback.submit);
-    this._setTypeChangeHandlers();
-    this._setOffersChangeHandlers();
-    this._setDestinationHandlers();
+    this._setInnerHandlers();
+    this._setDatePicker();
   }
 
   reset(point) {
