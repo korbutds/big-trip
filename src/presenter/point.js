@@ -58,6 +58,7 @@ export default class Point {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
+      this._pointEditComponent.reset(this._point);
       this._replaceFormToCard();
     }
   }
@@ -83,6 +84,7 @@ export default class Point {
   _escKeyDownHandle(evt) {
     if (Keys.ESCAPE.indexOf(evt.key) > -1) {
       evt.preventDefault();
+      this._pointEditComponent.reset(this._point);
       this._replaceFormToCard();
     }
   }
@@ -92,6 +94,7 @@ export default class Point {
   }
 
   _handleBackClick() {
+    this._pointEditComponent.reset(this._point);
     this._replaceFormToCard();
   }
 

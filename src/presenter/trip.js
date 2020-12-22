@@ -48,7 +48,7 @@ export default class Trip {
       case SortType.TIME:
         this._tripPoints.sort(sortPointTimeToUp);
         break;
-      case SortType.DAY:
+      default:
         this._tripPoints = this._sourcedTripPoints.slice();
         break;
     }
@@ -70,6 +70,7 @@ export default class Trip {
 
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._sourcedTripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 

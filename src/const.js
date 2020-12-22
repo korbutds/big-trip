@@ -5,36 +5,43 @@ import dayjs from "dayjs";
 const OFFERS_LIST = {
   orderUber: {
     id: `order-uber`,
+    offerKey: `orderUber`,
     name: `Order uber`,
     price: 20
   },
   addLuggage: {
     id: `add-luggage`,
+    offerKey: `addLuggage`,
     name: `Add luggage`,
     price: 15
   },
   switchToComfort: {
     id: `switch-to-comfort`,
+    offerKey: `switchToComfort`,
     name: `Switch to comfort`,
     price: 100
   },
   rentACar: {
     id: `rent-a-car`,
+    offerKey: `rentACar`,
     name: `Rent a car`,
     price: 150
   },
   addBreakfast: {
     id: `add-breakfast`,
+    offerKey: `addBreakfast`,
     name: `Add breakfast`,
     price: 25
   },
   bookTickets: {
     id: `book-tickets`,
+    offerKey: `bookTickets`,
     name: `Book tickets`,
     price: 12
   },
   lunchInCity: {
     id: `lunch-in-city`,
+    offerKey: `lunchInCity`,
     name: `Lunch in city`,
     price: 45
   },
@@ -89,8 +96,8 @@ const ROUTE_POINT_TYPES = {
     iconSrc: `./img/icons/check-in.png`,
     price: getRandomInt(2, 20) * 20,
   },
-  sightseeng: {
-    name: `Sightseeng`,
+  sightseeing: {
+    name: `Sightseeing`,
     offers: [OFFERS_LIST.bookTickets, OFFERS_LIST.lunchInCity, OFFERS_LIST.addBreakfast],
     iconSrc: `./img/icons/sightseeing.png`,
     price: getRandomInt(2, 20) * 20,

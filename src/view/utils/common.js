@@ -32,3 +32,18 @@ export const updateItem = (points, update) => {
     ...points.slice(index + 1)
   ];
 };
+
+export const deepClone = (obj) => {
+  const clone = {};
+  for (const i in obj) {
+    if (Array.isArray(obj[i])) {
+      clone[i] = obj[i].slice();
+      clone[i].forEach((el) => deepClone(el));
+    } else if (obj[i] instanceof Object) {
+      clone[i] = deepClone(obj[i]);
+    } else {
+      clone[i] = obj[i];
+    }
+  }
+  return clone;
+};
