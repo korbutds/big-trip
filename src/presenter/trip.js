@@ -12,8 +12,9 @@ import {sortPointPriceToUp, sortPointTimeToUp} from "../view/utils/points.js";
 import {SortType} from "../const.js";
 
 export default class Trip {
-  constructor(tripListContainer) {
+  constructor(tripListContainer, pointsModel) {
     this._tripListContainer = tripListContainer;
+    this._pointsModel = pointsModel;
 
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
@@ -38,6 +39,10 @@ export default class Trip {
 
     this._renderFilters();
     this._renderTrip();
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints();
   }
 
   _sortPoint(sortType) {
