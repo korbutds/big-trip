@@ -12,4 +12,4 @@ const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 
 const tripPresenter = new Trip(tripEventsSection, pointsModel);
-tripPresenter.init(points);
+tripPresenter.init();

@@ -33,31 +33,20 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(tripPoints) {
-    this._tripPoints = tripPoints.slice();
-    this._sourcedTripPoints = tripPoints.slice();
-
+  init() {
     this._renderFilters();
     this._renderTrip();
   }
 
   _getPoints() {
-    return this._pointsModel.getPoints();
-  }
-
-  _sortPoint(sortType) {
-    switch (sortType) {
+    switch (this._currentSortType) {
       case SortType.PRICE:
-        this._tripPoints.sort(sortPointPriceToUp);
-        break;
+        return this._pointsModel.getPoints().slice().sort(sortPointPriceToUp);
       case SortType.TIME:
-        this._tripPoints.sort(sortPointTimeToUp);
-        break;
-      default:
-        this._tripPoints = this._sourcedTripPoints.slice();
-        break;
+        return this._pointsModel.getPoints().slice().sort(sortPointTimeToUp);
     }
-    this._currentSortType = sortType;
+
+    return this._pointsModel.getPoints();
   }
 
   _renderPoint(point) {
@@ -74,8 +63,6 @@ export default class Trip {
   }
 
   _handlePointChange(updatedPoint) {
-    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
-    this._sourcedTripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
@@ -89,15 +76,18 @@ export default class Trip {
     if (this._currentSortType === sortType) {
       return;
     }
-    this._sortPoint(sortType);
+    this._currentSortType = sortType;
     this._clearTrip();
-    this._renderPoints();
+    this._renderPointsList();
   }
 
-  _renderPoints() {
-    for (let i = 0; i < this._tripPoints.length; i++) {
-      this._renderPoint(this._tripPoints[i]);
-    }
+  _renderPoints(points) {
+    points.forEach((point) => this._renderPoint(point));
+  }
+
+  _renderPointsList() {
+    const points = this._getPoints().slice();
+    this._renderPoints(points);
   }
 
   _renderFilters() {
@@ -120,13 +110,13 @@ export default class Trip {
 
   _renderTripBoard() {
     render(this._tripListContainer, this._boardComponent, RenderPosition.BEFOREBEGIN);
-    this._renderPoints();
+    this._renderPointsList();
 
   }
 
   _renderTrip() {
-    this._infoComponent = new TripInfo(this._tripPoints);
-    if (this._tripPoints.length === 0) {
+    this._infoComponent = new TripInfo(this._getPoints());
+    if (this._getPoints().length === 0) {
       this._renderEmptyTrip();
       this._filterComponent.disableElement();
     } else {
