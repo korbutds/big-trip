@@ -1,7 +1,7 @@
 import TripPoint from "../view/trip-point.js";
 import TripPointEdit from "../view/trip-edit-point.js";
 import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
-import {Keys} from "../const.js";
+import {Keys, UpdateType, UserAction} from "../const.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -99,11 +99,19 @@ export default class Point {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(point);
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        point
+    );
     this._replaceFormToCard();
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._point, {isFavorite: !this._point.isFavorite}));
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite})
+    );
   }
 }

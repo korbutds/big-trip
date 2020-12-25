@@ -138,7 +138,7 @@ const DESTINATIONS_ARRAY = [
   },
 ];
 
-export const SortType = {
+const SortType = {
   DAY: `day-up`,
   TIME: `time-up`,
   PRICE: `price-up`
@@ -158,4 +158,16 @@ const Keys = {
   ESCAPE: [`Esc`, `Escape`]
 };
 
-export {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY, BLANK_POINT, Keys};
+const UserAction = {
+  UPDATE_POINT: `UPDATE_POINT`,
+  ADD_POINT: `ADD_POINT`,
+  DELETE_POINT: `DELETE_POINT`
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY, BLANK_POINT, Keys, SortType, UserAction, UpdateType};

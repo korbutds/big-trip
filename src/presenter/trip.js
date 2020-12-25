@@ -7,7 +7,6 @@ import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
 import {render, RenderPosition} from "../view/utils/render.js";
 import Point from "./point.js";
-import {updateItem} from "../view/utils/common.js";
 import {sortPointPriceToUp, sortPointTimeToUp} from "../view/utils/points.js";
 import {SortType} from "../const.js";
 
@@ -28,9 +27,12 @@ export default class Trip {
     this._sortComponent = new TripSort();
     this._boardComponent = new TripBoard();
 
-    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    this._pointsModel.addObservers(this._handleModelEvent);
   }
 
   init() {
@@ -50,7 +52,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new Point(this._boardComponent, this._handlePointChange, this._handleModeChange);
+    const pointPresenter = new Point(this._boardComponent, this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -62,8 +64,20 @@ export default class Trip {
     this._pointPresenter = {};
   }
 
-  _handlePointChange(updatedPoint) {
-    this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  _handleViewAction(actionType, updateType, update) {
+    console.log(`View Action`, actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(`Model Event`, updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   }
 
   _handleModeChange() {
