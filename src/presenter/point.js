@@ -2,6 +2,7 @@ import TripPoint from "../view/trip-point.js";
 import TripPointEdit from "../view/trip-edit-point.js";
 import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
 import {Keys, UpdateType, UserAction} from "../const.js";
+import {isDatesEqual} from "../view/utils/points.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -21,6 +22,7 @@ export default class Point {
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleBackClick = this._handleBackClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleResetClick = this._handleResetClick.bind(this);
     this._escKeyDownHandle = this._escKeyDownHandle.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
@@ -37,6 +39,7 @@ export default class Point {
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setEditClickHandler(this._handleBackClick);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
+    this._pointEditComponent.setResetClickHandler(this._handleResetClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -98,11 +101,14 @@ export default class Point {
     this._replaceFormToCard();
   }
 
-  _handleFormSubmit(point) {
+  _handleFormSubmit(update) {
+    // Проверяем, поменялись ли в точке данные, которые попадают под фильтрацию,
+    // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
+    const isMinorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish);
     this._changeData(
         UserAction.UPDATE_POINT,
-        UpdateType.MINOR,
-        point
+        isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+        update
     );
     this._replaceFormToCard();
   }
@@ -112,6 +118,14 @@ export default class Point {
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
         Object.assign({}, this._point, {isFavorite: !this._point.isFavorite})
+    );
+  }
+
+  _handleResetClick(point) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        point
     );
   }
 }

@@ -58,13 +58,6 @@ export default class Trip {
     this._pointPresenter[point.id] = pointPresenter;
   }
 
-  _clearTrip() {
-    Object
-      .values(this._pointPresenter)
-      .forEach((presenter) => presenter.destroy());
-    this._pointPresenter = {};
-  }
-
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
