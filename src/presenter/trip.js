@@ -26,7 +26,6 @@ export default class Trip {
     this._filterComponent = new FilterMenu();
     this._emptyComponent = new TripEmpty();
     this._boardComponent = new TripBoard();
-    this._infoComponent = new TripInfo(this._getPoints());
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -128,6 +127,7 @@ export default class Trip {
   }
 
   _renderInfo() {
+    this._infoComponent = new TripInfo(this._getPoints());
     render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
@@ -170,6 +170,7 @@ export default class Trip {
     this._pointPresenter = {};
     remove(this._sortComponent);
     remove(this._emptyComponent);
+    remove(this._infoComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
