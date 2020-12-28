@@ -68,3 +68,7 @@ export const sortPointTimeToUp = (timeA, timeB) => {
 export const isDatesEqual = (dateA, dateB) => {
   return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `m`);
 };
+
+export const isDateExpired = (dueData) => {
+  return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `d`);
+};

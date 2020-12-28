@@ -10,6 +10,20 @@ import Point from "./point.js";
 import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 
+const filters = [
+  {
+    type: `everything`,
+    name: `Everything`,
+    count: 3
+  },
+  {
+    type: `past`,
+    name: `Past`,
+    count: 0
+  }
+];
+
+
 export default class Trip {
   constructor(tripListContainer, pointsModel) {
     this._tripListContainer = tripListContainer;
@@ -23,7 +37,7 @@ export default class Trip {
     this._tripInfoContainer = this._header.querySelector(`.trip-main`);
 
     this._sortComponent = null;
-    this._filterComponent = new FilterMenu();
+    this._filterComponent = new FilterMenu(filters, `everything`);
     this._emptyComponent = new TripEmpty();
     this._boardComponent = new TripBoard();
 
