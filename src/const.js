@@ -2,7 +2,7 @@ import {getRandomInt} from "./view/utils/common.js";
 import {createPhotosArr, getRandomFishText} from "./view/utils/points.js";
 import dayjs from "dayjs";
 
-const OFFERS_LIST = {
+export const OFFERS_LIST = {
   orderUber: {
     id: `order-uber`,
     offerKey: `orderUber`,
@@ -47,7 +47,7 @@ const OFFERS_LIST = {
   },
 };
 
-const ROUTE_POINT_TYPES = {
+export const ROUTE_POINT_TYPES = {
   taxi: {
     name: `Taxi`,
     offers: [OFFERS_LIST.orderUber, OFFERS_LIST.switchToComfort],
@@ -110,7 +110,7 @@ const ROUTE_POINT_TYPES = {
   },
 };
 
-const DESTINATIONS_ARRAY = [
+export const DESTINATIONS_ARRAY = [
   {
     name: `San-Francisco`,
     description: getRandomFishText(getRandomInt(1, 5)),
@@ -138,13 +138,13 @@ const DESTINATIONS_ARRAY = [
   },
 ];
 
-const SortType = {
+export const SortType = {
   DAY: `day-up`,
   TIME: `time-up`,
   PRICE: `price-up`
 };
 
-const BLANK_POINT = {
+export const BLANK_POINT = {
   times: dayjs(),
   type: ROUTE_POINT_TYPES.checkIn.name,
   destination: DESTINATIONS_ARRAY[0].name,
@@ -154,20 +154,24 @@ const BLANK_POINT = {
   isFavorite: false,
 };
 
-const Keys = {
+export const Keys = {
   ESCAPE: [`Esc`, `Escape`]
 };
 
-const UserAction = {
+export const UserAction = {
   UPDATE_POINT: `UPDATE_POINT`,
   ADD_POINT: `ADD_POINT`,
   DELETE_POINT: `DELETE_POINT`
 };
 
-const UpdateType = {
+export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
 };
 
-export {OFFERS_LIST, ROUTE_POINT_TYPES, DESTINATIONS_ARRAY, BLANK_POINT, Keys, SortType, UserAction, UpdateType};
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};

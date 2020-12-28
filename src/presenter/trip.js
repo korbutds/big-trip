@@ -7,7 +7,7 @@ import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 import Point from "./point.js";
-import {sortPointPriceToUp, sortPointTimeToUp} from "../view/utils/points.js";
+import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
 
 export default class Trip {
@@ -43,7 +43,7 @@ export default class Trip {
   _getPoints() {
     switch (this._currentSortType) {
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort(sortPointPriceToUp);
+        return this._pointsModel.getPoints().slice().sort(sortPointPriceToMin);
       case SortType.TIME:
         return this._pointsModel.getPoints().slice().sort(sortPointTimeToUp);
     }

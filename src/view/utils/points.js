@@ -55,8 +55,8 @@ export const getRandomFishText = (sentenseCount) => {
   return sentenseArr.join(`. `).concat(`.`);
 };
 
-export const sortPointPriceToUp = (priceA, priceB) => {
-  return priceA.type.price - priceB.type.price;
+export const sortPointPriceToMin = (priceA, priceB) => {
+  return priceB.type.price - priceA.type.price;
 };
 
 export const sortPointTimeToUp = (timeA, timeB) => {
