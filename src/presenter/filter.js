@@ -10,7 +10,10 @@ export default class Filter {
 
     this._filterComponent = null;
 
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+
+    this._filterModel.addObservers(this._handleModelEvent);
   }
 
   init() {
@@ -28,6 +31,10 @@ export default class Filter {
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+  }
+
+  _handleModelEvent() {
+    this.init();
   }
 
   _handleFilterTypeChange(filterType) {

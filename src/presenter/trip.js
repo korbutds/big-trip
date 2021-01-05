@@ -5,9 +5,10 @@ import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
-import Point from "./point.js";
+import PointPresenter from "./point.js";
+import NewPointPresenter from "./point-new.js";
 import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
-import {SortType, UpdateType, UserAction} from "../const.js";
+import {FilterType, SortType, UpdateType, UserAction} from "../const.js";
 import {filter} from "../view/utils/filters.js";
 
 
@@ -35,10 +36,17 @@ export default class Trip {
 
     this._pointsModel.addObservers(this._handleModelEvent);
     this._filterModel.addObservers(this._handleModelEvent);
+    this._pointNewPresenter = new NewPointPresenter(this._boardComponent, this._handleViewAction);
   }
 
   init() {
     this._renderTrip();
+  }
+
+  createTask() {
+    this._currentSortType = SortType.DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init();
   }
 
   _getPoints() {
@@ -57,7 +65,7 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new Point(this._boardComponent, this._handleViewAction, this._handleModeChange);
+    const pointPresenter = new PointPresenter(this._boardComponent, this._handleViewAction, this._handleModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -93,6 +101,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.resetView());
@@ -157,6 +166,7 @@ export default class Trip {
   }
 
   _clearTrip({resetSortType = false} = {}) {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());

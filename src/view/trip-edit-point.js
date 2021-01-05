@@ -5,6 +5,19 @@ import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+const BlankPoint = {
+  pointType: `taxi`,
+  times: {
+    start: Date(),
+    finish: Date(),
+  },
+  type: ROUTE_POINT_TYPES.taxi,
+  destination: ``,
+  offers: [],
+  description: ``,
+  photos: [],
+  isFavorite: false,
+};
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -17,9 +30,15 @@ const generateDistDatalist = (arr) => {
 const generatePhoto = (photosList) => {
   let str = ``;
   if (photosList.length > 0) {
+    let images = ``;
     photosList.forEach((element) => {
-      str += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
+      images += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
     });
+    str += `<div class="event__photos-container">
+    <div class="event__photos-tape">
+      ${images};
+    </div>
+  </div>`;
   }
   return str;
 };
@@ -81,7 +100,7 @@ const generateOffersList = (arr, checkedArr) => {
   return str;
 };
 
-const createEditPointTemplate = (point = {}) => {
+const createEditPointTemplate = (point) => {
   const {times, type, destination, offers, description, photos, pointType: typeId} = point;
   const {iconSrc, name, price} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
@@ -113,7 +132,7 @@ const createEditPointTemplate = (point = {}) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${price}">
+        <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -124,23 +143,19 @@ const createEditPointTemplate = (point = {}) => {
     </header>
     <section class="event__details">
       ${generateOffersList(offersList, offers)}
-      <section class="event__section  event__section--destination">
+      ${(description.length > 0 || photos.length > 0) ?
+    `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-          ${generatePhoto(photos)}
-          </div>
-        </div>
-      </section>
+        ${generatePhoto(photos)}
+      </section>` : ``}
     </section>
   </form>
 </li>`;
 };
 
 export default class EditPoint extends Smart {
-  constructor(point = {}) {
+  constructor(point = BlankPoint) {
     super();
     this._point = point;
     this._datepickerStart = null;
