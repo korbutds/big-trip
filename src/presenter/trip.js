@@ -1,6 +1,5 @@
 // import TripPoint from "../view/trip-point.js";
 // import TripPointEdit from "../view/trip-edit-point.js";
-import FilterMenu from "../view/trip-filters.js";
 import TripEmpty from "../view/trip-empty.js";
 import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
@@ -9,19 +8,6 @@ import {remove, render, RenderPosition} from "../view/utils/render.js";
 import Point from "./point.js";
 import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
-
-const filters = [
-  {
-    type: `everything`,
-    name: `Everything`,
-    count: 3
-  },
-  {
-    type: `past`,
-    name: `Past`,
-    count: 0
-  }
-];
 
 
 export default class Trip {
@@ -37,7 +23,6 @@ export default class Trip {
     this._tripInfoContainer = this._header.querySelector(`.trip-main`);
 
     this._sortComponent = null;
-    this._filterComponent = new FilterMenu(filters, `everything`);
     this._emptyComponent = new TripEmpty();
     this._boardComponent = new TripBoard();
 
@@ -50,7 +35,6 @@ export default class Trip {
   }
 
   init() {
-    this._renderFilters();
     this._renderTrip();
   }
 
@@ -131,11 +115,6 @@ export default class Trip {
     this._renderPoints(points);
   }
 
-  _renderFilters() {
-    render(this._tripControlsContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
-
-  }
-
   _renderEmptyTrip() {
     render(this._tripListContainer, this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
@@ -167,7 +146,6 @@ export default class Trip {
 
     if (pointsCount === 0) {
       this._renderEmptyTrip();
-      this._filterComponent.disableElement();
       return;
     }
 

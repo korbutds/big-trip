@@ -14,16 +14,9 @@ const createTripFiltersTemplate = (filterItems, currentFilterType) => {
                               .map((filter) => createTripFiltersItemTemplate(filter, currentFilterType))
                               .join(``);
   return `<div>
-            <h2 class="visually-hidden">Switch trip view</h2>
-            <nav class="trip-controls__trip-tabs  trip-tabs">
-              <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
-              <a class="trip-tabs__btn" href="#">Stats</a>
-            </nav>
-
             <h2 class="visually-hidden">Filter events</h2>
             <form class="trip-filters" action="#" method="get">
               ${filterItemTemplate}
-
               <button class="visually-hidden" type="submit">Accept filter</button>
             </form>
           </div>`;
@@ -35,16 +28,19 @@ export default class TripFilters extends AbstractView {
 
     this._filter = filter;
     this._currentFilterType = currentFilterType;
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
   getTemplate() {
     return createTripFiltersTemplate(this._filter, this._currentFilterType);
   }
 
-  disableElement() {
-    this.getElement()
-      .querySelectorAll(`.trip-filters__filter-input`)
-      .forEach((element) => {
-        element.disabled = true;
-      });
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.value);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);
   }
 }

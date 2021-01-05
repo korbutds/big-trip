@@ -28,10 +28,10 @@ export const getDateDiff = (start, finish) => {
   return time;
 };
 
-let startDate = dayjs().add(2, `day`).startOf(`date`);
+let startDate = dayjs().add(getRandomInt(-1, 1), `day`).startOf(`date`);
 
 export const generateDate = () => {
-  const MAX_TRIP_TIME = 6;
+  const MAX_TRIP_TIME = 12;
   const tripTime = getRandomInt(1, MAX_TRIP_TIME) * 30;
   const start = startDate;
   const tripEndTime = startDate.add(tripTime, `minutes`);
