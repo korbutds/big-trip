@@ -19,7 +19,7 @@ pointsModel.setPoints(points);
 render(tripControls, new TripViews(), RenderPosition.BEFOREBEGIN);
 
 const filterModel = new FilterModel();
+const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
 const filterPresenter = new Filter(tripControls, filterModel);
-const tripPresenter = new Trip(tripEventsSection, pointsModel);
 filterPresenter.init();
 tripPresenter.init();

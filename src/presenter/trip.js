@@ -8,12 +8,14 @@ import {remove, render, RenderPosition} from "../view/utils/render.js";
 import Point from "./point.js";
 import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
+import {filter} from "../view/utils/filters.js";
 
 
 export default class Trip {
-  constructor(tripListContainer, pointsModel) {
+  constructor(tripListContainer, pointsModel, filterModel) {
     this._tripListContainer = tripListContainer;
     this._pointsModel = pointsModel;
+    this._filterModel = filterModel;
 
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
@@ -32,6 +34,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._pointsModel.addObservers(this._handleModelEvent);
+    this._filterModel.addObservers(this._handleModelEvent);
   }
 
   init() {
@@ -39,14 +42,18 @@ export default class Trip {
   }
 
   _getPoints() {
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filtredPoints = filter[filterType](points);
+
     switch (this._currentSortType) {
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort(sortPointPriceToMin);
+        return filtredPoints.sort(sortPointPriceToMin);
       case SortType.TIME:
-        return this._pointsModel.getPoints().slice().sort(sortPointTimeToUp);
+        return filtredPoints.sort(sortPointTimeToUp);
     }
 
-    return this._pointsModel.getPoints();
+    return filtredPoints;
   }
 
   _renderPoint(point) {
@@ -67,14 +74,9 @@ export default class Trip {
         this._pointsModel.deletePoint(updateType, update);
         break;
     }
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
   }
 
   _handleModelEvent(updateType, data) {
-    // В зависимости от типа изменений решаем, что делать:
     switch (updateType) {
       case UpdateType.PATCH:
         this._pointPresenter[data.id].init(data);
