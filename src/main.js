@@ -5,6 +5,7 @@ import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import {render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
+import {HeaderItem} from "./const.js";
 
 const POINT_COUNT = 22;
 
@@ -25,6 +26,28 @@ const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
 const filterModel = new FilterModel();
 const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
 const filterPresenter = new Filter(tripControls, filterModel);
+
+const handleHeaderMenuClick = (headerItem) => {
+  switch (headerItem) {
+    case HeaderItem.ADD_NEW_POINT:
+      // Скрыть статистику
+      // Показать доску
+      // Показать форму добавления новой задачи
+      // Убрать выделение с ADD NEW TASK после сохранения
+      break;
+    case HeaderItem.TABLE:
+      // Показать доску
+      // Скрыть статистику
+      break;
+    case HeaderItem.STATS:
+      // Скрыть доску
+      // Показать статистику
+      break;
+  }
+};
+
+headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
+
 filterPresenter.init();
 tripPresenter.init();
 
