@@ -15,8 +15,9 @@ const tripEventsSection = pageMain.querySelector(`.trip-events`);
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
+const headerComponent = new TripView();
 
-render(pageBody, new TripView(), RenderPosition.AFTERBEGIN);
+render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);

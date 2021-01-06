@@ -72,3 +72,7 @@ export const isDatesEqual = (dateA, dateB) => {
 export const isDateExpired = (dueData) => {
   return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `d`);
 };
+
+export const isCostEqual = (oldCost, newCost) => {
+  return (oldCost === Number(newCost)) ? true : false;
+};

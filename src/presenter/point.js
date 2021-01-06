@@ -2,7 +2,7 @@ import TripPoint from "../view/trip-point.js";
 import TripPointEdit from "../view/trip-edit-point.js";
 import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
 import {Keys, UpdateType, UserAction} from "../const.js";
-import {isDatesEqual} from "../view/utils/points.js";
+import {isDatesEqual, isCostEqual} from "../view/utils/points.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -104,10 +104,10 @@ export default class Point {
   _handleFormSubmit(update) {
     // Проверяем, поменялись ли в точке данные, которые попадают под фильтрацию,
     // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
-    const isMinorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish);
+    const isMajorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish) || !isCostEqual(this._point.price, update.price);
     this._changeData(
         UserAction.UPDATE_POINT,
-        isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+        isMajorUpdate ? UpdateType.MAJOR : UpdateType.PATCH,
         update
     );
     this._replaceFormToCard();
