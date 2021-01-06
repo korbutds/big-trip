@@ -65,6 +65,10 @@ export const sortPointTimeToUp = (timeA, timeB) => {
   return timeADuration - timeBDuration;
 };
 
+export const sortPointDate = (dateA, dateB) => {
+  return dayjs(dateA.times.start) - dayjs(dateB.times.start);
+};
+
 export const isDatesEqual = (dateA, dateB) => {
   return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `m`);
 };

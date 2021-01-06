@@ -5,7 +5,7 @@ import TripBoard from "../view/trip-board.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 import PointPresenter from "./point.js";
 import NewPointPresenter from "./point-new.js";
-import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
+import {sortPointPriceToMin, sortPointTimeToUp, sortPointDate} from "../view/utils/points.js";
 import {FilterType, SortType, UpdateType, UserAction} from "../const.js";
 import {filter} from "../view/utils/filters.js";
 
@@ -57,8 +57,9 @@ export default class Trip {
         return filtredPoints.sort(sortPointPriceToMin);
       case SortType.TIME:
         return filtredPoints.sort(sortPointTimeToUp);
+      case SortType.DAY:
+        return filtredPoints.sort(sortPointDate);
     }
-
     return filtredPoints;
   }
 
