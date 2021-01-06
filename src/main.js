@@ -4,20 +4,22 @@ import Filter from "./presenter/filter.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import {render, RenderPosition} from "./view/utils/render.js";
-import TripViews from "./view/trip-view.js";
+import TripView from "./view/trip-view.js";
 
 const POINT_COUNT = 22;
 
-const pageMain = document.querySelector(`.page-body__page-main`);
+const pageBody = document.querySelector(`.page-body`);
+const pageMain = pageBody.querySelector(`.page-body__page-main`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
-const tripMain = document.querySelector(`.trip-main`);
-const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 
-render(tripControls, new TripViews(), RenderPosition.BEFOREBEGIN);
+render(pageBody, new TripView(), RenderPosition.AFTERBEGIN);
+
+const tripMain = document.querySelector(`.trip-main`);
+const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
 
 const filterModel = new FilterModel();
 const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
