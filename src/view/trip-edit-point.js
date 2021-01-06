@@ -101,8 +101,8 @@ const generateOffersList = (arr, checkedArr) => {
 };
 
 const createEditPointTemplate = (point) => {
-  const {times, type, destination, offers, description, photos, pointType: typeId} = point;
-  const {iconSrc, name, price} = type;
+  const {times, type, destination, offers, description, photos, pointType: typeId, price} = point;
+  const {iconSrc, name} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;
   let id = nanoid();
@@ -169,6 +169,7 @@ export default class EditPoint extends Smart {
     this._offersListChangeHandle = this._offersListChangeHandle.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._costChangeHandle = this._costChangeHandle.bind(this);
 
     this._setInnerHandlers();
     this._setDatePicker();
@@ -318,16 +319,11 @@ export default class EditPoint extends Smart {
     evt.target.reportValidity();
   }
 
-  _setInnerHandlers() {
-    this.getElement()
-      .querySelectorAll(`.event__type-input`)
-      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
-    this.getElement()
-      .querySelector(`.event__input--destination`)
-      .addEventListener(`change`, this._pointDestinationHandle);
-    this.getElement()
-      .querySelectorAll(`.event__offer-checkbox`)
-      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
+  _costChangeHandle(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
+    }, true);
   }
 
   _offersListChangeHandle(evt) {
@@ -343,6 +339,21 @@ export default class EditPoint extends Smart {
         offers: featuresFiltred
       }, true);
     }
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelectorAll(`.event__type-input`)
+      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._pointDestinationHandle);
+    this.getElement()
+      .querySelectorAll(`.event__offer-checkbox`)
+      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`change`, this._costChangeHandle);
   }
 
   restoreHandlers() {

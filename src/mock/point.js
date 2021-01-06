@@ -12,6 +12,7 @@ export const generatePoint = () => {
 
   const pointType = getRandomArrayElement(Object.keys(ROUTE_POINT_TYPES));
   const type = ROUTE_POINT_TYPES[pointType];
+  const price = type.price;
   const offersList = getRandomArray(getRandomInt(0, type[`offers`].length), type[`offers`]);
   return {
     id: nanoid(),
@@ -23,5 +24,6 @@ export const generatePoint = () => {
     description: destinationDescription,
     photos: destinationPhotos,
     isFavorite: Boolean(getRandomInt()),
+    price,
   };
 };
