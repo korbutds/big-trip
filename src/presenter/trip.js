@@ -1,5 +1,3 @@
-// import TripPoint from "../view/trip-point.js";
-// import TripPointEdit from "../view/trip-edit-point.js";
 import TripEmpty from "../view/trip-empty.js";
 import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
