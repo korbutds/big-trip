@@ -5,7 +5,7 @@ import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import {render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
-import {HeaderItem} from "./const.js";
+import {FilterType, HeaderItem, UpdateType} from "./const.js";
 
 const POINT_COUNT = 22;
 
@@ -37,19 +37,30 @@ const handleHeaderMenuClick = (headerItem) => {
     case HeaderItem.ADD_NEW_POINT:
       // Скрыть статистику
       // Показать доску
+      tripPresenter.destroy();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      tripPresenter.init();
       tripPresenter.createPoint(handlePointNewFormClose);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
                      .classList.remove(`trip-tabs__btn--active`);
-      // Показать форму добавления новой задачи
-      // Убрать выделение с ADD NEW TASK после сохранения
       break;
     case HeaderItem.TABLE:
-      // Показать доску
-      // Скрыть статистику
+      tripPresenter.destroy();
+      tripPresenter.init();
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
+                     .classList.add(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
+                     .classList.remove(`trip-tabs__btn--active`);
+
       break;
     case HeaderItem.STATS:
-      // Скрыть доску
-      // Показать статистику
+      tripPresenter.destroy();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      tripPresenter.renderTripInfo();
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
+                     .classList.remove(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
+                     .classList.add(`trip-tabs__btn--active`);
       break;
   }
 };
