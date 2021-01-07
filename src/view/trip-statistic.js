@@ -1,5 +1,9 @@
 import Abstract from "../view/abstract.js";
 
+const renderMoneyChart = () => {};
+const renderTypeChart = () => {};
+const renderTimeSpendChart = () => {};
+
 const createStatisticTemplate = () => {
   return `<section class="statistics">
             <h2 class="visually-hidden">Trip statistics</h2>
@@ -19,14 +23,27 @@ const createStatisticTemplate = () => {
 };
 
 export default class TripStatistic extends Abstract {
-  constructor(tasks) {
+  constructor(points) {
     super();
 
-    this._tasks = tasks;
+    this._points = points;
+    this._moneyChart = null;
+    this._typeChart = null;
+    this._timeSpendChart = null;
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._tasks);
+    return createStatisticTemplate(this._points);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeSpendChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeSpendChart = null;
+    }
   }
 
   restoreHandlers() {
@@ -34,6 +51,18 @@ export default class TripStatistic extends Abstract {
   }
 
   _setCharts() {
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeSpendChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeSpendChart = null;
+    }
 
+    const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
+    const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
+    const timeSpendCtx = this.getElement().querySelector(`.statistics__chart--time`);
+
+    this._moneyChart = renderMoneyChart(moneyCtx, this._points);
+    this._typeChart = renderTypeChart(typeCtx, this._points);
+    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._points);
   }
 }
