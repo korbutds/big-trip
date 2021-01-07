@@ -6,11 +6,13 @@ import FilterModel from "./model/filter.js";
 import {render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
+import StatisticView from "./view/trip-statistic.js";
 
 const POINT_COUNT = 22;
 
 const pageBody = document.querySelector(`.page-body`);
 const pageMain = pageBody.querySelector(`.page-body__page-main`);
+const pageContainer = pageMain.querySelector(`.page-body__container`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
@@ -68,5 +70,6 @@ const handleHeaderMenuClick = (headerItem) => {
 headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 
 filterPresenter.init();
-tripPresenter.init();
+// tripPresenter.init();
 
+render(pageContainer, new StatisticView(pointsModel.getPoints()), RenderPosition.BEFOREBEGIN);
