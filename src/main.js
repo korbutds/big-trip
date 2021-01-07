@@ -27,11 +27,19 @@ const filterModel = new FilterModel();
 const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
 const filterPresenter = new Filter(tripControls, filterModel);
 
+const handlePointNewFormClose = () => {
+  headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
+                 .classList.add(`trip-tabs__btn--active`);
+};
+
 const handleHeaderMenuClick = (headerItem) => {
   switch (headerItem) {
     case HeaderItem.ADD_NEW_POINT:
       // Скрыть статистику
       // Показать доску
+      tripPresenter.createPoint(handlePointNewFormClose);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
+                     .classList.remove(`trip-tabs__btn--active`);
       // Показать форму добавления новой задачи
       // Убрать выделение с ADD NEW TASK после сохранения
       break;
@@ -51,8 +59,3 @@ headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 filterPresenter.init();
 tripPresenter.init();
 
-tripMain.querySelector(`.trip-main__event-add-btn`)
-        .addEventListener(`click`, (evt) => {
-          evt.preventDefault();
-          tripPresenter.createTask();
-        });
