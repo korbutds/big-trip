@@ -16,8 +16,8 @@ const generateOffersList = (offersList) => {
 };
 
 const createTripPointTemplate = (point) => {
-  const {times, type, destination, offers, isFavorite} = point;
-  const {iconSrc, name, price} = type;
+  const {times, type, destination, offers, isFavorite, price} = point;
+  const {iconSrc, name} = type;
   const {start, finish} = times;
   const favorite = isFavorite ? `event__favorite-btn--active` : ``;
   return `<li class="trip-events__item">

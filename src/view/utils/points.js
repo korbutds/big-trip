@@ -28,10 +28,10 @@ export const getDateDiff = (start, finish) => {
   return time;
 };
 
-let startDate = dayjs().add(2, `day`).startOf(`date`);
+let startDate = dayjs().add(getRandomInt(-1, 1), `day`).startOf(`date`);
 
 export const generateDate = () => {
-  const MAX_TRIP_TIME = 6;
+  const MAX_TRIP_TIME = 12;
   const tripTime = getRandomInt(1, MAX_TRIP_TIME) * 30;
   const start = startDate;
   const tripEndTime = startDate.add(tripTime, `minutes`);
@@ -55,12 +55,20 @@ export const getRandomFishText = (sentenseCount) => {
   return sentenseArr.join(`. `).concat(`.`);
 };
 
-export const sortPointPriceToUp = (priceA, priceB) => {
-  return priceA.type.price - priceB.type.price;
+export const sortPointPriceToMin = (priceA, priceB) => {
+  return priceB.type.price - priceA.type.price;
 };
 
 export const sortPointTimeToUp = (timeA, timeB) => {
   const timeADuration = dayjs(timeA.times.finish).diff(dayjs(timeA.times.start));
   const timeBDuration = dayjs(timeB.times.finish).diff(dayjs(timeB.times.start));
   return timeADuration - timeBDuration;
+};
+
+export const isDatesEqual = (dateA, dateB) => {
+  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `m`);
+};
+
+export const isDateExpired = (dueData) => {
+  return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `d`);
 };

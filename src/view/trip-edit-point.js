@@ -5,6 +5,19 @@ import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
 import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+const BlankPoint = {
+  pointType: `taxi`,
+  times: {
+    start: Date(),
+    finish: Date(),
+  },
+  type: ROUTE_POINT_TYPES.taxi,
+  destination: ``,
+  offers: [],
+  description: ``,
+  photos: [],
+  isFavorite: false,
+};
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -17,9 +30,15 @@ const generateDistDatalist = (arr) => {
 const generatePhoto = (photosList) => {
   let str = ``;
   if (photosList.length > 0) {
+    let images = ``;
     photosList.forEach((element) => {
-      str += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
+      images += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
     });
+    str += `<div class="event__photos-container">
+    <div class="event__photos-tape">
+      ${images};
+    </div>
+  </div>`;
   }
   return str;
 };
@@ -81,9 +100,9 @@ const generateOffersList = (arr, checkedArr) => {
   return str;
 };
 
-const createEditPointTemplate = (point = {}) => {
-  const {times, type, destination, offers, description, photos, pointType: typeId} = point;
-  const {iconSrc, name, price} = type;
+const createEditPointTemplate = (point) => {
+  const {times, type, destination, offers, description, photos, pointType: typeId, price} = point;
+  const {iconSrc, name} = type;
   const offersList = ROUTE_POINT_TYPES[typeId].offers;
   const {start, finish} = times;
   let id = nanoid();
@@ -113,7 +132,7 @@ const createEditPointTemplate = (point = {}) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${price}">
+        <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value="${price}" required>
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -124,23 +143,19 @@ const createEditPointTemplate = (point = {}) => {
     </header>
     <section class="event__details">
       ${generateOffersList(offersList, offers)}
-      <section class="event__section  event__section--destination">
+      ${(description.length > 0 || photos.length > 0) ?
+    `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-          ${generatePhoto(photos)}
-          </div>
-        </div>
-      </section>
+        ${generatePhoto(photos)}
+      </section>` : ``}
     </section>
   </form>
 </li>`;
 };
 
 export default class EditPoint extends Smart {
-  constructor(point = {}) {
+  constructor(point = BlankPoint) {
     super();
     this._point = point;
     this._datepickerStart = null;
@@ -148,18 +163,38 @@ export default class EditPoint extends Smart {
 
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
+    this._resetHandler = this._resetHandler.bind(this);
     this._pointTypeChangeHandle = this._pointTypeChangeHandle.bind(this);
     this._pointDestinationHandle = this._pointDestinationHandle.bind(this);
     this._offersListChangeHandle = this._offersListChangeHandle.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._costChangeHandle = this._costChangeHandle.bind(this);
 
     this._setInnerHandlers();
     this._setDatePicker();
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+
+    if (this._datepickerFinish) {
+      this._datepickerFinish.destroy();
+      this._datepickerFinish = null;
+    }
+  }
+
   _clickHandler() {
     this._callback.click();
+  }
+
+  _resetHandler() {
+    this._callback.reset(this._point);
   }
 
   _submitHandler(evt) {
@@ -179,6 +214,11 @@ export default class EditPoint extends Smart {
   setEditSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._submitHandler);
+  }
+
+  setResetClickHandler(callback) {
+    this._callback.reset = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._resetHandler);
   }
 
   _pointTypeChangeHandle(evt) {
@@ -279,16 +319,11 @@ export default class EditPoint extends Smart {
     evt.target.reportValidity();
   }
 
-  _setInnerHandlers() {
-    this.getElement()
-      .querySelectorAll(`.event__type-input`)
-      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
-    this.getElement()
-      .querySelector(`.event__input--destination`)
-      .addEventListener(`change`, this._pointDestinationHandle);
-    this.getElement()
-      .querySelectorAll(`.event__offer-checkbox`)
-      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
+  _costChangeHandle(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
+    }, true);
   }
 
   _offersListChangeHandle(evt) {
@@ -306,9 +341,25 @@ export default class EditPoint extends Smart {
     }
   }
 
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelectorAll(`.event__type-input`)
+      .forEach((element) => element.addEventListener(`change`, this._pointTypeChangeHandle));
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._pointDestinationHandle);
+    this.getElement()
+      .querySelectorAll(`.event__offer-checkbox`)
+      .forEach((element) => element.addEventListener(`change`, this._offersListChangeHandle));
+    this.getElement()
+      .querySelector(`.event__input--price`)
+      .addEventListener(`change`, this._costChangeHandle);
+  }
+
   restoreHandlers() {
     this.setEditClickHandler(this._callback.click);
     this.setEditSubmitHandler(this._callback.submit);
+    this.setResetClickHandler(this._callback.reset);
     this._setInnerHandlers();
     this._setDatePicker();
   }
