@@ -1,15 +1,24 @@
 import Abstract from "../view/abstract.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {getDateInDays} from "./utils/points.js";
 
-const renderMoneyChart = (moneyCtx) => {
+const renderMoneyChart = (moneyCtx, labels, points) => {
+  const costsByLabel = [];
+  labels.forEach((label) => {
+    let cost = 0;
+    points.forEach((point) => {
+      cost += (point.pointType.toLowerCase() === label.toLowerCase()) ? point.price : 0;
+    });
+    costsByLabel.push(cost);
+  });
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      labels,
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data: costsByLabel,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -69,14 +78,23 @@ const renderMoneyChart = (moneyCtx) => {
   });
 
 };
-const renderTypeChart = (typeCtx) => {
+const renderTypeChart = (typeCtx, labels, points) => {
+  const labelCount = [];
+  labels.forEach((label) => {
+    let count = 0;
+    points.forEach((point) => {
+      count += (point.pointType.toLowerCase() === label.toLowerCase()) ? 1 : 0;
+    });
+    labelCount.push(count);
+  });
+
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      labels,
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],
+        data: labelCount,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -135,8 +153,85 @@ const renderTypeChart = (typeCtx) => {
     }
   });
 };
-const renderTimeChart = () => {
 
+const renderTimeChart = (timeCtx, labels, points) => {
+  const timeAmount = [];
+  labels.forEach((label) => {
+    let startTime = 0;
+    let finishTime = 0;
+
+    points.forEach((point) => {
+      if (point.pointType.toLowerCase() === label.toLowerCase()) {
+        startTime += point.times.start;
+        finishTime += point.times.finish;
+      }
+    });
+    timeAmount.push(finishTime - startTime);
+  });
+  return new Chart(timeCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels,
+      datasets: [{
+        data: timeAmount,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${getDateInDays(val)}`
+        }
+      },
+      title: {
+        display: true,
+        text: `TIME-SPEND`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
+      }
+    }
+  });
 };
 
 const createStatisticTemplate = () => {
@@ -166,10 +261,12 @@ export default class TripStatistic extends Abstract {
     this._typeChart = null;
     this._timeChart = null;
     this._setCharts();
+    this._labels = [];
   }
 
   getTemplate() {
     return createStatisticTemplate(this._points);
+
   }
 
   removeElement() {
@@ -182,6 +279,11 @@ export default class TripStatistic extends Abstract {
     }
   }
 
+  _getUniquePoints() {
+    const labelsList = this._points.reduce((acc, value) => [...acc, value.pointType.toUpperCase()], []);
+    this._labels = [...new Set(labelsList)].sort();
+  }
+
   restoreHandlers() {
     this._setCharts();
   }
@@ -192,18 +294,19 @@ export default class TripStatistic extends Abstract {
       this._typeChart = null;
       this._timeChart = null;
     }
+    this._getUniquePoints();
 
     const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
     const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
     const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);
 
-    const BAR_HEIGHT = 55;
+    const BAR_HEIGHT = 80;
     moneyCtx.height = BAR_HEIGHT * 5;
     typeCtx.height = BAR_HEIGHT * 5;
     timeCtx.height = BAR_HEIGHT * 5;
 
-    this._moneyChart = renderMoneyChart(moneyCtx, this._points);
-    this._typeChart = renderTypeChart(typeCtx, this._points);
-    this._timeChart = renderTimeChart(timeCtx, this._points);
+    this._moneyChart = renderMoneyChart(moneyCtx, this._labels, this._points);
+    this._typeChart = renderTypeChart(typeCtx, this._labels, this._points);
+    this._timeChart = renderTimeChart(timeCtx, this._labels, this._points);
   }
 }

@@ -3,7 +3,7 @@ import Trip from "./presenter/trip.js";
 import Filter from "./presenter/filter.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
-import {render, RenderPosition} from "./view/utils/render.js";
+import {remove, render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
 import StatisticView from "./view/trip-statistic.js";
@@ -34,21 +34,25 @@ const handlePointNewFormClose = () => {
                  .classList.add(`trip-tabs__btn--active`);
 };
 
+let statisticComponent = null;
+
 const handleHeaderMenuClick = (headerItem) => {
   switch (headerItem) {
     case HeaderItem.ADD_NEW_POINT:
-      // Скрыть статистику
-      // Показать доску
       tripPresenter.destroy();
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       tripPresenter.init();
+      remove(statisticComponent);
       tripPresenter.createPoint(handlePointNewFormClose);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
+                     .classList.remove(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.remove(`trip-tabs__btn--active`);
       break;
     case HeaderItem.TABLE:
       tripPresenter.destroy();
       tripPresenter.init();
+      remove(statisticComponent);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
                      .classList.add(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
@@ -63,6 +67,8 @@ const handleHeaderMenuClick = (headerItem) => {
                      .classList.remove(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.add(`trip-tabs__btn--active`);
+      statisticComponent = new StatisticView(pointsModel.getPoints());
+      render(pageContainer, statisticComponent, RenderPosition.BEFOREBEGIN);
       break;
   }
 };
@@ -70,6 +76,5 @@ const handleHeaderMenuClick = (headerItem) => {
 headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 
 filterPresenter.init();
-// tripPresenter.init();
+tripPresenter.init();
 
-render(pageContainer, new StatisticView(pointsModel.getPoints()), RenderPosition.BEFOREBEGIN);
