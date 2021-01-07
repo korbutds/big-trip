@@ -1,8 +1,143 @@
 import Abstract from "../view/abstract.js";
+import Chart from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-const renderMoneyChart = () => {};
-const renderTypeChart = () => {};
-const renderTimeSpendChart = () => {};
+const renderMoneyChart = (moneyCtx) => {
+  return new Chart(moneyCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      datasets: [{
+        data: [400, 300, 200, 160, 150, 100],
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `€ ${val}`
+        }
+      },
+      title: {
+        display: true,
+        text: `MONEY`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
+      }
+    }
+  });
+
+};
+const renderTypeChart = (typeCtx) => {
+  return new Chart(typeCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      datasets: [{
+        data: [4, 3, 2, 1, 1, 1],
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `#ffffff`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${val}x`
+        }
+      },
+      title: {
+        display: true,
+        text: `TYPE`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
+      }
+    }
+  });
+};
+const renderTimeChart = () => {
+
+};
 
 const createStatisticTemplate = () => {
   return `<section class="statistics">
@@ -16,7 +151,7 @@ const createStatisticTemplate = () => {
               <canvas class="statistics__chart  statistics__chart--transport" width="900"></canvas>
             </div>
 
-            <div class="statistics__item statistics__item--time-spend">
+            <div class="statistics__item statistics__item--time-">
               <canvas class="statistics__chart  statistics__chart--time" width="900"></canvas>
             </div>
           </section>`;
@@ -29,7 +164,8 @@ export default class TripStatistic extends Abstract {
     this._points = points;
     this._moneyChart = null;
     this._typeChart = null;
-    this._timeSpendChart = null;
+    this._timeChart = null;
+    this._setCharts();
   }
 
   getTemplate() {
@@ -39,10 +175,10 @@ export default class TripStatistic extends Abstract {
   removeElement() {
     super.removeElement();
 
-    if (this._moneyChart !== null || this._typeChart !== null || this._timeSpendChart !== null) {
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
       this._moneyChart = null;
       this._typeChart = null;
-      this._timeSpendChart = null;
+      this._timeChart = null;
     }
   }
 
@@ -51,18 +187,23 @@ export default class TripStatistic extends Abstract {
   }
 
   _setCharts() {
-    if (this._moneyChart !== null || this._typeChart !== null || this._timeSpendChart !== null) {
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
       this._moneyChart = null;
       this._typeChart = null;
-      this._timeSpendChart = null;
+      this._timeChart = null;
     }
 
     const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
     const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
-    const timeSpendCtx = this.getElement().querySelector(`.statistics__chart--time`);
+    const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);
+
+    const BAR_HEIGHT = 55;
+    moneyCtx.height = BAR_HEIGHT * 5;
+    typeCtx.height = BAR_HEIGHT * 5;
+    timeCtx.height = BAR_HEIGHT * 5;
 
     this._moneyChart = renderMoneyChart(moneyCtx, this._points);
     this._typeChart = renderTypeChart(typeCtx, this._points);
-    this._timeSpendChart = renderTimeSpendChart(timeSpendCtx, this._points);
+    this._timeChart = renderTimeChart(timeCtx, this._points);
   }
 }
