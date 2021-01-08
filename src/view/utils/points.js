@@ -102,3 +102,10 @@ export const isCostEqual = (oldCost, newCost) => {
   return (oldCost === Number(newCost)) ? true : false;
 };
 
+export const getOffersList = (offers, pointType) => {
+  let offerObject = offers.filter((offer) => {
+    return offer.type === pointType;
+  }).reduce((acc, curr) => [...acc, ...curr.offers], []);
+
+  return offerObject;
+};

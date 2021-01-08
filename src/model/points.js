@@ -1,5 +1,5 @@
 import Observer from "../view/utils/observer.js";
-import {ucFirstLetter} from "../view/utils/points.js";
+import {getOffersList, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
   constructor() {
@@ -55,7 +55,7 @@ export default class Points extends Observer {
     this._notify(updateType);
   }
 
-  static adaptToClient(point) {
+  static adaptToClient(point, offers) {
     const adaptedPoint = Object.assign(
         {},
         point,
@@ -72,6 +72,7 @@ export default class Points extends Observer {
           type: {
             iconSrc: `./img/icons/${point.type}.png`,
             name: ucFirstLetter(point.type),
+            offers: getOffersList(offers, point.type)
           }
         }
     );

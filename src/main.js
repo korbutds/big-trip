@@ -20,9 +20,17 @@ const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const api = new Api(END_POINT, AUTHORIZATION);
-console.log(points[0]);
-api.getPoints()
-  .then((tasks) => console.log(tasks));
+
+Promise.all([
+  api.getPoints(),
+  api.getOffers()
+]).then(([pointsArray, offersArray]) => {
+  const a = pointsArray.map((point) => {
+    console.log(point);
+    const b = api.getLocalPoint(point, offersArray);
+    return api.getLocalPoint(point, offersArray);
+  });
+})
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
