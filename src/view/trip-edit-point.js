@@ -32,7 +32,7 @@ const generatePhoto = (photosList) => {
   if (photosList.length > 0) {
     let images = ``;
     photosList.forEach((element) => {
-      images += `<img class="event__photo" src=${element} alt="Event photo"></img>`;
+      images += `<img class="event__photo" src="${element.src}" alt="${element.description}"></img>`;
     });
     str += `<div class="event__photos-container">
     <div class="event__photos-tape">

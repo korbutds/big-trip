@@ -11,7 +11,7 @@ import Api from "./api.js";
 
 const POINT_COUNT = 22;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
-const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`
+const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
 
 const pageBody = document.querySelector(`.page-body`);
 const pageMain = pageBody.querySelector(`.page-body__page-main`);
@@ -20,9 +20,9 @@ const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const api = new Api(END_POINT, AUTHORIZATION);
-console.log(points[0])
+console.log(points[0]);
 api.getPoints()
-  .then((tasks) => console.log(tasks[2]))
+  .then((tasks) => console.log(tasks));
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);

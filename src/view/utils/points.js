@@ -6,12 +6,24 @@ dayjs.extend(duration);
 
 export const createPhotosArr = () => {
   const count = getRandomInt(1, 9);
+  const description = `some photo description`;
   const src = [];
   for (let i = 0; i < count; i++) {
-    src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+    src.push({
+      src: `http://picsum.photos/248/152?r=${Math.random()}`,
+      description
+    });
   }
 
   return src;
+};
+
+export const ucFirstLetter = (str) => {
+  if (!str) {
+    return str;
+  }
+
+  return str[0].toUpperCase() + str.slice(1);
 };
 
 const addZeroToNumber = (number) => {
@@ -89,3 +101,4 @@ export const isDateExpired = (dueData) => {
 export const isCostEqual = (oldCost, newCost) => {
   return (oldCost === Number(newCost)) ? true : false;
 };
+

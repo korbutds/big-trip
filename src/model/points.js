@@ -1,4 +1,5 @@
 import Observer from "../view/utils/observer.js";
+import {ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
   constructor() {
@@ -52,5 +53,63 @@ export default class Points extends Observer {
     ];
 
     this._notify(updateType);
+  }
+
+  static adaptToClient(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          price: point.base_price,
+          times: {
+            start: new Date(point.date_from).valueOf(),
+            finish: new Date(point.date_to).valueOf()
+          },
+          destination: point.destination.name,
+          description: point.destination.description,
+          photos: point.destination.pictures,
+          isFavorite: point.is_favorite,
+          type: {
+            iconSrc: `./img/icons/${point.type}.png`,
+            name: ucFirstLetter(point.type),
+          }
+        }
+    );
+
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.destination.name;
+    delete adaptedPoint.destination.description;
+    delete adaptedPoint.destination.pictures;
+    delete adaptedPoint.is_favorite;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          base_price: point.price,
+          date_from: point.times.start,
+          date_to: point.times.finish,
+          destination: {
+            description: point.description,
+            name: point.destination,
+            pictures: point.photos,
+          },
+          is_favorite: point.isFavorite,
+          type: point.type.name.toLowerCase()
+        }
+    );
+
+    delete adaptedPoint.price;
+    delete adaptedPoint.times;
+    delete adaptedPoint.description;
+    delete adaptedPoint.isFavorite;
+
+    return adaptedPoint;
   }
 }
