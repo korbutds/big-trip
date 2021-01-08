@@ -77,4 +77,3 @@ headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();
-
