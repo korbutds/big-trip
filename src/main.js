@@ -7,8 +7,11 @@ import {remove, render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
 import StatisticView from "./view/trip-statistic.js";
+import Api from "./api.js";
 
 const POINT_COUNT = 22;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`
 
 const pageBody = document.querySelector(`.page-body`);
 const pageMain = pageBody.querySelector(`.page-body__page-main`);
@@ -16,6 +19,11 @@ const pageContainer = pageMain.querySelector(`.page-body__container`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
+const api = new Api(END_POINT, AUTHORIZATION);
+console.log(points[0])
+api.getPoints()
+  .then((tasks) => console.log(tasks[2]))
+
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 const headerComponent = new TripView();
