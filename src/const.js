@@ -175,3 +175,9 @@ export const FilterType = {
   FUTURE: `future`,
   PAST: `past`
 };
+
+export const HeaderItem = {
+  ADD_NEW_POINT: `ADD_NEW_POINT`,
+  TABLE: `TABLE`,
+  STATS: `STATS`
+};

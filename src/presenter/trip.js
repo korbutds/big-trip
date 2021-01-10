@@ -5,8 +5,8 @@ import TripBoard from "../view/trip-board.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 import PointPresenter from "./point.js";
 import NewPointPresenter from "./point-new.js";
-import {sortPointPriceToMin, sortPointTimeToUp} from "../view/utils/points.js";
-import {FilterType, SortType, UpdateType, UserAction} from "../const.js";
+import {sortPointPriceToMin, sortPointTimeToUp, sortPointDate} from "../view/utils/points.js";
+import {SortType, UpdateType, UserAction} from "../const.js";
 import {filter} from "../view/utils/filters.js";
 
 
@@ -32,19 +32,25 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointsModel.addObservers(this._handleModelEvent);
-    this._filterModel.addObservers(this._handleModelEvent);
     this._pointNewPresenter = new NewPointPresenter(this._boardComponent, this._handleViewAction);
   }
 
   init() {
+    this._pointsModel.addObservers(this._handleModelEvent);
+    this._filterModel.addObservers(this._handleModelEvent);
     this._renderTrip();
   }
 
-  createTask() {
-    this._currentSortType = SortType.DAY;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointNewPresenter.init();
+  destroy() {
+    this._clearTrip({resetSortType: true});
+
+    remove(this._boardComponent);
+    this._pointsModel.removeObservers(this._handleModelEvent);
+    this._filterModel.removeObservers(this._handleModelEvent);
+  }
+
+  createPoint(callback) {
+    this._pointNewPresenter.init(callback);
   }
 
   _getPoints() {
@@ -57,8 +63,9 @@ export default class Trip {
         return filtredPoints.sort(sortPointPriceToMin);
       case SortType.TIME:
         return filtredPoints.sort(sortPointTimeToUp);
+      case SortType.DAY:
+        return filtredPoints.sort(sortPointDate);
     }
-
     return filtredPoints;
   }
 
@@ -125,12 +132,17 @@ export default class Trip {
   }
 
   _renderEmptyTrip() {
+    render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
     render(this._tripListContainer, this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderInfo() {
     this._infoComponent = new TripInfo(this._getPoints());
     render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  renderTripInfo() {
+    this._renderInfo();
   }
 
   _renderSort() {

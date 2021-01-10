@@ -32,7 +32,7 @@ const createTripInfoTemplate = (points) => {
   const destinations = points.reduce((prev, current) => {
     return [...prev, current.destination];
   }, []);
-  const pointsCost = points.reduce((prev, current) => [...prev, current[`type`][`price`]], []);
+  const pointsCost = points.reduce((prev, current) => [...prev, Number(current[`price`])], []);
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getDestinationString(destinations)}</h1>

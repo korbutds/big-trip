@@ -170,6 +170,7 @@ export default class EditPoint extends Smart {
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
     this._costChangeHandle = this._costChangeHandle.bind(this);
+    this._updateDate = this._updateDate.bind(this);
 
     this._setInnerHandlers();
     this._setDatePicker();
@@ -269,15 +270,20 @@ export default class EditPoint extends Smart {
           start: startDate,
           finish: this._point.times.finish
         }
-      });
+      }, true);
     } else {
       this.updateData({
         times: {
           start: startDate,
           finish: startDate
         }
-      });
+      }, true);
     }
+
+    this.getElement()
+        .removeEventListener(`click`, this._updateDate);
+    this.getElement()
+        .addEventListener(`click`, this._updateDate);
   }
 
   _endDateChangeHandler([userTime]) {
@@ -289,15 +295,27 @@ export default class EditPoint extends Smart {
           start: endDate,
           finish: endDate
         }
-      });
+      }, true);
     } else {
       this.updateData({
         times: {
           start: this._point.times.start,
           finish: endDate
         }
-      });
+      }, true);
     }
+
+    this.getElement()
+    .removeEventListener(`click`, this._updateDate);
+    this.getElement()
+    .addEventListener(`click`, this._updateDate);
+  }
+
+  _updateDate(evt) {
+    if (evt.target.classList.contains(`flatpickr-calendar`)) {
+      return;
+    }
+    this.updateElement();
   }
 
   _pointDestinationHandle(evt) {

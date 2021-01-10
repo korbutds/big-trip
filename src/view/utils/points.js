@@ -28,6 +28,15 @@ export const getDateDiff = (start, finish) => {
   return time;
 };
 
+export const getDateInDays = (dateDiff) => {
+  const timeDuration = dayjs.duration(dateDiff);
+  const days = timeDuration.days();
+  const hours = timeDuration.hours();
+  const minutes = timeDuration.minutes();
+  const time = `${(days > 0) ? addZeroToNumber(days) + `D ` : ``}${(hours > 0) ? addZeroToNumber(hours) + `H ` : ``}${(minutes > 0) ? addZeroToNumber(minutes) + `M` : ``}`;
+  return time;
+};
+
 let startDate = dayjs().add(getRandomInt(-1, 1), `day`).startOf(`date`);
 
 export const generateDate = () => {
@@ -65,10 +74,18 @@ export const sortPointTimeToUp = (timeA, timeB) => {
   return timeADuration - timeBDuration;
 };
 
+export const sortPointDate = (dateA, dateB) => {
+  return dayjs(dateA.times.start) - dayjs(dateB.times.start);
+};
+
 export const isDatesEqual = (dateA, dateB) => {
   return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `m`);
 };
 
 export const isDateExpired = (dueData) => {
   return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `d`);
+};
+
+export const isCostEqual = (oldCost, newCost) => {
+  return (oldCost === Number(newCost)) ? true : false;
 };
