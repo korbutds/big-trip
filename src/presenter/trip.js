@@ -2,6 +2,7 @@ import TripEmpty from "../view/trip-empty.js";
 import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
+import TripLoading from "../view/trip-loading.js"
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 import PointPresenter from "./point.js";
 import NewPointPresenter from "./point-new.js";
@@ -15,6 +16,7 @@ export default class Trip {
     this._tripListContainer = tripListContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
+    this._isLoading = true;
 
     this._pointPresenter = {};
     this._currentSortType = SortType.DAY;
@@ -26,6 +28,7 @@ export default class Trip {
     this._sortComponent = null;
     this._emptyComponent = new TripEmpty();
     this._boardComponent = new TripBoard();
+    this._loadingComponent = new TripLoading();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -102,6 +105,11 @@ export default class Trip {
         this._clearTrip({resetSortType: true});
         this._renderTrip();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderTrip();
+        break;
     }
   }
 
@@ -132,8 +140,13 @@ export default class Trip {
   }
 
   _renderEmptyTrip() {
+    debugger
     // render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
     render(this._tripListContainer, this._emptyComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderLoadnig() {
+    render(this._tripListContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderInfo() {
@@ -162,8 +175,14 @@ export default class Trip {
   }
 
   _renderTrip() {
+    if (this._isLoading) {
+      this._renderLoadnig();
+      return;
+    }
+
     const points = this._getPoints();
     const pointsCount = points.length;
+
     if (pointsCount === 0) {
       this._renderEmptyTrip();
       return;
@@ -181,8 +200,9 @@ export default class Trip {
       .forEach((presenter) => presenter.destroy());
 
     this._pointPresenter = {};
-    remove(this._sortComponent);
     remove(this._emptyComponent);
+    remove(this._sortComponent);
+    remove(this._loadingComponent);
     remove(this._infoComponent);
 
     if (resetSortType) {

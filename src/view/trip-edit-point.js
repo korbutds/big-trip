@@ -3,21 +3,7 @@ import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
 import flatpickr from "flatpickr";
-
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-const BlankPoint = {
-  pointType: `taxi`,
-  times: {
-    start: Date(),
-    finish: Date(),
-  },
-  type: ROUTE_POINT_TYPES.taxi,
-  destination: ``,
-  offers: [],
-  description: ``,
-  photos: [],
-  isFavorite: false,
-};
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -155,9 +141,11 @@ const createEditPointTemplate = (point) => {
 };
 
 export default class EditPoint extends Smart {
-  constructor(point = BlankPoint) {
+  constructor(point = [], destinations, offers) {
     super();
     this._point = point;
+    this._destinations = destinations;
+    this._offers = offers;
     this._datepickerStart = null;
     this._datepickerFinish = null;
 
@@ -204,7 +192,7 @@ export default class EditPoint extends Smart {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._point);
+    return createEditPointTemplate(this._point, this._destinations, this._offers);
   }
 
   setEditClickHandler(callback) {

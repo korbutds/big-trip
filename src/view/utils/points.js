@@ -103,11 +103,7 @@ export const isCostEqual = (oldCost, newCost) => {
 };
 
 export const getOffersList = (offers, pointType) => {
-  let offerObject = offers.filter((offer) => {
-    return offer.type === pointType;
-  }).reduce((acc, curr) => [...acc, ...curr.offers], []);
-
-  return offerObject;
+  return offers[pointType];
 };
 
 export const toCamelCase = (str) => {
@@ -126,4 +122,29 @@ export const toHtmlView = (str) => {
     }
     return element.toLowerCase();
   }).join(``);
+};
+
+export const getOfferToClient = (offer) => {
+  const offerObject = Object.assign(
+      {},
+      offer,
+      {
+        name: offer.title,
+        id: toHtmlView(offer.title),
+        offerKey: toCamelCase(offer.title)
+      }
+  );
+  delete offerObject.title;
+  return offerObject;
+};
+
+export const offersArrayToClientView = (offersArray) => {
+  const clientOffers = [];
+  if (offersArray && offersArray.length > 0) {
+    offersArray.forEach((offer) => {
+      clientOffers.push(getOfferToClient(offer));
+    });
+  }
+
+  return clientOffers;
 };

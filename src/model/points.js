@@ -1,5 +1,5 @@
 import Observer from "../view/utils/observer.js";
-import {getOffersList, toCamelCase, toHtmlView, ucFirstLetter} from "../view/utils/points.js";
+import {offersArrayToClientView, toCamelCase, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
   constructor() {
@@ -20,7 +20,10 @@ export default class Points extends Observer {
   }
 
   setOffers(offers) {
-    this._offers = offers.slice();
+    this._offers = Object.assign(
+        {},
+        offers
+    );
   }
 
   getPoints() {
@@ -75,7 +78,7 @@ export default class Points extends Observer {
     this._notify(updateType);
   }
 
-  adaptToClient(point) {
+  adaptPointsToClient(point) {
     const adaptedPoint = Object.assign(
         {},
         point,
@@ -90,35 +93,11 @@ export default class Points extends Observer {
           photos: point.destination.pictures,
           isFavorite: point.is_favorite,
           pointType: toCamelCase(point.type),
-          offers: point.offers.map((el) => {
-            const newOfferObjectsList = Object.assign(
-                {},
-                el,
-                {
-                  name: el.title,
-                  offerKey: toCamelCase(el.title),
-                  id: toHtmlView(el.title)
-                }
-            );
-            delete newOfferObjectsList.title;
-            return newOfferObjectsList;
-          }),
+          offers: offersArrayToClientView(point.offers),
           type: {
             iconSrc: `./img/icons/${point.type}.png`,
             name: ucFirstLetter(point.type),
-            offers: getOffersList(this._offers, point.type).map((el) => {
-              const newOfferObjectsList = Object.assign(
-                  {},
-                  el,
-                  {
-                    name: el.title,
-                    offerKey: toCamelCase(el.title),
-                    id: toHtmlView(el.title)
-                  }
-              );
-              delete newOfferObjectsList.title;
-              return newOfferObjectsList;
-            })
+            offers: this._offers[toCamelCase(point.type)].offers
           }
         }
     );
@@ -134,7 +113,7 @@ export default class Points extends Observer {
     return adaptedPoint;
   }
 
-  static adaptToServer(point) {
+  adaptPointsToServer(point) {
     const adaptedPoint = Object.assign(
         {},
         point,
@@ -158,5 +137,27 @@ export default class Points extends Observer {
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;
+  }
+
+  adaptDestinationToClient(destination) {
+    const adaptedDestination = Object.assign(
+        {},
+        destination,
+        {
+          photos: destination.pictures
+        }
+    );
+
+    delete adaptedDestination.pictures;
+
+    return adaptedDestination;
+  }
+
+  adaptOfferToClient(offer) {
+    return {
+      name: ucFirstLetter(offer.type),
+      offers: offersArrayToClientView(offer.offers),
+      iconSrc: `./img/icons/${offer.type}.png`
+    };
   }
 }
