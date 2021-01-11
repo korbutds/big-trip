@@ -29,6 +29,7 @@ render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
 
+const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
 const filterPresenter = new Filter(tripControls, filterModel);
@@ -82,18 +83,19 @@ headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 filterPresenter.init();
 tripPresenter.init();
 
-const pointsModel = new PointsModel();
 
 Promise.all([
   api.getPoints(),
   api.getOffers(),
   api.getDestinations()
-]).then(([pointsArray, offersArray, destinationsArray]) => {
-  pointsModel.setDestinations(destinationsArray);
-  pointsModel.setOffers(offersArray);
+])
+  .then(([pointsArray, offersArray, destinationsArray]) => {
+    pointsModel.setDestinations(destinationsArray);
+    pointsModel.setOffers(offersArray);
 
-  const localPoints = pointsArray.map((point) => {
-    return pointsModel.adaptToClient(point);
-  });
-  pointsModel.setPoints(localPoints);
-});
+    const localPoints = pointsArray.map((point) => {
+      return pointsModel.adaptToClient(point);
+    });
+    pointsModel.setPoints(UpdateType.INIT, localPoints);
+  })
+  .catch(pointsModel.setPoints(UpdateType.INIT, []));
