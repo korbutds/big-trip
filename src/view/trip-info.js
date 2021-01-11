@@ -34,16 +34,16 @@ const createTripInfoTemplate = (points) => {
   }, []);
   const pointsCost = points.reduce((prev, current) => [...prev, Number(current[`price`])], []);
   return `<section class="trip-main__trip-info  trip-info">
-  <div class="trip-info__main">
-    <h1 class="trip-info__title">${getDestinationString(destinations)}</h1>
+    <div class="trip-info__main">
+      <h1 class="trip-info__title">${getDestinationString(destinations)}</h1>
 
-    <p class="trip-info__dates">${dateString(start, finish)}</p>
-  </div>
+      <p class="trip-info__dates">${dateString(start, finish)}</p>
+    </div>
 
-  <p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">${countFullPrice(pointsCost)}</span>
-  </p>
-</section>`;
+    <p class="trip-info__cost">
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${countFullPrice(pointsCost)}</span>
+    </p>
+  </section>`;
 };
 
 export default class TripInfo extends AbstractView {

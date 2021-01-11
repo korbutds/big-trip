@@ -1,4 +1,4 @@
-import {generatePoint} from "./mock/point.js";
+// import {generatePoint} from "./mock/point.js";
 import Trip from "./presenter/trip.js";
 import Filter from "./presenter/filter.js";
 import PointsModel from "./model/points.js";
@@ -9,7 +9,7 @@ import {FilterType, HeaderItem, UpdateType} from "./const.js";
 import StatisticView from "./view/trip-statistic.js";
 import Api from "./api.js";
 
-const POINT_COUNT = 22;
+// const POINT_COUNT = 22;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
 
@@ -18,22 +18,10 @@ const pageMain = pageBody.querySelector(`.page-body__page-main`);
 const pageContainer = pageMain.querySelector(`.page-body__container`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
-const points = new Array(POINT_COUNT).fill().map(generatePoint);
+// const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const api = new Api(END_POINT, AUTHORIZATION);
 
-Promise.all([
-  api.getPoints(),
-  api.getOffers()
-]).then(([pointsArray, offersArray]) => {
-  const a = pointsArray.map((point) => {
-    console.log(point);
-    const b = api.getLocalPoint(point, offersArray);
-    return api.getLocalPoint(point, offersArray);
-  });
-})
-
-const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
+// pointsModel.setPoints(points);
 const headerComponent = new TripView();
 
 render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
@@ -93,3 +81,19 @@ headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();
+
+const pointsModel = new PointsModel();
+
+Promise.all([
+  api.getPoints(),
+  api.getOffers(),
+  api.getDestinations()
+]).then(([pointsArray, offersArray, destinationsArray]) => {
+  pointsModel.setDestinations(destinationsArray);
+  pointsModel.setOffers(offersArray);
+
+  const localPoints = pointsArray.map((point) => {
+    return pointsModel.adaptToClient(point);
+  });
+  pointsModel.setPoints(localPoints);
+});

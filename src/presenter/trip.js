@@ -132,7 +132,7 @@ export default class Trip {
   }
 
   _renderEmptyTrip() {
-    render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
+    // render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
     render(this._tripListContainer, this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 
@@ -164,7 +164,6 @@ export default class Trip {
   _renderTrip() {
     const points = this._getPoints();
     const pointsCount = points.length;
-
     if (pointsCount === 0) {
       this._renderEmptyTrip();
       return;

@@ -28,8 +28,13 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  getLocalPoint(point, offers) {
-    PointsModel.adaptToClient(point, offers);
+  getDestinations() {
+    return this._load({url: `destinations`})
+      .then(Api.toJSON);
+  }
+
+  getLocalPoint(point) {
+    return PointsModel.adaptToClient(point);
   }
 
   updatePoint(point) {

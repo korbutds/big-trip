@@ -109,3 +109,21 @@ export const getOffersList = (offers, pointType) => {
 
   return offerObject;
 };
+
+export const toCamelCase = (str) => {
+  return [...str].map((element, index, arr) => {
+    if (index > 0 && arr[index - 1] === ` ` || arr[index - 1] === `-`) {
+      return element.toUpperCase();
+    }
+    return element.toLowerCase();
+  }).filter((element) => element !== ` ` && element !== `-`).join(``);
+};
+
+export const toHtmlView = (str) => {
+  return [...str].map((element) => {
+    if (element === ` `) {
+      return `-`;
+    }
+    return element.toLowerCase();
+  }).join(``);
+};
