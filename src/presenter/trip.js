@@ -12,10 +12,12 @@ import {filter} from "../view/utils/filters.js";
 
 
 export default class Trip {
-  constructor(tripListContainer, pointsModel, filterModel) {
+  constructor(tripListContainer, pointsModel, filterModel, api) {
     this._tripListContainer = tripListContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
+    this._api = api;
+
     this._isLoading = true;
 
     this._pointPresenter = {};
@@ -89,7 +91,9 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);

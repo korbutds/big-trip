@@ -33,19 +33,15 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  getLocalPoint(point) {
-    return PointsModel.adaptToClient(point);
-  }
-
   updatePoint(point) {
+    const points = Object.assign({}, point);
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(PointsModel.adaptToServer),
+      body: JSON.stringify(PointsModel.adaptPointsToServer(points)),
       headers: new Headers({"Content-Type": `application/json`})
     })
-      .then(Api.toJSON)
-      .then(PointsModel.adaptToClient);
+      .then(Api.toJSON);
   }
 
   _load({

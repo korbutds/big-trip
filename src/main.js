@@ -7,7 +7,6 @@ import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
 import StatisticView from "./view/trip-statistic.js";
 import Api from "./api.js";
-import {toCamelCase} from "./view/utils/points.js";
 
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
@@ -28,7 +27,7 @@ const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
 
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
-const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
+const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel, api);
 const filterPresenter = new Filter(tripControls, filterModel);
 
 const handlePointNewFormClose = () => {
@@ -75,36 +74,23 @@ const handleHeaderMenuClick = (headerItem) => {
   }
 };
 
-headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();
 
 
 Promise.all([
-  api.getPoints(),
   api.getOffers(),
-  api.getDestinations()
+  api.getDestinations(),
+  api.getPoints(),
 ])
-  .then(([pointsArray, offersArray, destinationsArray]) => {
-    const localDestinations = destinationsArray.map((destination) => {
-      return pointsModel.adaptDestinationToClient(destination);
-    });
-    const localOffers = {};
-    offersArray.forEach((offer) => {
-      localOffers[toCamelCase(offer.type)] = pointsModel.adaptOfferToClient(offer);
-    }, {});
-
-    pointsModel.setOffers(localOffers);
-    pointsModel.setDestinations(localDestinations);
-
-    const localPoints = pointsArray.map((point) => {
-      return pointsModel.adaptPointsToClient(point);
-    });
-
-    pointsModel.setPoints(UpdateType.INIT, localPoints);
+  .then(([offersArray, destinationsArray, pointsArray]) => {
+    pointsModel.setOffers(offersArray);
+    pointsModel.setDestinations(destinationsArray);
+    pointsModel.setPoints(UpdateType.INIT, pointsArray);
+    headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
   })
-  .catch((reject) => {
-    console.log(reject)
+  .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
+    headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
   });

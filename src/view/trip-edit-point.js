@@ -90,7 +90,6 @@ const generateOffersList = (arr, checkedArr) => {
 };
 
 const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
-  // console.log(routePointTypes)
   const {times, type, destination, offers, description, photos, pointType: typeId, price} = point;
   const {iconSrc, name} = type;
   const offersList = routePointTypes[typeId].offers;

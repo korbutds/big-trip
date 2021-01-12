@@ -1,5 +1,5 @@
 import Observer from "../view/utils/observer.js";
-import {offersArrayToClientView, toCamelCase, ucFirstLetter} from "../view/utils/points.js";
+import {offersArrayToClientView, offersArrayToServerView, toCamelCase, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
   constructor() {
@@ -10,20 +10,22 @@ export default class Points extends Observer {
   }
 
   setPoints(updateType, points) {
-    this._points = points.slice();
-
+    this._points = points.slice().map((point) => {
+      return this.adaptPointsToClient(point);
+    });
     this._notify(updateType);
   }
 
-  setDestinations(destinations) {
-    this._destinations = destinations.slice();
+  setDestinations(destinationsArray) {
+    this._destinations = destinationsArray.map((destination) => {
+      return this.adaptDestinationToClient(destination);
+    });
   }
 
-  setOffers(offers) {
-    this._offers = Object.assign(
-        {},
-        offers
-    );
+  setOffers(offersArray) {
+    offersArray.forEach((offer) => {
+      this._offers[toCamelCase(offer.type)] = this.adaptOfferToClient(offer);
+    }, {});
   }
 
   getPoints() {
@@ -40,18 +42,17 @@ export default class Points extends Observer {
 
   updatePoint(updateType, update) {
     const index = this._points.findIndex((point) => point.id === update.id);
-
     if (index === -1) {
       throw new Error(`Can't update unexisting point`);
     }
-
     this._points = [
       ...this._points.slice(0, index),
       update,
       ...this._points.slice(index + 1)
     ];
-
-    this._notify(updateType, update);
+    debugger;
+    // Обрати внимание сюда, пожалуйста. Кажется у меня костыль)
+    this._notify(updateType, this.adaptPointsToClient(update));
   }
 
   addPoint(updateType, update) {
@@ -113,28 +114,29 @@ export default class Points extends Observer {
     return adaptedPoint;
   }
 
-  adaptPointsToServer(point) {
+  static adaptPointsToServer(point) {
     const adaptedPoint = Object.assign(
         {},
         point,
         {
           'base_price': point.price,
-          'date_from': point.times.start,
-          'date_to': point.times.finish,
+          'date_from': new Date(point.times.start).toISOString(),
+          'date_to': new Date(point.times.finish).toISOString(),
           'destination': {
             description: point.description,
             name: point.destination,
             pictures: point.photos,
           },
           'is_favorite': point.isFavorite,
-          'type': point.type.name.toLowerCase()
+          'type': point.pointType,
+          'offers': offersArrayToServerView(point.offers)
         }
     );
-
     delete adaptedPoint.price;
     delete adaptedPoint.times;
     delete adaptedPoint.description;
     delete adaptedPoint.isFavorite;
+    delete adaptedPoint.pointType;
 
     return adaptedPoint;
   }

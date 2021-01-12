@@ -149,6 +149,18 @@ export const offersArrayToClientView = (offersArray) => {
   return clientOffers;
 };
 
+export const offersArrayToServerView = (offersArray) => {
+  const array = offersArray.slice();
+  return array.map((offer) => {
+    offer.title = offer.name;
+    // delete offer.name;
+    // delete offer.id;
+    // delete offer.offerKey;
+
+    return offer;
+  });
+};
+
 export const getOffersListFromObject = (offersArray) => {
   const offerObject = {};
   offersArray.forEach((offer) => {
