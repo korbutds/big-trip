@@ -148,3 +148,16 @@ export const offersArrayToClientView = (offersArray) => {
 
   return clientOffers;
 };
+
+export const getOffersListFromObject = (offersArray) => {
+  const offerObject = {};
+  offersArray.forEach((offer) => {
+    offerObject[offer.offerKey] = {
+      name: offer.name,
+      price: offer.price,
+      id: offer.id,
+      offerKey: offer.offerKey
+    };
+  });
+  return offerObject;
+};

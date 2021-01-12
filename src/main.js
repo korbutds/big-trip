@@ -1,4 +1,3 @@
-// import {generatePoint} from "./mock/point.js";
 import Trip from "./presenter/trip.js";
 import Filter from "./presenter/filter.js";
 import PointsModel from "./model/points.js";
@@ -10,7 +9,6 @@ import StatisticView from "./view/trip-statistic.js";
 import Api from "./api.js";
 import {toCamelCase} from "./view/utils/points.js";
 
-// const POINT_COUNT = 1;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
 
@@ -19,11 +17,8 @@ const pageMain = pageBody.querySelector(`.page-body__page-main`);
 const pageContainer = pageMain.querySelector(`.page-body__container`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
-// const points = new Array(POINT_COUNT).fill().map(generatePoint);
-// console.log(points)
 const api = new Api(END_POINT, AUTHORIZATION);
 
-// pointsModel.setPoints(points);
 const headerComponent = new TripView();
 
 render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
@@ -109,4 +104,7 @@ Promise.all([
 
     pointsModel.setPoints(UpdateType.INIT, localPoints);
   })
-  .catch(pointsModel.setPoints(UpdateType.INIT, []));
+  .catch((reject) => {
+    console.log(reject)
+    pointsModel.setPoints(UpdateType.INIT, []);
+  });

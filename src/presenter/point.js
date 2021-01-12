@@ -27,14 +27,16 @@ export default class Point {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
-  init(point) {
+  init(point, offers, destinations) {
     this._point = point;
+    this._offers = offers;
+    this._destinations = destinations;
 
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new TripPoint(point);
-    this._pointEditComponent = new TripPointEdit(point);
+    this._pointEditComponent = new TripPointEdit(point, offers, destinations);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointEditComponent.setEditClickHandler(this._handleBackClick);
@@ -102,8 +104,6 @@ export default class Point {
   }
 
   _handleFormSubmit(update) {
-    // Проверяем, поменялись ли в точке данные, которые попадают под фильтрацию,
-    // а значит требуют перерисовки списка - если таких нет, это PATCH-обновление
     const isMajorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish) || !isCostEqual(this._point.price, update.price);
     this._changeData(
         UserAction.UPDATE_POINT,

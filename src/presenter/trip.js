@@ -2,7 +2,7 @@ import TripEmpty from "../view/trip-empty.js";
 import TripInfo from "../view/trip-info.js";
 import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
-import TripLoading from "../view/trip-loading.js"
+import TripLoading from "../view/trip-loading.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 import PointPresenter from "./point.js";
 import NewPointPresenter from "./point-new.js";
@@ -72,9 +72,17 @@ export default class Trip {
     return filtredPoints;
   }
 
-  _renderPoint(point) {
+  _getOffers() {
+    return this._pointsModel.getOffers();
+  }
+
+  _getDestinations() {
+    return this._pointsModel.getDestinations();
+  }
+
+  _renderPoint(point, offers, destinations) {
     const pointPresenter = new PointPresenter(this._boardComponent, this._handleViewAction, this._handleModeChange);
-    pointPresenter.init(point);
+    pointPresenter.init(point, offers, destinations);
     this._pointPresenter[point.id] = pointPresenter;
   }
 
@@ -95,7 +103,7 @@ export default class Trip {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._pointPresenter[data.id].init(data);
+        this._pointPresenter[data.id].init(data, this._getOffers(), this._getDestinations());
         break;
       case UpdateType.MINOR:
         this._clearTrip();
@@ -130,18 +138,18 @@ export default class Trip {
     this._renderTrip();
   }
 
-  _renderPoints(points) {
-    points.forEach((point) => this._renderPoint(point));
+  _renderPoints(points, offers, destinations) {
+    points.forEach((point) => this._renderPoint(point, offers, destinations));
   }
 
   _renderPointsList() {
     const points = this._getPoints().slice();
-    this._renderPoints(points);
+    const offers = Object.assign({}, this._getOffers());
+    const destinations = this._getDestinations();
+    this._renderPoints(points, offers, destinations);
   }
 
   _renderEmptyTrip() {
-    debugger
-    // render(this._tripInfoContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
     render(this._tripListContainer, this._emptyComponent, RenderPosition.AFTERBEGIN);
   }
 

@@ -1,9 +1,9 @@
 import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import Smart from "../view/smart.js";
-import {ROUTE_POINT_TYPES, OFFERS_LIST, DESTINATIONS_ARRAY} from "../const.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import {getOffersListFromObject} from "./utils/points.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -65,16 +65,19 @@ const generateEventTypeList = (eventsObject, iconSrc, id, eventType) => {
 };
 
 const generateOffersList = (arr, checkedArr) => {
+  // console.log(arr, `arr`)
+  // console.log(checkedArr, `checkedArr`)
+  const checkedOffersKeys = checkedArr.reduce((acc, curr) => [...acc, curr.offerKey], []);
   let str = ``;
   if (arr.length > 0) {
     str += `<section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
               <div class="event__available-offers">`;
     for (let i = 0; i < arr.length; i++) {
-      let id = nanoid();
+      const isChecked = checkedOffersKeys.includes(arr[i].offerKey) ? true : false;
       str += `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" data-feature-name="${arr[i].offerKey}" id="event-offer-${arr[i][`id`]}-${id}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${checkedArr.includes(arr[i]) ? `checked` : ``}>
-                  <label class="event__offer-label" for="event-offer-${arr[i][`id`]}-${id}">
+                  <input class="event__offer-checkbox  visually-hidden" data-feature-name="${arr[i].offerKey}" id="event-offer-${arr[i][`id`]}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${isChecked ? `checked` : ``}>
+                  <label class="event__offer-label" for="event-offer-${arr[i][`id`]}">
                     <span class="event__offer-title">${arr[i][`name`]}</span>
                     &plus;&euro;&nbsp;
                     <span class="event__offer-price">${arr[i][`price`]}</span>
@@ -86,20 +89,21 @@ const generateOffersList = (arr, checkedArr) => {
   return str;
 };
 
-const createEditPointTemplate = (point) => {
+const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
+  // console.log(routePointTypes)
   const {times, type, destination, offers, description, photos, pointType: typeId, price} = point;
   const {iconSrc, name} = type;
-  const offersList = ROUTE_POINT_TYPES[typeId].offers;
+  const offersList = routePointTypes[typeId].offers;
   const {start, finish} = times;
   let id = nanoid();
-  const newPointList = DESTINATIONS_ARRAY.reduce((prev, curr) => {
+  const newPointList = destinationsArray.reduce((prev, curr) => {
     return [...prev, curr.name];
   }, []);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
-      ${generateEventTypeList(ROUTE_POINT_TYPES, iconSrc, id, name)}
+      ${generateEventTypeList(routePointTypes, iconSrc, id, name)}
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-${id}">
@@ -141,11 +145,12 @@ const createEditPointTemplate = (point) => {
 };
 
 export default class EditPoint extends Smart {
-  constructor(point = [], destinations, offers) {
+  constructor(point = [], offers, destinations) {
     super();
     this._point = point;
     this._destinations = destinations;
     this._offers = offers;
+
     this._datepickerStart = null;
     this._datepickerFinish = null;
 
@@ -214,7 +219,7 @@ export default class EditPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       pointType: evt.target.value,
-      type: ROUTE_POINT_TYPES[evt.target.value],
+      type: this._offers[evt.target.value],
       offers: []
     });
   }
@@ -308,14 +313,14 @@ export default class EditPoint extends Smart {
 
   _pointDestinationHandle(evt) {
     evt.preventDefault();
-    const destinationList = DESTINATIONS_ARRAY.reduce((acc, current) => {
+    const destinationList = this._destinations.reduce((acc, current) => {
       return [...acc, current.name];
     }, []);
     if (!destinationList.includes(evt.target.value)) {
       evt.target.setCustomValidity(`Данной точки маршрута не существует. Попробуйте выбрать из предложенного списка`);
     } else {
       evt.target.setCustomValidity(``);
-      const destinationObject = DESTINATIONS_ARRAY.find((elem) => elem.name === evt.target.value);
+      const destinationObject = this._destinations.find((elem) => elem.name === evt.target.value);
       this.updateData({
         destination: destinationObject.name,
         description: destinationObject.description,
@@ -333,14 +338,15 @@ export default class EditPoint extends Smart {
   }
 
   _offersListChangeHandle(evt) {
-    const offers = this._point.offers.slice();
+    const pointOffers = this._point.offers.slice();
+    const availableOffers = this._offers[this._point.pointType].offers;
     if (evt.target.checked) {
-      offers.push(OFFERS_LIST[evt.target.dataset.featureName]);
+      pointOffers.push(getOffersListFromObject(availableOffers)[evt.target.dataset.featureName]);
       this.updateData({
-        offers
+        offers: pointOffers
       }, true);
     } else {
-      const featuresFiltred = offers.filter((feature) => feature.offerKey !== evt.target.dataset.featureName);
+      const featuresFiltred = pointOffers.filter((feature) => feature.offerKey !== evt.target.dataset.featureName);
       this.updateData({
         offers: featuresFiltred
       }, true);
