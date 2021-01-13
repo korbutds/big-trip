@@ -2,6 +2,8 @@ import Trip from "./presenter/trip.js";
 import Filter from "./presenter/filter.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
+import OffersModel from "./model/offers.js";
+import DestinationsModel from "./model/destinations.js";
 import {remove, render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
@@ -24,10 +26,11 @@ render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
-
-const pointsModel = new PointsModel();
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
+const pointsModel = new PointsModel(offersModel);
 const filterModel = new FilterModel();
-const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel, api);
+const tripPresenter = new Trip(tripEventsSection, pointsModel, destinationsModel, offersModel, filterModel, api);
 const filterPresenter = new Filter(tripControls, filterModel);
 
 const handlePointNewFormClose = () => {
@@ -85,8 +88,8 @@ Promise.all([
   api.getPoints(),
 ])
   .then(([offersArray, destinationsArray, pointsArray]) => {
-    pointsModel.setOffers(offersArray);
-    pointsModel.setDestinations(destinationsArray);
+    offersModel.setOffers(offersArray);
+    destinationsModel.setDestinations(destinationsArray);
     pointsModel.setPoints(UpdateType.INIT, pointsArray);
     headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
   })

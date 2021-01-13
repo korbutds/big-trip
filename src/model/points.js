@@ -2,11 +2,10 @@ import Observer from "../view/utils/observer.js";
 import {offersArrayToClientView, offersArrayToServerView, toCamelCase, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
-  constructor() {
+  constructor(offersModel) {
     super();
     this._points = [];
-    this._destinations = [];
-    this._offers = [];
+    this._offersModel = offersModel;
   }
 
   setPoints(updateType, points) {
@@ -16,28 +15,8 @@ export default class Points extends Observer {
     this._notify(updateType);
   }
 
-  setDestinations(destinationsArray) {
-    this._destinations = destinationsArray.map((destination) => {
-      return this.adaptDestinationToClient(destination);
-    });
-  }
-
-  setOffers(offersArray) {
-    offersArray.forEach((offer) => {
-      this._offers[toCamelCase(offer.type)] = this.adaptOfferToClient(offer);
-    }, {});
-  }
-
   getPoints() {
     return this._points;
-  }
-
-  getDestinations() {
-    return this._destinations;
-  }
-
-  getOffers() {
-    return this._offers;
   }
 
   updatePoint(updateType, update) {
@@ -50,7 +29,6 @@ export default class Points extends Observer {
       this.adaptPointsToClient(update),
       ...this._points.slice(index + 1)
     ];
-    // Обрати внимание сюда, пожалуйста. Кажется у меня костыль)
     this._notify(updateType, this.adaptPointsToClient(update));
   }
 
@@ -97,7 +75,7 @@ export default class Points extends Observer {
           type: {
             iconSrc: `./img/icons/${point.type}.png`,
             name: ucFirstLetter(point.type),
-            offers: this._offers[toCamelCase(point.type)].offers
+            offers: this._offersModel.getOffers()[toCamelCase(point.type)].offers
           }
         }
     );
@@ -138,27 +116,5 @@ export default class Points extends Observer {
     delete adaptedPoint.pointType;
 
     return adaptedPoint;
-  }
-
-  adaptDestinationToClient(destination) {
-    const adaptedDestination = Object.assign(
-        {},
-        destination,
-        {
-          photos: destination.pictures
-        }
-    );
-
-    delete adaptedDestination.pictures;
-
-    return adaptedDestination;
-  }
-
-  adaptOfferToClient(offer) {
-    return {
-      name: ucFirstLetter(offer.type),
-      offers: offersArrayToClientView(offer.offers),
-      iconSrc: `./img/icons/${offer.type}.png`
-    };
   }
 }

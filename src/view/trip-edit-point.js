@@ -217,6 +217,7 @@ export default class EditPoint extends Smart {
   _pointTypeChangeHandle(evt) {
     evt.preventDefault();
     this.updateData({
+      price: ``,
       pointType: evt.target.value,
       type: this._offers[evt.target.value],
       offers: []

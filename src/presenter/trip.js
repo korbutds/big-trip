@@ -12,9 +12,11 @@ import {filter} from "../view/utils/filters.js";
 
 
 export default class Trip {
-  constructor(tripListContainer, pointsModel, filterModel, api) {
+  constructor(tripListContainer, pointsModel, destinationsModel, offersModel, filterModel, api) {
     this._tripListContainer = tripListContainer;
     this._pointsModel = pointsModel;
+    this._destinationsModel = destinationsModel;
+    this._offersModel = offersModel;
     this._filterModel = filterModel;
     this._api = api;
 
@@ -75,11 +77,11 @@ export default class Trip {
   }
 
   _getOffers() {
-    return this._pointsModel.getOffers();
+    return this._offersModel.getOffers();
   }
 
   _getDestinations() {
-    return this._pointsModel.getDestinations();
+    return this._destinationsModel.getDestinations();
   }
 
   _renderPoint(point, offers, destinations) {
