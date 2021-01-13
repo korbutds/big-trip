@@ -1,5 +1,6 @@
 import Observer from "../view/utils/observer.js";
-import {offersArrayToClientView, offersArrayToServerView, toCamelCase, ucFirstLetter} from "../view/utils/points.js";
+import {offersArrayToClientView, offersArrayToServerView} from "../view/utils/offers.js";
+import {toCamelCase, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
   constructor(offersModel) {

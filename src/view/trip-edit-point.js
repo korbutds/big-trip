@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import {getOffersListFromObject} from "./utils/points.js";
+import {getOffersListFromObject} from "./utils/offers.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
