@@ -47,10 +47,9 @@ export default class Points extends Observer {
     }
     this._points = [
       ...this._points.slice(0, index),
-      update,
+      this.adaptPointsToClient(update),
       ...this._points.slice(index + 1)
     ];
-    debugger;
     // Обрати внимание сюда, пожалуйста. Кажется у меня костыль)
     this._notify(updateType, this.adaptPointsToClient(update));
   }
@@ -119,7 +118,7 @@ export default class Points extends Observer {
         {},
         point,
         {
-          'base_price': point.price,
+          'base_price': Number(point.price),
           'date_from': new Date(point.times.start).toISOString(),
           'date_to': new Date(point.times.finish).toISOString(),
           'destination': {

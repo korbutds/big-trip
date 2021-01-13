@@ -152,12 +152,17 @@ export const offersArrayToClientView = (offersArray) => {
 export const offersArrayToServerView = (offersArray) => {
   const array = offersArray.slice();
   return array.map((offer) => {
+    const adaptedOffer = Object.assign(
+        {},
+        offer,
+        {title: offer.name}
+    )
     offer.title = offer.name;
-    // delete offer.name;
-    // delete offer.id;
-    // delete offer.offerKey;
+    delete adaptedOffer.name;
+    delete adaptedOffer.id;
+    delete adaptedOffer.offerKey;
 
-    return offer;
+    return adaptedOffer;
   });
 };
 
