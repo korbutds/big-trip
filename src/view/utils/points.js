@@ -6,12 +6,24 @@ dayjs.extend(duration);
 
 export const createPhotosArr = () => {
   const count = getRandomInt(1, 9);
+  const description = `some photo description`;
   const src = [];
   for (let i = 0; i < count; i++) {
-    src.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+    src.push({
+      src: `http://picsum.photos/248/152?r=${Math.random()}`,
+      description
+    });
   }
 
   return src;
+};
+
+export const ucFirstLetter = (str) => {
+  if (!str) {
+    return str;
+  }
+
+  return str[0].toUpperCase() + str.slice(1);
 };
 
 const addZeroToNumber = (number) => {
@@ -89,3 +101,80 @@ export const isDateExpired = (dueData) => {
 export const isCostEqual = (oldCost, newCost) => {
   return (oldCost === Number(newCost)) ? true : false;
 };
+
+export const getOffersList = (offers, pointType) => {
+  return offers[pointType];
+};
+
+export const toCamelCase = (str) => {
+  return [...str].map((element, index, arr) => {
+    if (index > 0 && arr[index - 1] === ` ` || arr[index - 1] === `-`) {
+      return element.toUpperCase();
+    }
+    return element.toLowerCase();
+  }).filter((element) => element !== ` ` && element !== `-`).join(``);
+};
+
+export const toHtmlView = (str) => {
+  return [...str].map((element) => {
+    if (element === ` `) {
+      return `-`;
+    }
+    return element.toLowerCase();
+  }).join(``);
+};
+
+// export const getOfferToClient = (offer) => {
+//   const offerObject = Object.assign(
+//       {},
+//       offer,
+//       {
+//         name: offer.title,
+//         id: toHtmlView(offer.title),
+//         offerKey: toCamelCase(offer.title)
+//       }
+//   );
+//   delete offerObject.title;
+//   return offerObject;
+// };
+
+// export const offersArrayToClientView = (offersArray) => {
+//   const clientOffers = [];
+//   if (offersArray && offersArray.length > 0) {
+//     offersArray.forEach((offer) => {
+//       clientOffers.push(getOfferToClient(offer));
+//     });
+//   }
+
+//   return clientOffers;
+// };
+
+// export const offersArrayToServerView = (offersArray) => {
+//   const array = offersArray.slice();
+//   return array.map((offer) => {
+//     const adaptedOffer = Object.assign(
+//         {},
+//         offer,
+//         {title: offer.name}
+//     )
+//     offer.title = offer.name;
+//     delete adaptedOffer.name;
+//     delete adaptedOffer.id;
+//     delete adaptedOffer.offerKey;
+
+//     return adaptedOffer;
+//   });
+// };
+
+// export const getOffersListFromObject = (offersArray) => {
+//   const offerObject = {};
+//   offersArray.forEach((offer) => {
+//     offerObject[offer.offerKey] = {
+//       name: offer.name,
+//       price: offer.price,
+//       id: offer.id,
+//       offerKey: offer.offerKey
+//     };
+//   });
+//   return offerObject;
+// };

@@ -1,32 +1,36 @@
-import {generatePoint} from "./mock/point.js";
 import Trip from "./presenter/trip.js";
 import Filter from "./presenter/filter.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
+import OffersModel from "./model/offers.js";
+import DestinationsModel from "./model/destinations.js";
 import {remove, render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
 import StatisticView from "./view/trip-statistic.js";
+import Api from "./api.js";
 
-const POINT_COUNT = 22;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
 
 const pageBody = document.querySelector(`.page-body`);
 const pageMain = pageBody.querySelector(`.page-body__page-main`);
 const pageContainer = pageMain.querySelector(`.page-body__container`);
 const tripEventsSection = pageMain.querySelector(`.trip-events`);
 
-const points = new Array(POINT_COUNT).fill().map(generatePoint);
-const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
+const api = new Api(END_POINT, AUTHORIZATION);
+
 const headerComponent = new TripView();
 
 render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
-
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
+const pointsModel = new PointsModel(offersModel);
 const filterModel = new FilterModel();
-const tripPresenter = new Trip(tripEventsSection, pointsModel, filterModel);
+const tripPresenter = new Trip(tripEventsSection, pointsModel, destinationsModel, offersModel, filterModel, api);
 const filterPresenter = new Filter(tripControls, filterModel);
 
 const handlePointNewFormClose = () => {
@@ -73,8 +77,23 @@ const handleHeaderMenuClick = (headerItem) => {
   }
 };
 
-headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
 
 filterPresenter.init();
 tripPresenter.init();
 
+
+Promise.all([
+  api.getOffers(),
+  api.getDestinations(),
+  api.getPoints(),
+])
+  .then(([offersArray, destinationsArray, pointsArray]) => {
+    offersModel.setOffers(offersArray);
+    destinationsModel.setDestinations(destinationsArray);
+    pointsModel.setPoints(UpdateType.INIT, pointsArray);
+    headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
+  })
+  .catch(() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+    headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
+  });

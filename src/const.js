@@ -1,6 +1,5 @@
 import {getRandomInt} from "./view/utils/common.js";
 import {createPhotosArr, getRandomFishText} from "./view/utils/points.js";
-import dayjs from "dayjs";
 
 export const OFFERS_LIST = {
   orderUber: {
@@ -144,16 +143,6 @@ export const SortType = {
   PRICE: `price-up`
 };
 
-export const BLANK_POINT = {
-  times: dayjs(),
-  type: ROUTE_POINT_TYPES.checkIn.name,
-  destination: DESTINATIONS_ARRAY[0].name,
-  offers: ROUTE_POINT_TYPES.checkIn.offers,
-  description: getRandomFishText(getRandomInt(1, 5)),
-  photos: DESTINATIONS_ARRAY[0].photos,
-  isFavorite: false,
-};
-
 export const Keys = {
   ESCAPE: [`Esc`, `Escape`]
 };
@@ -167,7 +156,8 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 export const FilterType = {
