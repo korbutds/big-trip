@@ -53,6 +53,13 @@ export default class Api {
     .then(Api.toJSON);
   }
 
+  deletePoint(point) {
+    return this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE
+    });
+  }
+
   _load({
     url,
     method = Method.GET,
