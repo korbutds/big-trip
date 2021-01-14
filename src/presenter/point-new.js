@@ -1,12 +1,33 @@
-import {nanoid} from "nanoid";
 import {Keys, UpdateType, UserAction} from "../const.js";
 import PointEdit from "../view/trip-edit-point.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 
+const blankPoint = (offers) => {
+  const now = new Date();
+  const copiedOffers = Object.assign({}, offers);
+  return {
+    isFavorite: false,
+    offers: [],
+    pointType: `sightseeing`,
+    price: 0,
+    times: {
+      start: now.getTime(),
+      finish: now.getTime() + 60000
+    },
+    type: {
+      iconSrc: `./img/icons/sightseeing.png`,
+      name: `Sightseeing`,
+      offers: copiedOffers
+    }
+  };
+};
+
 export default class PointNew {
-  constructor(pointListContainer, changeData) {
+  constructor(pointListContainer, changeData, offers, destinations) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
+    this._offers = offers;
+    this._destinations = destinations;
 
     this._pointEditComponent = null;
     this._destroyCallback = null;
@@ -22,8 +43,8 @@ export default class PointNew {
     if (this._pointEditComponent !== null) {
       return;
     }
-
-    this._pointEditComponent = new PointEdit();
+    const newPoint = blankPoint(this._offers);
+    this._pointEditComponent = new PointEdit(newPoint, this._offers, this._destinations);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setResetClickHandler(this._handleResetClick);
 
@@ -50,7 +71,7 @@ export default class PointNew {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        Object.assign({id: nanoid()}, point)
+        point
     );
   }
 

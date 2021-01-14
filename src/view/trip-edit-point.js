@@ -1,4 +1,3 @@
-import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import flatpickr from "flatpickr";
@@ -65,8 +64,6 @@ const generateEventTypeList = (eventsObject, iconSrc, id, eventType) => {
 };
 
 const generateOffersList = (arr, checkedArr) => {
-  // console.log(arr, `arr`)
-  // console.log(checkedArr, `checkedArr`)
   const checkedOffersKeys = checkedArr.reduce((acc, curr) => [...acc, curr.offerKey], []);
   let str = ``;
   if (arr.length > 0) {
@@ -90,11 +87,10 @@ const generateOffersList = (arr, checkedArr) => {
 };
 
 const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
-  const {times, type, destination, offers, description, photos, pointType: typeId, price} = point;
+  const {id, times, type, destination, offers, description, photos, pointType: typeId, price} = point;
   const {iconSrc, name} = type;
   const offersList = routePointTypes[typeId].offers;
   const {start, finish} = times;
-  let id = nanoid();
   const newPointList = destinationsArray.reduce((prev, curr) => {
     return [...prev, curr.name];
   }, []);
@@ -108,7 +104,7 @@ const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
         <label class="event__label  event__type-output" for="event-destination-${id}">
           ${name}
         </label>
-        <input class="event__input  event__input--destination" type="text" id="event-destination-${id}" name="event-destination" value="${destination}" list="destination-list-${id}" required>
+        <input class="event__input  event__input--destination" type="text" id="event-destination-${id}" name="event-destination" value="${destination ? destination : ``}" list="destination-list-${id}" required>
         <datalist id="destination-list-${id}">
           ${generateDistDatalist(newPointList)}
         </datalist>
@@ -132,7 +128,7 @@ const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
     </header>
     <section class="event__details">
       ${generateOffersList(offersList, offers)}
-      ${(description.length > 0 || photos.length > 0) ?
+      ${(description || photos) ?
     `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
@@ -268,7 +264,7 @@ export default class EditPoint extends Smart {
       this.updateData({
         times: {
           start: startDate,
-          finish: startDate
+          finish: startDate + 60000
         }
       }, true);
     }
@@ -285,7 +281,7 @@ export default class EditPoint extends Smart {
     if (endDate < this._point.times.start) {
       this.updateData({
         times: {
-          start: endDate,
+          start: endDate - 60000,
           finish: endDate
         }
       }, true);

@@ -38,8 +38,6 @@ export default class Trip {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-
-    this._pointNewPresenter = new NewPointPresenter(this._boardComponent, this._handleViewAction);
   }
 
   init() {
@@ -96,10 +94,12 @@ export default class Trip {
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
-        // this._pointsModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._api.addPoint(update).then((response) => {
+          this._pointsModel.addPoint(updateType, response);
+        });
+        // this._pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
         this._pointsModel.deletePoint(updateType, update);
@@ -150,6 +150,8 @@ export default class Trip {
   }
 
   _renderPointsList() {
+    this._pointNewPresenter = new NewPointPresenter(this._boardComponent, this._handleViewAction, this._getOffers(), this._getDestinations());
+
     const points = this._getPoints().slice();
     const offers = Object.assign({}, this._getOffers());
     const destinations = this._getDestinations();

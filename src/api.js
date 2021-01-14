@@ -34,14 +34,23 @@ export default class Api {
   }
 
   updatePoint(point) {
-    const points = Object.assign({}, point);
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(PointsModel.adaptPointsToServer(points)),
+      body: JSON.stringify(PointsModel.adaptPointsToServer(point)),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON);
+  }
+
+  addPoint(point) {
+    return this._load({
+      url: `points`,
+      method: Method.POST,
+      body: JSON.stringify(PointsModel.adaptPointsToServer(point)),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+    .then(Api.toJSON);
   }
 
   _load({
