@@ -85,4 +85,11 @@ export default class PointNew {
       this.destroy();
     }
   }
+
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
 }

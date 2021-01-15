@@ -4,7 +4,7 @@ import TripSort from "../view/trip-sort.js";
 import TripBoard from "../view/trip-board.js";
 import TripLoading from "../view/trip-loading.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
-import PointPresenter from "./point.js";
+import PointPresenter, {State as PointPresentrViewState} from "./point.js";
 import NewPointPresenter from "./point-new.js";
 import {sortPointPriceToMin, sortPointTimeToUp, sortPointDate} from "../view/utils/points.js";
 import {SortType, UpdateType, UserAction} from "../const.js";
@@ -91,6 +91,7 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this._pointPresenter[update.id].setViewState(PointPresentrViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
@@ -101,6 +102,7 @@ export default class Trip {
         });
         break;
       case UserAction.DELETE_POINT:
+        this._pointPresenter[update.id].setViewState(PointPresentrViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
         });
