@@ -55,6 +55,7 @@ const handleHeaderMenuClick = (headerItem) => {
       break;
     case HeaderItem.TABLE:
       tripPresenter.destroy();
+      filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
       tripPresenter.init();
       remove(statisticComponent);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
