@@ -92,4 +92,16 @@ export default class PointNew {
       isSaving: true
     });
   }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._pointEditComponent.shake(resetFormState);
+  }
 }
