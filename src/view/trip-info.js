@@ -8,13 +8,13 @@ const countFullPrice = (costs = []) => {
 const getDestinationString = (destinations) => {
   let str = ``;
   destinations = [...new Set(destinations)];
-  if (destinations.length - 1 > 3) {
+  if (destinations.length > 3) {
     str = `${destinations[0]} &mdash; . . . &mdash; ${destinations[destinations.length - 1]}`;
-  } else if (destinations.length - 1 === 3) {
+  } else if (destinations.length === 3) {
     str = `${destinations[0]} &mdash; ${destinations[1]} &mdash; ${destinations[2]}`;
-  } else if (destinations.length - 1 === 2) {
+  } else if (destinations.length === 2) {
     str = `${destinations[0]} &mdash; ${destinations[1]}`;
-  } else if (destinations.length - 1 === 1) {
+  } else if (destinations.length === 1) {
     str = `${destinations[0]}`;
   }
   return str;

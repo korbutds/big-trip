@@ -1,4 +1,3 @@
-import {nanoid} from "nanoid";
 import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import flatpickr from "flatpickr";
@@ -29,22 +28,22 @@ const generatePhoto = (photosList) => {
   return str;
 };
 
-const generateData = (start, finish, id) => {
+const generateData = (start, finish, id, isDisabled) => {
   return `<div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-${id}">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${dayjs(start).format(`DD/MM/YY HH:mm`)}">
+            <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${dayjs(start).format(`DD/MM/YY HH:mm`)}" ${isDisabled ? `disabled` : ``}>
             &mdash;
             <label class="visually-hidden" for="event-end-time-${id}">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${dayjs(finish).format(`DD/MM/YY HH:mm`)}">
+            <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${dayjs(finish).format(`DD/MM/YY HH:mm`)}" ${isDisabled ? `disabled` : ``}>
           </div>`;
 };
 
-const generateEventTypeList = (eventsObject, iconSrc, id, eventType) => {
+const generateEventTypeList = (eventsObject, iconSrc, id, eventType, isDisabled) => {
   const eventsList = Object.keys(eventsObject);
   let events = ``;
   for (let i = 0; i < eventsList.length; i++) {
     events += `<div class="event__type-item">
-                <input id="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventsList[i]}" ${(eventType === eventsObject[eventsList[i]].name) ? `checked` : ``}>
+                <input id="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventsList[i]}" ${(eventType === eventsObject[eventsList[i]].name) ? `checked` : ``} ${isDisabled ? `disabled` : ``}>
                 <label class="event__type-label  event__type-label--${eventsObject[eventsList[i]].name.toLowerCase()}" for="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}">${eventsObject[eventsList[i]].name}</label>
               </div>`;
   }
@@ -53,7 +52,7 @@ const generateEventTypeList = (eventsObject, iconSrc, id, eventType) => {
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src=${iconSrc} alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox" ${isDisabled ? `disabled` : ``}>
 
             <div class="event__type-list">
               <fieldset class="event__type-group">
@@ -64,9 +63,7 @@ const generateEventTypeList = (eventsObject, iconSrc, id, eventType) => {
           </div>`;
 };
 
-const generateOffersList = (arr, checkedArr) => {
-  // console.log(arr, `arr`)
-  // console.log(checkedArr, `checkedArr`)
+const generateOffersList = (arr, checkedArr, isDisabled) => {
   const checkedOffersKeys = checkedArr.reduce((acc, curr) => [...acc, curr.offerKey], []);
   let str = ``;
   if (arr.length > 0) {
@@ -76,7 +73,7 @@ const generateOffersList = (arr, checkedArr) => {
     for (let i = 0; i < arr.length; i++) {
       const isChecked = checkedOffersKeys.includes(arr[i].offerKey) ? true : false;
       str += `<div class="event__offer-selector">
-                  <input class="event__offer-checkbox  visually-hidden" data-feature-name="${arr[i].offerKey}" id="event-offer-${arr[i][`id`]}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${isChecked ? `checked` : ``}>
+                  <input class="event__offer-checkbox  visually-hidden" data-feature-name="${arr[i].offerKey}" id="event-offer-${arr[i][`id`]}" type="checkbox" name="event-offer-${arr[i][`id`]}" ${isChecked ? `checked` : ``} ${isDisabled ? `disabled` : ``}>
                   <label class="event__offer-label" for="event-offer-${arr[i][`id`]}">
                     <span class="event__offer-title">${arr[i][`name`]}</span>
                     &plus;&euro;&nbsp;
@@ -90,11 +87,10 @@ const generateOffersList = (arr, checkedArr) => {
 };
 
 const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
-  const {times, type, destination, offers, description, photos, pointType: typeId, price} = point;
+  const {id, times, type, destination, offers, description, photos, pointType: typeId, price, isDisabled, isSaving, isDeleting} = point;
   const {iconSrc, name} = type;
   const offersList = routePointTypes[typeId].offers;
   const {start, finish} = times;
-  let id = nanoid();
   const newPointList = destinationsArray.reduce((prev, curr) => {
     return [...prev, curr.name];
   }, []);
@@ -102,37 +98,37 @@ const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
-      ${generateEventTypeList(routePointTypes, iconSrc, id, name)}
+      ${generateEventTypeList(routePointTypes, iconSrc, id, name, isDisabled)}
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-${id}">
           ${name}
         </label>
-        <input class="event__input  event__input--destination" type="text" id="event-destination-${id}" name="event-destination" value="${destination}" list="destination-list-${id}" required>
+        <input class="event__input  event__input--destination" type="text" id="event-destination-${id}" name="event-destination" value="${destination ? destination : ``}" list="destination-list-${id}" required ${isDisabled ? `disabled` : ``}>
         <datalist id="destination-list-${id}">
           ${generateDistDatalist(newPointList)}
         </datalist>
       </div>
 
-      ${generateData(start, finish, id)}
+      ${generateData(start, finish, id, isDisabled)}
 
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-${id}">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value="${price}" required>
+        <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" name="event-price" value="${price}" ${isDisabled ? `disabled` : ``} required>
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
+      <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
+      <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
+      <button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
     <section class="event__details">
-      ${generateOffersList(offersList, offers)}
-      ${(description.length > 0 || photos.length > 0) ?
+      ${generateOffersList(offersList, offers, isDisabled)}
+      ${(description || photos) ?
     `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
@@ -144,9 +140,9 @@ const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
 };
 
 export default class EditPoint extends Smart {
-  constructor(point = [], offers, destinations) {
+  constructor(point = {}, offers, destinations) {
     super();
-    this._point = point;
+    this._point = EditPoint.parsePointToData(point);
     this._destinations = destinations;
     this._offers = offers;
 
@@ -192,7 +188,7 @@ export default class EditPoint extends Smart {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(this._point);
+    this._callback.submit(EditPoint.parseDataToPoint(this._point));
   }
 
   getTemplate() {
@@ -268,7 +264,7 @@ export default class EditPoint extends Smart {
       this.updateData({
         times: {
           start: startDate,
-          finish: startDate
+          finish: startDate + 60000
         }
       }, true);
     }
@@ -285,7 +281,7 @@ export default class EditPoint extends Smart {
     if (endDate < this._point.times.start) {
       this.updateData({
         times: {
-          start: endDate,
+          start: endDate - 60000,
           finish: endDate
         }
       }, true);
@@ -378,5 +374,27 @@ export default class EditPoint extends Smart {
 
   reset(point) {
     this.updateData(point);
+  }
+
+  static parsePointToData(point) {
+    return Object.assign(
+        {},
+        point,
+        {
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
+        }
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+
+    delete data.isDeleting;
+    delete data.isSaving;
+    delete data.isDeleting;
+
+    return data;
   }
 }
