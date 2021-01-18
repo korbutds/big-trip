@@ -98,3 +98,7 @@ Promise.all([
     pointsModel.setPoints(UpdateType.INIT, []);
     headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
   });
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
