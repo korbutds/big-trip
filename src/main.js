@@ -8,7 +8,7 @@ import {remove, render, RenderPosition} from "./view/utils/render.js";
 import TripView from "./view/trip-view.js";
 import {FilterType, HeaderItem, UpdateType} from "./const.js";
 import StatisticView from "./view/trip-statistic.js";
-import Api from "./api.js";
+import Api from "./api/api.js";
 
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
