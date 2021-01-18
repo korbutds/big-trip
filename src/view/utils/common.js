@@ -34,3 +34,7 @@ export const deepClone = (obj) => {
   }
   return clone;
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};
