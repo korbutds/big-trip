@@ -50,7 +50,7 @@ export default class Point {
     this._pointEditComponent.setEditClickHandler(this._handleBackClick);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setResetClickHandler(this._handleResetClick);
-    this._pointEditComponent.setEditClickHandler(this._handleResetClick);
+    this._pointEditComponent.setEditClickHandler(this._handleBackClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
