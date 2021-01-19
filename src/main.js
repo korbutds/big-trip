@@ -11,7 +11,7 @@ import StatisticView from "./view/trip-statistic.js";
 import Api from "./api/api.js";
 
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
-const AUTHORIZATION = `Basic j4VEMYWTVT-1dxQ9p5W88`;
+const AUTHORIZATION = `Basic j4VEMYWTVT-1dxreQ9p5W4s8`;
 
 const pageBody = document.querySelector(`.page-body`);
 const pageMain = pageBody.querySelector(`.page-body__page-main`);
@@ -99,6 +99,6 @@ Promise.all([
     headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
   });
 
-window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`);
-});
+// window.addEventListener(`load`, () => {
+//   navigator.serviceWorker.register(`/sw.js`);
+// });
