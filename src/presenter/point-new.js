@@ -44,7 +44,7 @@ export default class PointNew {
       return;
     }
     const newPoint = blankPoint(this._offers);
-    this._pointEditComponent = new PointEdit(newPoint, this._offers, this._destinations);
+    this._pointEditComponent = new PointEdit(newPoint, this._offers, this._destinations, true);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setResetClickHandler(this._handleResetClick);
 
