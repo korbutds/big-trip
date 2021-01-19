@@ -21,7 +21,17 @@ self.addEventListener(`install`, (evt) => {
             `/fonts/Montserrat-SemiBold.woff2`,
             `/img/header-bg.png`,
             `/img/header-bg@2x.png`,
-            `/img/logo.png`
+            `/img/logo.png`,
+            `/img/icons/bus.png`,
+            `/img/icons/check-in.png`,
+            `/img/icons/drive.png`,
+            `/img/icons/flight.png`,
+            `/img/icons/restaurant.png`,
+            `/img/icons/ship.png`,
+            `/img/icons/sightseeing.png`,
+            `/img/icons/taxi.png`,
+            `/img/icons/train.png`,
+            `/img/icons/transport.png`,
           ]);
         })
   );

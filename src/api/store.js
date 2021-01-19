@@ -17,10 +17,10 @@ export default class Store {
   }
 
   setItem(key, value) {
-    const store = this._storage.getItems();
+    const store = this.getItems();
 
     this._storage.setItem(
-        this._storage,
+        this._storeKey,
         JSON.stringify(
             Object.assign(
                 {},

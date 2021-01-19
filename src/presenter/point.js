@@ -3,6 +3,8 @@ import TripPointEdit from "../view/trip-edit-point.js";
 import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
 import {Keys, UpdateType, UserAction} from "../const.js";
 import {isDatesEqual, isCostEqual} from "../view/utils/points.js";
+import {isOnline} from "../view/utils/common.js";
+import {toast} from "../view/utils/toast/toast.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -48,6 +50,7 @@ export default class Point {
     this._pointEditComponent.setEditClickHandler(this._handleBackClick);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setResetClickHandler(this._handleResetClick);
+    this._pointEditComponent.setEditClickHandler(this._handleResetClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -124,6 +127,11 @@ export default class Point {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      toast(`You can't edit task offline`);
+      return;
+    }
+
     this._replaceCardToForm();
   }
 
@@ -133,6 +141,11 @@ export default class Point {
   }
 
   _handleFormSubmit(update) {
+    if (!isOnline()) {
+      toast(`You can't edit task offline`);
+      return;
+    }
+
     const isMajorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish) || !isCostEqual(this._point.price, update.price);
     this._changeData(
         UserAction.UPDATE_POINT,
@@ -150,6 +163,11 @@ export default class Point {
   }
 
   _handleResetClick(point) {
+    if (!isOnline()) {
+      toast(`You can't edit task offline`);
+      return;
+    }
+
     this._changeData(
         UserAction.DELETE_POINT,
         UpdateType.MINOR,
