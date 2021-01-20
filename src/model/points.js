@@ -106,7 +106,7 @@ export default class Points extends Observer {
             pictures: point.photos,
           },
           'is_favorite': point.isFavorite,
-          'type': point.pointType,
+          'type': point.type.name.toLowerCase(),
           'offers': offersArrayToServerView(point.offers)
         }
     );
