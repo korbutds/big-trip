@@ -77,7 +77,7 @@ export const getRandomFishText = (sentenseCount) => {
 };
 
 export const sortPointPriceToMin = (priceA, priceB) => {
-  return priceB.type.price - priceA.type.price;
+  return priceB.price - priceA.price;
 };
 
 export const sortPointTimeToUp = (timeA, timeB) => {

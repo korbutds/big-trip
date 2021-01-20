@@ -55,6 +55,8 @@ export default class PointNew {
     render(this._pointListContainer, this._pointEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
+    document.querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = true;
+
   }
 
   destroy() {
