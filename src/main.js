@@ -15,7 +15,7 @@ import {isOnline} from "./view/utils/common.js";
 import {toast} from "./view/utils/toast/toast.js";
 
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
-const AUTHORIZATION = `Basic j4VEMY2TVT-1dreQ9p9W4s8`;
+const AUTHORIZATION = `Basic j4VEMY12TVT-1dreQ9p9W4s8`;
 const STORAGE_TYPE = window.localStorage;
 const STORE_KEY_TYPE = {
   POINTS: `points`,
@@ -51,7 +51,7 @@ const destinationsModel = new DestinationsModel();
 const pointsModel = new PointsModel(offersModel);
 const filterModel = new FilterModel();
 const tripPresenter = new Trip(tripEventsSection, pointsModel, destinationsModel, offersModel, filterModel, apiWithProvider);
-const filterPresenter = new Filter(tripControls, filterModel);
+const filterPresenter = new Filter(tripControls, filterModel, pointsModel);
 
 const handlePointNewFormClose = () => {
   headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
@@ -76,6 +76,7 @@ const handleHeaderMenuClick = (headerItem) => {
                      .classList.remove(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.remove(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = true;
       break;
     case HeaderItem.TABLE:
       tripPresenter.destroy();
@@ -86,6 +87,7 @@ const handleHeaderMenuClick = (headerItem) => {
                      .classList.add(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.remove(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = false;
 
       break;
     case HeaderItem.STATS:
@@ -103,7 +105,7 @@ const handleHeaderMenuClick = (headerItem) => {
 };
 
 
-filterPresenter.init();
+// filterPresenter.init();
 tripPresenter.init();
 
 
@@ -117,6 +119,8 @@ Promise.all([
     destinationsModel.setDestinations(destinationsArray);
     pointsModel.setPoints(UpdateType.INIT, pointsArray);
     headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
+    filterPresenter.init();
+
   })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);

@@ -86,7 +86,7 @@ const generateOffersList = (arr, checkedArr, isDisabled) => {
   return str;
 };
 
-const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
+const createEditPointTemplate = (point, destinationsArray, routePointTypes, isNewPoint) => {
   const {id, times, type, destination, offers, description, photos, pointType: typeId, price, isDisabled, isSaving, isDeleting} = point;
   const {iconSrc, name} = type;
   const offersList = routePointTypes[typeId].offers;
@@ -121,7 +121,7 @@ const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
-      <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
+      ${isNewPoint ? `<button class="event__reset-btn" type="reset" >Cancel</button>` : `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>`}
       <button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
         <span class="visually-hidden">Open event</span>
       </button>
@@ -140,11 +140,12 @@ const createEditPointTemplate = (point, destinationsArray, routePointTypes) => {
 };
 
 export default class EditPoint extends Smart {
-  constructor(point = {}, offers, destinations) {
+  constructor(point = {}, offers, destinations, isNewPoint = false) {
     super();
-    this._point = EditPoint.parsePointToData(point);
     this._destinations = destinations;
     this._offers = offers;
+    this._isNewPoint = isNewPoint;
+    this._point = EditPoint.parsePointToData(point);
 
     this._datepickerStart = null;
     this._datepickerFinish = null;
@@ -192,7 +193,7 @@ export default class EditPoint extends Smart {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._point, this._destinations, this._offers);
+    return createEditPointTemplate(this._point, this._destinations, this._offers, this._isNewPoint);
   }
 
   setEditClickHandler(callback) {
@@ -383,7 +384,7 @@ export default class EditPoint extends Smart {
         {
           isDisabled: false,
           isSaving: false,
-          isDeleting: false
+          isDeleting: false,
         }
     );
   }
