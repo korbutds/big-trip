@@ -15,7 +15,7 @@ import {isOnline} from "./view/utils/common.js";
 import {toast} from "./view/utils/toast/toast.js";
 
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
-const AUTHORIZATION = `Basic j4VEMY12TVT-1dreQ9p9W4s8`;
+const AUTHORIZATION = `Basic j4VEMY2TjT-1dreQ9p0W4s8`;
 const STORAGE_TYPE = window.localStorage;
 const STORE_KEY_TYPE = {
   POINTS: `points`,
@@ -40,15 +40,15 @@ const destinationsStore = new Store(DESTINATIONS_STORE_NAME, STORAGE_TYPE);
 const api = new Api(END_POINT, AUTHORIZATION);
 const apiWithProvider = new Provider(api, pointsStore, offersStore, destinationsStore);
 
-const headerComponent = new TripView();
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
+const pointsModel = new PointsModel(offersModel);
+const headerComponent = new TripView(pointsModel);
 
 render(pageBody, headerComponent, RenderPosition.AFTERBEGIN);
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-main__trip-controls`);
-const offersModel = new OffersModel();
-const destinationsModel = new DestinationsModel();
-const pointsModel = new PointsModel(offersModel);
 const filterModel = new FilterModel();
 const tripPresenter = new Trip(tripEventsSection, pointsModel, destinationsModel, offersModel, filterModel, apiWithProvider);
 const filterPresenter = new Filter(tripControls, filterModel, pointsModel);
@@ -76,7 +76,6 @@ const handleHeaderMenuClick = (headerItem) => {
                      .classList.remove(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.remove(`trip-tabs__btn--active`);
-      // headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = true;
       break;
     case HeaderItem.TABLE:
       tripPresenter.destroy();
@@ -92,8 +91,10 @@ const handleHeaderMenuClick = (headerItem) => {
       break;
     case HeaderItem.STATS:
       tripPresenter.destroy();
-      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-      tripPresenter.renderTripInfo();
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.DISABLED);
+      if (pointsModel.getPoints().length !== 0) {
+        tripPresenter.renderTripInfo();
+      }
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.TABLE}]`)
                      .classList.remove(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)

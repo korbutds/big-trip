@@ -69,7 +69,7 @@ export default class PointNew {
     }
 
     remove(this._pointEditComponent);
-    this._pointEditComponent = null;
+    // this._pointEditComponent = null;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     document.querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = false;
   }
