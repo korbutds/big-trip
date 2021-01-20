@@ -76,6 +76,7 @@ const handleHeaderMenuClick = (headerItem) => {
                      .classList.remove(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.remove(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = true;
       break;
     case HeaderItem.TABLE:
       tripPresenter.destroy();
@@ -86,6 +87,7 @@ const handleHeaderMenuClick = (headerItem) => {
                      .classList.add(`trip-tabs__btn--active`);
       headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.STATS}]`)
                      .classList.remove(`trip-tabs__btn--active`);
+      headerComponent.getElement().querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = false;
 
       break;
     case HeaderItem.STATS:

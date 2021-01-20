@@ -1,4 +1,4 @@
-import {Keys, UpdateType, UserAction} from "../const.js";
+import {HeaderItem, Keys, UpdateType, UserAction} from "../const.js";
 import PointEdit from "../view/trip-edit-point.js";
 import {remove, render, RenderPosition} from "../view/utils/render.js";
 
@@ -35,6 +35,8 @@ export default class PointNew {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleResetClick = this._handleResetClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleBackClick = this._handleBackClick.bind(this);
+
   }
 
   init(callback) {
@@ -47,6 +49,8 @@ export default class PointNew {
     this._pointEditComponent = new PointEdit(newPoint, this._offers, this._destinations, true);
     this._pointEditComponent.setEditSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setResetClickHandler(this._handleResetClick);
+    this._pointEditComponent.setEditClickHandler(this._handleBackClick);
+
 
     render(this._pointListContainer, this._pointEditComponent, RenderPosition.AFTERBEGIN);
 
@@ -65,6 +69,7 @@ export default class PointNew {
     remove(this._pointEditComponent);
     this._pointEditComponent = null;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    document.querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = false;
   }
 
   _handleFormSubmit(point) {
@@ -73,6 +78,11 @@ export default class PointNew {
         UpdateType.MINOR,
         point
     );
+    document.querySelector(`[data-header-type=${HeaderItem.ADD_NEW_POINT}]`).disabled = false;
+  }
+
+  _handleBackClick() {
+    this.destroy();
   }
 
   _handleResetClick() {
