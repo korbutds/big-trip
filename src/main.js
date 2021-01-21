@@ -17,16 +17,16 @@ import {toast} from "./view/utils/toast/toast.js";
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic j4V2EMY2TjT-1drQ9p0W4s8`;
 const STORAGE_TYPE = window.localStorage;
-const STORE_KEY_TYPE = {
+const ScoreKeyType = {
   POINTS: `points`,
   OFFERS: `offers`,
   DESTINATIONS: `destinations`
 };
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v1`;
-const POINTS_STORE_NAME = `${STORE_PREFIX}-${STORE_KEY_TYPE.POINTS}-${STORE_VER}`;
-const OFFERS_STORE_NAME = `${STORE_PREFIX}-${STORE_KEY_TYPE.OFFERS}-${STORE_VER}`;
-const DESTINATIONS_STORE_NAME = `${STORE_PREFIX}-${STORE_KEY_TYPE.DESTINATIONS}-${STORE_VER}`;
+const POINTS_STORE_NAME = `${STORE_PREFIX}-$ ScoreKeyType.POINTS}-${STORE_VER}`;
+const OFFERS_STORE_NAME = `${STORE_PREFIX}-$ ScoreKeyType.OFFERS}-${STORE_VER}`;
+const DESTINATIONS_STORE_NAME = `${STORE_PREFIX}-$ ScoreKeyType.DESTINATIONS}-${STORE_VER}`;
 
 const pageBody = document.querySelector(`.page-body`);
 const pageMain = pageBody.querySelector(`.page-body__page-main`);
