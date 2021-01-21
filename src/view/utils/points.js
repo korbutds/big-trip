@@ -101,6 +101,11 @@ export const isDateExpired = (dueData) => {
 export const isCostEqual = (oldCost, newCost) => {
   return (oldCost === Number(newCost)) ? true : false;
 };
+export const isOffersSumEqual = (oldPoint, newPoint) => {
+  const oldOffersCost = oldPoint.offers.reduce((acc, curr) => acc + curr.price, 0);
+  const newOffersCost = newPoint.offers.reduce((acc, curr) => acc + curr.price, 0);
+  return oldOffersCost === newOffersCost ? true : false;
+};
 
 export const getOffersList = (offers, pointType) => {
   return offers[pointType];

@@ -15,7 +15,7 @@ import {isOnline} from "./view/utils/common.js";
 import {toast} from "./view/utils/toast/toast.js";
 
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
-const AUTHORIZATION = `Basic j4VEMY2TjT-1dreQ9p0W4s8`;
+const AUTHORIZATION = `Basic j4V2EMY2TjT-1drQ9p0W4s8`;
 const STORAGE_TYPE = window.localStorage;
 const STORE_KEY_TYPE = {
   POINTS: `points`,
@@ -106,7 +106,6 @@ const handleHeaderMenuClick = (headerItem) => {
 };
 
 
-// filterPresenter.init();
 tripPresenter.init();
 
 

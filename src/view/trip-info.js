@@ -1,10 +1,6 @@
 import dayjs from "dayjs";
 import AbstractView from "../view/abstract.js";
 
-const countFullPrice = (costs = []) => {
-  return (costs.length > 0) ? costs.reduce((accumulator, cost) => accumulator + cost) : 0;
-};
-
 const getDestinationString = (destinations) => {
   let str = ``;
   if (destinations.length > 3) {
@@ -31,7 +27,12 @@ const createTripInfoTemplate = (points) => {
   const destinations = points.reduce((prev, current) => {
     return [...prev, current.destination];
   }, []);
-  const pointsCost = points.reduce((prev, current) => [...prev, Number(current[`price`])], []);
+  const pointsCost = points.reduce((prev, current) => prev + current.price, 0);
+  const offersPrice = points.reduce((prev, current) => {
+    const currentOffersPrice = current.offers.reduce((acc, offerPrice) => acc + offerPrice.price, 0);
+    return prev + currentOffersPrice;
+  }, 0);
+  const fullTripCost = pointsCost + offersPrice;
   return `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
       <h1 class="trip-info__title">${getDestinationString(destinations)}</h1>
@@ -40,7 +41,7 @@ const createTripInfoTemplate = (points) => {
     </div>
 
     <p class="trip-info__cost">
-      Total: &euro;&nbsp;<span class="trip-info__cost-value">${countFullPrice(pointsCost)}</span>
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${fullTripCost}</span>
     </p>
   </section>`;
 };
