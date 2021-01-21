@@ -77,7 +77,7 @@ export const getRandomFishText = (sentenseCount) => {
 };
 
 export const sortPointPriceToMin = (priceA, priceB) => {
-  return priceB.type.price - priceA.type.price;
+  return priceB.price - priceA.price;
 };
 
 export const sortPointTimeToUp = (timeA, timeB) => {
@@ -91,15 +91,20 @@ export const sortPointDate = (dateA, dateB) => {
 };
 
 export const isDatesEqual = (dateA, dateB) => {
-  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `m`);
+  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `s`);
 };
 
 export const isDateExpired = (dueData) => {
-  return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `d`);
+  return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `s`);
 };
 
 export const isCostEqual = (oldCost, newCost) => {
   return (oldCost === Number(newCost)) ? true : false;
+};
+export const isOffersSumEqual = (oldPoint, newPoint) => {
+  const oldOffersCost = oldPoint.offers.reduce((acc, curr) => acc + curr.price, 0);
+  const newOffersCost = newPoint.offers.reduce((acc, curr) => acc + curr.price, 0);
+  return oldOffersCost === newOffersCost ? true : false;
 };
 
 export const getOffersList = (offers, pointType) => {
@@ -123,58 +128,3 @@ export const toHtmlView = (str) => {
     return element.toLowerCase();
   }).join(``);
 };
-
-// export const getOfferToClient = (offer) => {
-//   const offerObject = Object.assign(
-//       {},
-//       offer,
-//       {
-//         name: offer.title,
-//         id: toHtmlView(offer.title),
-//         offerKey: toCamelCase(offer.title)
-//       }
-//   );
-//   delete offerObject.title;
-//   return offerObject;
-// };
-
-// export const offersArrayToClientView = (offersArray) => {
-//   const clientOffers = [];
-//   if (offersArray && offersArray.length > 0) {
-//     offersArray.forEach((offer) => {
-//       clientOffers.push(getOfferToClient(offer));
-//     });
-//   }
-
-//   return clientOffers;
-// };
-
-// export const offersArrayToServerView = (offersArray) => {
-//   const array = offersArray.slice();
-//   return array.map((offer) => {
-//     const adaptedOffer = Object.assign(
-//         {},
-//         offer,
-//         {title: offer.name}
-//     )
-//     offer.title = offer.name;
-//     delete adaptedOffer.name;
-//     delete adaptedOffer.id;
-//     delete adaptedOffer.offerKey;
-
-//     return adaptedOffer;
-//   });
-// };
-
-// export const getOffersListFromObject = (offersArray) => {
-//   const offerObject = {};
-//   offersArray.forEach((offer) => {
-//     offerObject[offer.offerKey] = {
-//       name: offer.name,
-//       price: offer.price,
-//       id: offer.id,
-//       offerKey: offer.offerKey
-//     };
-//   });
-//   return offerObject;
-// };

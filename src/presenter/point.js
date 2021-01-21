@@ -2,7 +2,7 @@ import TripPoint from "../view/trip-point.js";
 import TripPointEdit from "../view/trip-edit-point.js";
 import {render, replace, RenderPosition, remove} from "../view/utils/render.js";
 import {Keys, UpdateType, UserAction} from "../const.js";
-import {isDatesEqual, isCostEqual} from "../view/utils/points.js";
+import {isDatesEqual, isCostEqual, isOffersSumEqual} from "../view/utils/points.js";
 import {isOnline} from "../view/utils/common.js";
 import {toast} from "../view/utils/toast/toast.js";
 
@@ -145,8 +145,7 @@ export default class Point {
       toast(`You can't edit task offline`);
       return;
     }
-
-    const isMajorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish) || !isCostEqual(this._point.price, update.price);
+    const isMajorUpdate = !isDatesEqual(this._point.times.finish, update.times.finish) || !isCostEqual(this._point.price, update.price) || !isOffersSumEqual(this._point, update);
     this._changeData(
         UserAction.UPDATE_POINT,
         isMajorUpdate ? UpdateType.MAJOR : UpdateType.PATCH,

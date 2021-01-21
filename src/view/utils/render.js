@@ -41,7 +41,7 @@ export const replace = (newChild, oldChild) => {
 };
 
 export const remove = (component) => {
-  if (component === null) {
+  if (component === null || component === undefined) {
     return;
   }
 

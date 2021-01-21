@@ -265,8 +265,7 @@ export default class TripStatistic extends Abstract {
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._points);
-
+    return createStatisticTemplate();
   }
 
   removeElement() {
@@ -295,7 +294,9 @@ export default class TripStatistic extends Abstract {
       this._timeChart = null;
     }
     this._getUniquePoints();
-
+    if (this._points.length === 0) {
+      return;
+    }
     const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
     const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
     const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);

@@ -56,6 +56,7 @@ export default class Trip {
 
   createPoint(callback) {
     this._pointNewPresenter.init(callback);
+    remove(this._emptyComponent);
   }
 
   _getPoints() {
@@ -198,7 +199,7 @@ export default class Trip {
     this._sortComponent = new TripSort(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    render(this._tripListContainer, this._sortComponent, RenderPosition.BEFOREBEGIN);
+    render(this._tripListContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderTripBoard() {
@@ -216,14 +217,14 @@ export default class Trip {
     const points = this._getPoints();
     const pointsCount = points.length;
 
+    this._renderTripBoard();
     if (pointsCount === 0) {
       this._renderEmptyTrip();
       return;
     }
 
-    this._renderInfo();
     this._renderSort();
-    this._renderTripBoard();
+    this._renderInfo();
   }
 
   _clearTrip({resetSortType = false} = {}) {
