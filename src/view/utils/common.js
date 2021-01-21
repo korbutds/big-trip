@@ -9,7 +9,7 @@ export const getRandomArrayElement = (arr) => {
 };
 
 export const getRandomArray = (count, arr) => {
-  let pointArr = [];
+  const pointArr = [];
   if (arr.length > 0) {
     const arrLength = arr.length;
     for (let i = 0; i < count; i++) {
