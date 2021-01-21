@@ -24,8 +24,8 @@ const ScoreKeyType = {
 };
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v1`;
-const POINTS_STORE_NAME = `${STORE_PREFIX}-$ ScoreKeyType.POINTS}-${STORE_VER}`;
-const OFFERS_STORE_NAME = `${STORE_PREFIX}-$ ScoreKeyType.OFFERS}-${STORE_VER}`;
+const POINTS_STORE_NAME = `${STORE_PREFIX}-${ScoreKeyType.POINTS}-${STORE_VER}`;
+const OFFERS_STORE_NAME = `${STORE_PREFIX}-${ScoreKeyType.OFFERS}-${STORE_VER}`;
 const DESTINATIONS_STORE_NAME = `${STORE_PREFIX}-$ ScoreKeyType.DESTINATIONS}-${STORE_VER}`;
 
 const pageBody = document.querySelector(`.page-body`);
