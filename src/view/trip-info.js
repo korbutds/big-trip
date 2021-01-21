@@ -16,7 +16,7 @@ const getDestinationString = (destinations) => {
 };
 
 const dateString = (start, finish) => {
-  return (dayjs(start).format(`MMM`) === dayjs(finish).format(`MMM`)) ? `${dayjs(start).format(`MMM DD`)} &mdash; ${dayjs(finish).format(`DD`)}` : `${dayjs(start).format(`MMM DD`)} &mdash; ${dayjs(finish).format(`MMM DD`)}`;
+  return (dayjs(start).format(`MMM`) === dayjs(finish).format(`MMM`)) ? `${dayjs(start).format(`DD MMM`)} &mdash; ${dayjs(finish).format(`DD`)}` : `${dayjs(start).format(`DD MMM`)} &mdash; ${dayjs(finish).format(`DD MMM`)}`;
 };
 
 const createTripInfoTemplate = (points) => {
