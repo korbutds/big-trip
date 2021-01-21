@@ -91,11 +91,11 @@ export const sortPointDate = (dateA, dateB) => {
 };
 
 export const isDatesEqual = (dateA, dateB) => {
-  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `m`);
+  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, `s`);
 };
 
 export const isDateExpired = (dueData) => {
-  return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `d`);
+  return dueData === null ? false : dayjs(dueData).isBefore(dayjs(), `s`);
 };
 
 export const isCostEqual = (oldCost, newCost) => {
