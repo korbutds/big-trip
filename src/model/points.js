@@ -1,5 +1,5 @@
 import Observer from "../view/utils/observer.js";
-import {offersArrayToClientView, offersArrayToServerView} from "../view/utils/offers.js";
+import {offersToClientView, offersToServerView} from "../view/utils/offers.js";
 import {toCamelCase, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Points extends Observer {
@@ -72,7 +72,7 @@ export default class Points extends Observer {
           photos: point.destination.pictures,
           isFavorite: point.is_favorite,
           pointType: toCamelCase(point.type),
-          offers: offersArrayToClientView(point.offers),
+          offers: offersToClientView(point.offers),
           type: {
             iconSrc: `./img/icons/${point.type}.png`,
             name: ucFirstLetter(point.type),
@@ -107,7 +107,7 @@ export default class Points extends Observer {
           },
           'is_favorite': point.isFavorite,
           'type': point.type.name.toLowerCase(),
-          'offers': offersArrayToServerView(point.offers)
+          'offers': offersToServerView(point.offers)
         }
     );
     delete adaptedPoint.price;

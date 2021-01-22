@@ -1,22 +1,6 @@
-import {getRandomInt} from "./common.js";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
-
-
-export const createPhotosArr = () => {
-  const count = getRandomInt(1, 9);
-  const description = `some photo description`;
-  const src = [];
-  for (let i = 0; i < count; i++) {
-    src.push({
-      src: `http://picsum.photos/248/152?r=${Math.random()}`,
-      description
-    });
-  }
-
-  return src;
-};
 
 export const ucFirstLetter = (str) => {
   if (!str) {
@@ -47,33 +31,6 @@ export const getDateInDays = (dateDiff) => {
   const minutes = timeDuration.minutes();
   const time = `${(days > 0) ? addZeroToNumber(days) + `D ` : ``}${(hours > 0) ? addZeroToNumber(hours) + `H ` : ``}${(minutes > 0) ? addZeroToNumber(minutes) + `M` : ``}`;
   return time;
-};
-
-let startDate = dayjs().add(getRandomInt(-1, 1), `day`).startOf(`date`);
-
-export const generateDate = () => {
-  const MAX_TRIP_TIME = 12;
-  const tripTime = getRandomInt(1, MAX_TRIP_TIME) * 30;
-  const start = startDate;
-  const tripEndTime = startDate.add(tripTime, `minutes`);
-  const finish = tripEndTime;
-  startDate = finish;
-  return {
-    start: Date.parse(start),
-    finish: Date.parse(finish)
-  };
-};
-
-export const getRandomFishText = (sentenseCount) => {
-  const FISH_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
-  const fishTextArr = FISH_TEXT.split(`. `);
-  const fishTextLength = fishTextArr.length;
-  const sentenseArr = [];
-
-  for (let i = 0; i < sentenseCount; i++) {
-    sentenseArr.push(fishTextArr[getRandomInt(0, fishTextLength - 1)]);
-  }
-  return sentenseArr.join(`. `).concat(`.`);
 };
 
 export const sortPointPriceToMin = (priceA, priceB) => {

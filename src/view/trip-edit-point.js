@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import Smart from "../view/smart.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import {getOffersListFromObject} from "./utils/offers.js";
+import {getOffersList} from "./utils/offers.js";
 
 const generateDistDatalist = (arr) => {
   let str = ``;
@@ -38,13 +38,13 @@ const generateData = (start, finish, id, isDisabled) => {
           </div>`;
 };
 
-const generateEventTypeList = (eventsObject, iconSrc, id, eventType, isDisabled) => {
-  const eventsList = Object.keys(eventsObject);
-  let events = ``;
+const generateEventTypeList = (events, iconSrc, id, eventType, isDisabled) => {
+  const eventsList = Object.keys(events);
+  let eventsInput = ``;
   for (let i = 0; i < eventsList.length; i++) {
-    events += `<div class="event__type-item">
-                <input id="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventsList[i]}" ${(eventType === eventsObject[eventsList[i]].name) ? `checked` : ``} ${isDisabled ? `disabled` : ``}>
-                <label class="event__type-label  event__type-label--${eventsObject[eventsList[i]].name.toLowerCase()}" for="event-type-${eventsObject[eventsList[i]].name.toLowerCase()}-${id}">${eventsObject[eventsList[i]].name}</label>
+    eventsInput += `<div class="event__type-item">
+                <input id="event-type-${events[eventsList[i]].name.toLowerCase()}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventsList[i]}" ${(eventType === events[eventsList[i]].name) ? `checked` : ``} ${isDisabled ? `disabled` : ``}>
+                <label class="event__type-label  event__type-label--${events[eventsList[i]].name.toLowerCase()}" for="event-type-${events[eventsList[i]].name.toLowerCase()}-${id}">${events[eventsList[i]].name}</label>
               </div>`;
   }
   return `<div class="event__type-wrapper">
@@ -57,7 +57,7 @@ const generateEventTypeList = (eventsObject, iconSrc, id, eventType, isDisabled)
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${events}
+                ${eventsInput}
               </fieldset>
             </div>
           </div>`;
@@ -86,12 +86,12 @@ const generateOffersList = (arr, checkedArr, isDisabled) => {
   return str;
 };
 
-const createEditPointTemplate = (point, destinationsArray, routePointTypes, isNewPoint) => {
+const createEditPointTemplate = (point, destinations, routePointTypes, isNewPoint) => {
   const {id, times, type, destination, offers, description, photos, pointType: typeId, price, isDisabled, isSaving, isDeleting} = point;
   const {iconSrc, name} = type;
   const offersList = routePointTypes[typeId].offers;
   const {start, finish} = times;
-  const newPointList = destinationsArray.reduce((prev, curr) => {
+  const newPointList = destinations.reduce((prev, curr) => {
     return [...prev, curr.name];
   }, []);
 
@@ -338,7 +338,7 @@ export default class EditPoint extends Smart {
     const pointOffers = this._point.offers.slice();
     const availableOffers = this._offers[this._point.pointType].offers;
     if (evt.target.checked) {
-      pointOffers.push(getOffersListFromObject(availableOffers)[evt.target.dataset.featureName]);
+      pointOffers.push(getOffersList(availableOffers)[evt.target.dataset.featureName]);
       this.updateData({
         offers: pointOffers
       }, true);

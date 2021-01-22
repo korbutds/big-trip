@@ -6,8 +6,8 @@ export default class Destination extends Observer {
     this._destinations = [];
   }
 
-  setDestinations(destinationsArray) {
-    this._destinations = destinationsArray.map((destination) => {
+  setDestinations(destinations) {
+    this._destinations = destinations.map((destination) => {
       return this.adaptDestinationToClient(destination);
     });
   }
