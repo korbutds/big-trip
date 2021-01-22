@@ -114,10 +114,10 @@ Promise.all([
   apiWithProvider.getDestinations(),
   apiWithProvider.getPoints(),
 ])
-  .then(([offersArray, destinationsArray, pointsArray]) => {
-    offersModel.setOffers(offersArray);
-    destinationsModel.setDestinations(destinationsArray);
-    pointsModel.setPoints(UpdateType.INIT, pointsArray);
+  .then(([offers, destinations, points]) => {
+    offersModel.setOffers(offers);
+    destinationsModel.setDestinations(destinations);
+    pointsModel.setPoints(UpdateType.INIT, points);
     headerComponent.setHeaderClickHandler(handleHeaderMenuClick);
     filterPresenter.init();
 

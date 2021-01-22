@@ -1,7 +1,7 @@
 import {toCamelCase, toHtmlView} from "./points";
 
 export const getOfferToClient = (offer) => {
-  const offerObject = Object.assign(
+  const clientOffers = Object.assign(
       {},
       offer,
       {
@@ -10,14 +10,14 @@ export const getOfferToClient = (offer) => {
         offerKey: toCamelCase(offer.title)
       }
   );
-  delete offerObject.title;
-  return offerObject;
+  delete clientOffers.title;
+  return clientOffers;
 };
 
-export const offersArrayToClientView = (offersArray) => {
+export const offersToClientView = (offers) => {
   const clientOffers = [];
-  if (offersArray && offersArray.length > 0) {
-    offersArray.forEach((offer) => {
+  if (offers && offers.length > 0) {
+    offers.forEach((offer) => {
       clientOffers.push(getOfferToClient(offer));
     });
   }
@@ -25,9 +25,9 @@ export const offersArrayToClientView = (offersArray) => {
   return clientOffers;
 };
 
-export const offersArrayToServerView = (offersArray) => {
-  const array = offersArray.slice();
-  return array.map((offer) => {
+export const offersToServerView = (offers) => {
+  const offersClientView = offers.slice();
+  return offersClientView.map((offer) => {
     const adaptedOffer = Object.assign(
         {},
         offer,
@@ -42,15 +42,15 @@ export const offersArrayToServerView = (offersArray) => {
   });
 };
 
-export const getOffersListFromObject = (offersArray) => {
-  const offerObject = {};
-  offersArray.forEach((offer) => {
-    offerObject[offer.offerKey] = {
+export const getOffersList = (offers) => {
+  const offersList = {};
+  offers.forEach((offer) => {
+    offersList[offer.offerKey] = {
       name: offer.name,
       price: offer.price,
       id: offer.id,
       offerKey: offer.offerKey
     };
   });
-  return offerObject;
+  return offersList;
 };

@@ -1,5 +1,5 @@
 import Observer from "../view/utils/observer.js";
-import {offersArrayToClientView} from "../view/utils/offers.js";
+import {offersToClientView} from "../view/utils/offers.js";
 import {toCamelCase, ucFirstLetter} from "../view/utils/points.js";
 
 export default class Offers extends Observer {
@@ -8,8 +8,8 @@ export default class Offers extends Observer {
     this._offers = [];
   }
 
-  setOffers(offersArray) {
-    offersArray.forEach((offer) => {
+  setOffers(offers) {
+    offers.forEach((offer) => {
       this._offers[toCamelCase(offer.type)] = this.adaptOfferToClient(offer);
     }, {});
   }
@@ -21,7 +21,7 @@ export default class Offers extends Observer {
   adaptOfferToClient(offer) {
     return {
       name: ucFirstLetter(offer.type),
-      offers: offersArrayToClientView(offer.offers),
+      offers: offersToClientView(offer.offers),
       iconSrc: `./img/icons/${offer.type}.png`
     };
   }
